@@ -1,0 +1,211 @@
+<!doctype html>
+<html>
+	<head>
+	  <meta charset="utf-8">
+
+	  <title>Home</title>
+
+	  <link rel="stylesheet" href="bootstrap/css/bootstrap.css" type="text/css"/>
+
+	  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" type="text/css"/>
+
+	  <link rel="stylesheet" href="includes/css/styles.css">
+
+	  <link rel="stylesheet" href="includes/css/bootstrap-glyphicons.css" >
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"> <!-- max and user scale is important for collapse -->
+
+	</head>
+
+	<body>
+	
+	    <div class="container-fluid">
+
+		    <div class="navbar navbar-default navbar-fixed-top"> <!--html5 use nav instead of div-->
+
+				<div class="container">
+
+					<!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+					<button class="navbar-toggle collapsed" data-target=".navbar-responsive-collapse" data-toggle="collapse" type="button">
+
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+
+					</button><!--requires jquery for the collaose to work and also non fluid container and default navbar-->
+
+					<a class="navbar-brand" href="index.html"><img src="images/logo2.png" alt="CMS" style="height:30px;" align="center"></a>
+
+					<div class="navbar-collapse collapse navbar-responsive-collapse " > <!--classes use dfor responsive design-->
+
+					  <ul class="nav navbar-nav">
+
+						<li class="active"><a href="index.html">Home</a></li>
+						<li> <a href="demo.html">Demo</a> </li>
+						<li> <a href="about.html">About Us</a> </li>
+						<li> <a href="contact.html">Contact</a> </li>
+
+					  </ul>
+
+					  <ul class="nav navbar-nav pull-right">
+
+						<li class="dropdown">
+
+						   <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> My Account <strong class="caret"></strong></a><!--CMS\includes\fonts the file name is glyphiconshalflings and no - in between-->
+
+							<ul class="dropdown-menu">
+
+							  <li><a href="#">Edit Profile</a></li>
+							  <li><a href="#">Remove Profile</a></li>
+							  <li><a href="#">Logout</a></li>
+
+							</ul>
+
+						</li>
+
+					  </ul>
+
+					</div><!--end of navbar collapse-->
+
+				</div><!--end of container-->
+
+		    </div> <!--end of navbar-->
+
+			<div class="row-fluid" >
+
+				<div class="col-md-4">
+
+				  <!--<img src="images/leftpic.jpg"><!-- style="margin:100px;" align="left"-->
+
+				</div><!--end of col 4-->
+				
+				<div class="col-md-4">
+
+				  <!--<img src="images/leftpic.jpg"><!-- style="margin:100px;" align="left"-->
+
+				</div><!--end of col 4-->
+
+
+				<div class="col-md-4">
+
+					<div class="modal-body"><!-- style="margin:100px;"-->
+
+						<div class="well"><!-- style="margin-left:150px; width:350px;"-->
+
+							<ul class="nav nav-pills nav-justified">
+
+							  <li class="active"><a href="#login" data-toggle="tab" >Login</a></li>
+							  <li><a href="#create" data-toggle="tab">Create Account</a></li>
+
+							</ul>
+
+							<hr style="align:top;">
+
+							<div id="myTabContent" class="tab-content">
+
+								<div class="tab-pane active in" id="login" >
+
+									<form><!--class="form-horizontal" action='' method="POST" check this at the end-->
+
+
+										<div class="form-group">
+
+											 <label for="Email" style="margin-top:5px;">Email Address</label><input type="email" class="form-control" id="Email" placeholder="Email" >
+											 <label for="Password" style="margin-top:5px;">Password</label><input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+
+											 <button class="btn btn-primary" style="margin-top:10px;"><a href="#" style="color:white;">Login</a></button>
+
+										</div>
+
+
+									</form>
+
+								</div><!--end of create tab-->
+
+								<div class="tab-pane fade" id="create">
+
+									<form id="createtab">
+
+										<div class="form-group">
+
+
+											 <label for="FirstName" style="margin-top:5px;">First Name</label><input type="text" class="form-control" id="FirstName" placeholder="FirstName">
+											 <label for="LastName" style="margin-top:5px;">Last Name</label><input type="text" class="form-control" id="LastName" placeholder="LastName">
+											 <label for="Address" style="margin-top:5px;">Address</label><textarea value="Smith" class="form-control" id="Address" rows="3" placeholder="Address"></textarea>
+											 <label for="Email" style="margin-top:5px;">Email Address</label><input type="email" class="form-control" id="Email" placeholder="Email">
+											 <label for="Password" style="margin-top:5px;">Password</label><input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+
+											 <button class="btn btn-primary" style="margin-top:10px;><a href="#" style="color:white;">Create Account</a></button>
+
+										</div>
+
+									</form>
+
+								</div><!--end of create tab-->
+
+							</div><!--end of tab content-->
+
+						</div><!--end of class well-->
+
+					</div><!--end of modal body-->
+
+				</div><!--end of row 8-->
+
+			</div><!--end of row-->
+   
+        </div><!--end of container-fluid-->
+</body>
+	  
+		<footer align="bottom">
+		
+			<div class="container-fluid">
+			
+				<div class="row">
+					
+					<div class="col-sm-3" style="text-align:center;">
+						
+						<h6>Copyright &copy; 2016 Team November</h6>
+					
+					</div>
+					
+					<div class="col-sm-3">
+						
+						<h6>Navigation</h6>
+						<ul class="unstyled">
+							<li><a href="#">Home</a></li>
+							<li><a href="#">Demo</a></li>
+							<li><a href="#">Contact</a></li>
+						</ul>
+						
+					</div><!-- end col-sm-3 -->
+					
+					<div class="col-sm-3">
+						
+						<h6>Follow Us</h6>
+						<ul class="unstyled">
+							<li><a href="#">Twitter</a></li>
+							<li><a href="#">Facebook</a></li>
+							<li><a href="#">Google Plus</a></li>
+						</ul>
+						
+					</div><!-- end col-sm-3 -->
+					
+					<div class="col-sm-3" style="text-align:left;">
+						
+						<h6>Coded by Team November</h6>
+						
+					</div><!-- end col-sm-3 -->
+				
+				</div><!-- end row -->
+			
+			</div><!-- end container -->
+
+		</footer>
+
+	    <script src="http://code.jquery.com/jquery.js"></script>
+
+	    <script src="bootstrap/js/bootstrap.min.js"></script>
+	
+	
+	
+</html>
