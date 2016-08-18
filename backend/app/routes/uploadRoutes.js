@@ -19,7 +19,7 @@ Email.html="<p>Dear Author,<br>You have successfully submitted a paper<br>Best o
 app.get('/api/upload', function (req, res) {
  res.render('index', {});
 });*/ 
-	app.post('/api/upload', multer({ dest: './submissions/'}).single('uploadedfile'), function(req,res){
+	app.post('/api/upload/', multer({ dest: './submissions/'}).single('uploadedfile'), function(req,res){
 	console.log(req.body); //form fields
 	/* example output:
 	{ title: 'abc' }
@@ -36,12 +36,11 @@ app.get('/api/upload', function (req, res) {
               size: 277056 }
 	 */
 	var response ={
-		id:{type:String}
+		id:123
 }
-response.id='123'
 	res.status(201);
-            res.end(response); //send id 
-var emailController=require('../Controllers/emailController')(Email);
+            res.end(JSON.stringify(response)); //send id 
+var emailController=require('../controllers/emailController')(Email);
 	res.status(204).end();
 });
   

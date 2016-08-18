@@ -90,3 +90,5 @@ npm-debug.log
 .vscode
 *.log
 *.stackdump
+
+/backend/submissions/
