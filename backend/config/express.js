@@ -13,7 +13,9 @@ var config = require('./config'),
 	session = require('express-session'),
 	MongoStore = require('connect-mongo')(session),
 	flash = require('connect-flash'),
-	passport = require('passport');
+	passport = require('passport'),
+    multer  = require('multer');
+
 
 // Define the Express configuration method
 module.exports = function(db) {
@@ -54,23 +56,62 @@ module.exports = function(db) {
 	}));
 
 	// Set the application view engine and 'views' folder
-	app.set('views', './app/views');
-	app.set('view engine', 'ejs');
+	//app.set('views', './app/views');
+	//app.set('view engine', 'ejs');
 
 	// Configure the flash messages middleware
-	app.use(flash());
+	//app.use(flash());
 
 	// Configure the Passport middleware
 	app.use(passport.initialize());
 	app.use(passport.session());
 
+
+// app.all('/*', function(req, res, next) {
+//   // CORS headers
+//   res.header("Access-Control-Allow-Origin", "*"); // restrict it to the required domain
+//   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+//   // Set custom headers for CORS
+//   res.header('Access-Control-Allow-Headers', 'Content-type,Accept,X-Access-Token,X-Key');
+//   if (req.method == 'OPTIONS') {
+//     res.status(200).end();
+//   } else {
+//     next();
+//   }
+// });
+ 
+// // Auth Middleware - This will check if the token is valid
+// // Only the requests that start with /api/v1/* will be checked for the token.
+// // Any URL's that do not follow the below pattern should be avoided unless you 
+// // are sure that authentication is not needed
+// app.all('/api/v1/*', [require('./middlewares/validateRequest')]);//The middleware that
+//                                                                 // we are going to write to authenticate 
+// 																//and authorize the request.
+ 
+// app.use('/', require('./routes'));
+ 
+// // If no route is matched by now, it must be a 404
+// app.use(function(req, res, next) {
+//   var err = new Error('Not Found');
+//   err.status = 404;
+//   next(err);
+// });
+
+
+
+
 	// Load the routing files
 	require('../app/routes/index.server.routes.js')(app);
 	require('../app/routes/users.server.routes.js')(app);
 	require('../app/routes/articles.server.routes.js')(app);
+	require('../app/routes/uploadRoutes')(app);
+	//var Book = require('./models/bookModel');
+    //bookRouter = require('./Routes/bookRoutes')(Book);
+    //app.use('/api/books', bookRouter);
 
 	// Configure static file serving
-	app.use(express.static('./public'));
+	//app.use(express.static('./public'));
+   
 
 	// Load the Socket.io configuration
 	require('./socketio')(server, io, mongoStore);
