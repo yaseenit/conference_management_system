@@ -2,8 +2,8 @@
 'use strict';
 
 // Load the module dependencies
-var users = require('../../app/controllers/users.server.controller'),
-	articles = require('../../app/controllers/articles.server.controller');
+var users = require('../controllers/usersController'),
+	articles = require('../controllers/articlesController');
 
 // Define the routes module' method
 module.exports = function(app) {

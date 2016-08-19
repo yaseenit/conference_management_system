@@ -101,10 +101,10 @@ module.exports = function(db) {
 
 
 	// Load the routing files
-	require('../app/routes/index.server.routes.js')(app);
-	require('../app/routes/users.server.routes.js')(app);
-	require('../app/routes/articles.server.routes.js')(app);
-	require('../app/routes/uploadRoutes')(app);
+	require('../routes/indexRoutes.js')(app);
+	require('../routes/usersRoutes.js')(app);
+	require('../routes/articlesRoutes.js')(app);
+	require('../routes/uploadRoutes')(app);
 	//var Book = require('./models/bookModel');
     //bookRouter = require('./Routes/bookRoutes')(Book);
     //app.use('/api/books', bookRouter);

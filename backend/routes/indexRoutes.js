@@ -4,10 +4,17 @@
 // Define the routes module' method
 module.exports = function(app) {
 	// Load the 'index' controller
-	var index = require('../controllers/index.server.controller');
+	var index = require('../controllers/indexController');
+
+	var ping = {
+		message: "Welcome to CMS API.",
+		code: 200
+	};
 
 	// Mount the 'index' controller's 'render' method
-	app.get('/', index.render);
+	app.get('/ping',function(req, res){
+        res.json(ping);
+          });
 
 	// var auth = require('./auth.js');
 	// var products = require('./products.js');
