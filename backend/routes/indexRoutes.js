@@ -6,41 +6,57 @@ module.exports = function(app) {
 	// Load the 'index' controller
 	var index = require('../controllers/indexController');
 
-	var ping = {
+
+	// app.get('/ping',function(req, res){
+    //     res.json(ping);
+    //       });
+
+	var auth = require('./auth.js');
+	//var products = require('./products.js');
+	//var user = require('./users.js');
+	
+
+
+
+	/*
+	* Routes that can be accessed by any one
+	*/
+	app.get('/', function (req, res) { // welcoming
+	var welcome = {
 		message: "Welcome to CMS API.",
 		code: 200
 	};
+	res.json(welcome);
+	});
 
-	// Mount the 'index' controller's 'render' method
-	app.get('/ping',function(req, res){
-        res.json(ping);
-          });
+	app.get('/ping', function (req, res) {// pong
+	var pong = {
+		message: "Welcome to CMS API. Server is up & running!",
+		code: 200
+	};
+	res.json(pong);
+	});
 
-	// var auth = require('./auth.js');
-	// var products = require('./products.js');
-	// var user = require('./users.js');
-	
-	// /*
-	// * Routes that can be accessed by any one
-	// */
-	// router.post('/login', auth.login);
+	app.post('/login', auth.login);
+/****************************************************/
+
 	
 	// /*
 	// * Routes that can be accessed only by autheticated users
 	// */
-	// router.get('/api/v1/products', products.getAll);
-	// router.get('/api/v1/product/:id', products.getOne);
-	// router.post('/api/v1/product/', products.create);
-	// router.put('/api/v1/product/:id', products.update);
-	// router.delete('/api/v1/product/:id', products.delete);
+	// app.get('/api/v1/submission', products.getAll);
+	// app.get('/api/v1/submission/:id', products.getOne);
+	// app.post('/api/v1/submission/', products.create);
+	// app.put('/api/v1/submission/:id', products.update);
+	// app.delete('/api/v1/submission/:id', products.delete);
 	
 	// /*
 	// * Routes that can be accessed only by authenticated & authorized users
 	// */
-	// router.get('/api/v1/admin/users', user.getAll);
-	// router.get('/api/v1/admin/user/:id', user.getOne);
-	// router.post('/api/v1/admin/user/', user.create);
-	// router.put('/api/v1/admin/user/:id', user.update);
-	// router.delete('/api/v1/admin/user/:id', user.delete);
+	// app.get('/api/v1/chair/users', user.getAll);
+	// app.get('/api/v1/chair/user/:id', user.getOne);
+	// app.post('/api/v1/chair/user/', user.create);
+	// app.put('/api/v1/chair/user/:id', user.update);
+	// app.delete('/api/v1/chair/user/:id', user.delete);
 
 };
