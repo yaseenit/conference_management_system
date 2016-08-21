@@ -50,13 +50,13 @@ var UserSchema = new Schema({
 	salt: {
 		type: String
 	},
-	provider: {
-		type: String,
-		// Validate 'provider' value existance
-		required: 'Provider is required'
-	},
-	providerId: String,
-	providerData: {},
+	// provider: {
+	// 	type: String,
+	// 	// Validate 'provider' value existance
+	// 	required: 'Provider is required'
+	// },
+	// providerId: String,
+	// providerData: {},
 	created: {
 		type: Date,
 		// Create a default 'created' value
@@ -65,19 +65,19 @@ var UserSchema = new Schema({
 });
 
 // Set the 'fullname' virtual property
-UserSchema.virtual('fullName').get(function() {
-	return this.firstName + ' ' + this.lastName;
-}).set(function(fullName) {
-	var splitName = fullName.split(' ');
-	this.firstName = splitName[0] || '';
-	this.lastName = splitName[1] || '';
-});
-UserSchema.virtual('user_postal_address').get(function() {
-     return this.user_street + ' ' + this.user_postal_code + ' ' + this.user_city+ ' ' + this.user_state + ' ' + this.user_country;
-});
-UserSchema.virtual('institution_postal_address').get(function() {
-     return this.institution_street + ' ' + this.institution_postal_code + ' ' + this.institution_city+ ' ' + this.institution_state + ' ' + this.institution_country;
-});
+// UserSchema.virtual('fullName').get(function() {
+// 	return this.firstName + ' ' + this.lastName;
+// }).set(function(fullName) {
+// 	var splitName = fullName.split(' ');
+// 	this.firstName = splitName[0] || '';
+// 	this.lastName = splitName[1] || '';
+// });
+// UserSchema.virtual('user_postal_address').get(function() {
+//      return this.user_street + ' ' + this.user_postal_code + ' ' + this.user_city+ ' ' + this.user_state + ' ' + this.user_country;
+// });
+// UserSchema.virtual('institution_postal_address').get(function() {
+//      return this.institution_street + ' ' + this.institution_postal_code + ' ' + this.institution_city+ ' ' + this.institution_state + ' ' + this.institution_country;
+// });
 // Use a pre-save middleware to hash the password
 UserSchema.pre('save', function(next) {
 	if (this.password) {
@@ -126,8 +126,26 @@ UserSchema.methods.authenticate = function(password) {
 // Configure the 'UserSchema' to use getters and virtuals when transforming to JSON
 UserSchema.set('toJSON', {
 	getters: true,
-	virtuals: true
+	virtuals: true,
+    transform: function(doc, ret, options) {
+        delete ret.password;
+		delete ret.salt;
+        delete ret.__v;
+        return ret;
+    }
 });
+// UPDATE - You might want to use a white list:
+// UserSchema.set('toJSON', {
+//     transform: function(doc, ret, options) {
+//         var retJson = {
+//             email: ret.email,
+//             registered: ret.registered,
+//             modified: ret.modified
+//         };
+//         return retJson;
+//     }
+// });
+
 
 // Create the 'User' model out of the 'UserSchema'
 mongoose.model('User', UserSchema);

@@ -2,19 +2,19 @@
 'use strict';
 
 // Load the module dependencies
-var users = require('../controllers/usersController'),
+var usersController = require('../controllers/usersController'),
 	passport = require('passport');
 
 // Define the routes module' method
 module.exports = function(app) {
 	// Set up the 'signup' routes 
 	app.route('/signup')
-	   .get(users.renderSignup)
-	   .post(users.signup);
+	   .get(usersController.renderSignup)
+	   .post(usersController.signup);
 
 	// Set up the 'signin' routes 
 	app.route('/signin')
-	   .get(users.renderSignin)
+	   .get(usersController.renderSignin)
 	   .post(passport.authenticate('local', {
 			successRedirect: '/',
 			failureRedirect: '/signin',
@@ -53,5 +53,5 @@ module.exports = function(app) {
 	}));
 
 	// Set up the 'signout' route
-	app.get('/signout', users.signout);
+	app.get('/signout', usersController.signout);
 };

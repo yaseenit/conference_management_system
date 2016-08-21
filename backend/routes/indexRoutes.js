@@ -6,7 +6,6 @@ module.exports = function(app) {
 	// Load the 'index' controller
 	var index = require('../controllers/indexController');
 
-
 	// app.get('/ping',function(req, res){
     //     res.json(ping);
     //       });
@@ -38,6 +37,8 @@ module.exports = function(app) {
 	});
 
 	app.post('/login', auth.login);
+	app.post('/register', auth.register);
+
 /****************************************************/
 
 	

@@ -4,16 +4,16 @@
 // Load the module dependencies
 var config = require('./config'),
 	http = require('http'),
-	socketio = require('socket.io'),
+	//socketio = require('socket.io'),
 	express = require('express'),
 	morgan = require('morgan'),
 	compress = require('compression'),
 	bodyParser = require('body-parser'),
 	methodOverride = require('method-override'),
-	session = require('express-session'),
+	//session = require('express-session'),
 	//MongoStore = require('connect-mongo')(session),
 	//flash = require('connect-flash'),
-	passport = require('passport'),
+	//passport = require('passport'),
     multer = require('multer');
 
 
@@ -26,7 +26,7 @@ module.exports = function (db) {
     var server = http.createServer(app);
 
     // Create a new Socket.io server
-    var io = socketio.listen(server);
+    //var io = socketio.listen(server);
 
 	// Use the 'NDOE_ENV' variable to activate the 'morgan' logger or 'compress' middleware
 	if (process.env.NODE_ENV === 'development') {
@@ -44,11 +44,11 @@ module.exports = function (db) {
 
 
 	// Configure the 'session' middleware
-	app.use(session({
-		saveUninitialized: true,
-		resave: true,
-		secret: config.sessionSecret,
-	}));
+	// app.use(session({
+	// 	saveUninitialized: true,
+	// 	resave: true,
+	// 	secret: config.sessionSecret,
+	// }));
 
 	// Set the application view engine and 'views' folder
 	//app.set('views', './app/views');
@@ -58,14 +58,14 @@ module.exports = function (db) {
 	//app.use(flash());
 
 	// Configure the Passport middleware
-	app.use(passport.initialize());
-	app.use(passport.session());
+	//app.use(passport.initialize());
+	//app.use(passport.session());
 
 
 	app.all('/*', function (req, res, next) {
 		// CORS headers
 		res.header("Access-Control-Allow-Origin", "*"); // restrict it to the required domain
-		res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+		res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH,OPTIONS');
 		// Set custom headers for CORS
 		res.header('Access-Control-Allow-Headers', 'Content-type,Accept,X-Access-Token');
 		if (req.method == 'OPTIONS') {
@@ -77,7 +77,7 @@ module.exports = function (db) {
 
 	// Load the routing files
 	require('../routes/indexRoutes.js')(app);
-	require('../routes/usersRoutes.js')(app);
+	//require('../routes/usersRoutes.js')(app);
 	require('../routes/articlesRoutes.js')(app);
 	require('../routes/uploadRoutes')(app);
 	require('../routes/auth');
@@ -108,7 +108,7 @@ module.exports = function (db) {
 
 
 	// Load the Socket.io configuration
-	require('./socketio')(server, io);
+	//require('./socketio')(server, io);
 
 	// Return the Server instance
 	return server;
