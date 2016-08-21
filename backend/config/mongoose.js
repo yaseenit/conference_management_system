@@ -13,7 +13,8 @@ module.exports = function() {
 	// Load the application models 
 	require('../models/userModel');
 	require('../models/articleModel');
-
+	require('../models/submissionModel');
+	require('../models/conferenceModel');
 	// Return the Mongoose connection instance
 	return db;
 };
