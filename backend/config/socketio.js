@@ -7,7 +7,7 @@ var config = require('./config'),
     passport = require('passport');
 
 // Define the Socket.io configuration method
-module.exports = function(server, io, mongoStore) {
+module.exports = function(server, io){//, mongoStore) {
 	// Intercept Socket.io's handshake request
     io.use(function(socket, next) {
     	// Use the 'cookie-parser' module to parse the request cookies
@@ -15,22 +15,22 @@ module.exports = function(server, io, mongoStore) {
         	// Get the session id from the request cookies
             var sessionId = socket.request.signedCookies['connect.sid'];
 
-            // Use the mongoStorage instance to get the Express session information
-            mongoStore.get(sessionId, function(err, session) {
-            	// Set the Socket.io session information
-                socket.request.session = session;
+            // // Use the mongoStorage instance to get the Express session information
+            // mongoStore.get(sessionId, function(err, session) {
+            // 	// Set the Socket.io session information
+            //     socket.request.session = session;
 
-                // Use Passport to populate the user details
-                passport.initialize()(socket.request, {}, function() {
-                	passport.session()(socket.request, {}, function() {
-                		if (socket.request.user) {
-                			next(null, true);
-                		} else {
-                			next(new Error('User is not authenticated'), false);
-                		}
-                	});
-                });
-            });
+            //     // Use Passport to populate the user details
+            //     passport.initialize()(socket.request, {}, function() {
+            //     	passport.session()(socket.request, {}, function() {
+            //     		if (socket.request.user) {
+            //     			next(null, true);
+            //     		} else {
+            //     			next(new Error('User is not authenticated'), false);
+            //     		}
+            //     	});
+            //     });
+            // });
         });
     });
 	
