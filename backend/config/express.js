@@ -105,6 +105,7 @@ module.exports = function(db) {
 	require('../routes/usersRoutes.js')(app);
 	require('../routes/articlesRoutes.js')(app);
 	require('../routes/uploadRoutes')(app);
+	require('../routes/submissionRoutes')(app);
 	//var Book = require('./models/bookModel');
     //bookRouter = require('./Routes/bookRoutes')(Book);
     //app.use('/api/books', bookRouter);

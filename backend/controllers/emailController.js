@@ -1,14 +1,14 @@
 var nodemailer = require('nodemailer');
 var emailController = function(Email){
 	var smtpTransport = nodemailer.createTransport("SMTP",{
-    service: Email.service,
+    service: "Gmail",
     auth: {
-        user: Email.auth.user,
-        pass: Email.auth.pass
+        user: "tkproject2016@gmail.com",
+        pass: "TKproject.2016"
     }
 });
 	var mailOptions = {
-    from: Email.from, // sender address
+    from: '"CMS"<tkproject2016@gmail.com>', // sender address
     to:Email.to, // list of receivers
     subject: Email.subject, // Subject line
     text: Email.text, // plaintext body
