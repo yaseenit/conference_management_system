@@ -15,6 +15,7 @@ module.exports = function() {
 	require('../models/articleModel');
 	require('../models/submissionModel');
 	require('../models/conferenceModel');
+	require('../models/reviewModel');
 	// Return the Mongoose connection instance
 	return db;
 };

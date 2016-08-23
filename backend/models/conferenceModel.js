@@ -3,12 +3,13 @@ var mongoose = require('mongoose'),
 
 var conferenceModel = new Schema({
     title: {type: String},
-    chair: {type: String},
-    chairEmail: {type: String},
-    startdate: {type: String},
-    enddate: {type: String},
+    chair: {type: String,required:true},
+    chairEmail: {type: String,unique:true},
+    startdate: {type: Date},
+    enddate: {type: Date},
     conferenceLocation:{type: String},
-    status: {type: Boolean, default:false}
+    status: {type: Boolean, default:false},
+    reviewPhase:{type:Boolean,default: true}
 });
 
 module.exports= mongoose.model('Conference', conferenceModel);

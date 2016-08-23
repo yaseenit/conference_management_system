@@ -3,10 +3,13 @@ var submissionController = function(Submission){
 
     var post = function(req, res){
         var submission = new Submission(req.body);
-
+//a submission must have a title
         if(!req.body.title){
             res.status(400);
-            res.send('Title is required');
+          var titleError={
+              "Error": "No title is found" 
+            };
+            res.send(titleError);
         }
         else {
             submission.save();
