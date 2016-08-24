@@ -1,5 +1,9 @@
 var jwt = require('jwt-simple');
 var User = require('mongoose').model('User')
+var Email = require('../models/emailModel');
+var os = require("os");
+var async = require('async');
+
 
 var auth = {
 
@@ -16,45 +20,20 @@ var auth = {
       });
       return;
     }
-    findTheUser = function (username, password, done) {
-      // Use the 'User' model 'findOne' method to find a user with the current username
-      User.findOne({
-        username: username
-      }, function (err, user) {
-        // If an error occurs continue to the next middleware
-        if (err) {
-          return done(err);
-        }
-        // If a user was not found, continue to the next middleware with an error message
-        if (!user) {
-          return done(null, false, {
-            message: 'Unknown user'
-          });
-        }
-        // If the passport is incorrect, continue to the next middleware with an error message
-        if (!user.authenticate(password)) {
-          return done(null, false, {
-            message: 'Invalid password'
-          });
-        }
-        // Otherwise, continue to the next middleware with the user object
-        return done(null, user);
-      });
-    };
 
-    findTheUser(username, password, function (err, user, message) {
+    User.isRegisteredUser(username, password, function (err, user, message) {
       if (err) {
         res.status(500);
         res.json({
           "status": 500,
-          "message":message.message
+          "message": message.message
         });
       }
       if (!user) {
         res.status(401);
         res.json({
           "status": 401,
-          "message":message.message
+          "message": message.message
         });
       }
       if (user) {
@@ -82,27 +61,68 @@ var auth = {
         if (err) {
           // Use the error handling method to get the error message
           var message = getErrorMessage(err);
-
-          // Set the flash messages
-          //req.flash('error', message);
-
-          // Redirect the user back to the signup page
           return res.status(400).json({ "message": message });
         }
 
-        // // If the user was created successfully use the Passport 'login' method to login
-        // req.login(user, function(err) {
-        // 	// If a login error occurs move to the next middleware
-        // 	if (err) return next(err);
-
-        // 	// Redirect the user back to the main application page
-        // 	return res.redirect('/');
-        // });
+        // If the user was created successfully 
+        sendConfirmationEmail(user,req.headers.host);
+        // reply 
         res.json(genToken(user));;
       });
     }
 
   },// end of register
+
+  confirm_registertion: function (req, res) {
+    var token = req.params.token;
+    console.log("token: " + token);
+    var errorMessage;
+    if (token) {
+      try {
+        var decoded = jwt.decode(token, require('../config/jwt_secret.js')());
+      } catch (err) {
+        res.status(500);
+        res.json({
+          "status": 500,
+          "message": "Oops something went wrong with token decoding. Void token!",
+          "error": err
+        });
+        return;
+      }
+
+      User.findOneAndUpdate({ 'username': decoded.userid }, { 'is_confirmed': true }, { upsert: false }, function (err, user) {
+        if (err) {
+          res.status(500);
+          res.json({
+            "status": 500,
+            "message": "Oops something went wrong",
+            "error": err
+          });
+          return;
+        }
+        if (!user) {
+          res.status(500);
+          res.json({
+            "status": 500,
+            "message": "User not found!",
+          });
+          return;
+        }
+        html_code = "<html><head><title>Confirmation has been done successfully!</title></head>\
+                    <body>\
+                      <h2>Thank you for your confirmation!</h2>\
+                    </body></html>";
+        res.send(html_code);
+      });
+
+    } else {
+      res.status(500);
+      res.json({
+        "status": 500,
+        "message": "Missing Token!",
+      });
+    }
+  }//end of confirm_registertion
 }
 
 
@@ -130,7 +150,7 @@ function genToken(user) {
   var token = jwt.encode({
     exp: expires,
     userid: user.username // add the user object to the token
-  }, require('../config/secret')());
+  }, require('../config/jwt_secret')());
   userToReturn = {
 
   }
@@ -171,6 +191,20 @@ function getErrorMessage(err) {
 
   // Return the message error
   return message;
+}
+
+function sendConfirmationEmail(user,host) {
+  Email.to = user.username;
+  Email.subject = "CMS: Registration Confirmation";
+  var name = user.username.substring(0, user.username.lastIndexOf("@"));
+  if (user.lastName) {
+    name = user.lastName;
+  }
+  //req.headers.host
+  confirm_link = 'http://'+ host + '/confirm_registertion/' + genToken(user).token;
+  Email.html = "<p>Dear Mr/Ms " + name + ",<br>You've successfully registered! please confirm your email by clicking on the following link:   " 
+    + confirm_link + "<br>Thank you</p>";
+  var emailController = require('../controllers/emailController')(Email);
 };
 
 module.exports = auth;

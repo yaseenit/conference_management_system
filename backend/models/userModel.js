@@ -5,7 +5,6 @@
 var mongoose = require('mongoose'),
 	crypto = require('crypto'),
 	Schema = mongoose.Schema;
-
 // Define a new 'UserSchema'
 var UserSchema = new Schema({
 	firstName: String,
@@ -61,7 +60,10 @@ var UserSchema = new Schema({
 		type: Date,
 		// Create a default 'created' value
 		default: Date.now
-	}
+	},
+	is_confirmed: {type: Boolean, default:false}// get true value if the user confirms their 
+	                                      // registration by clicking on a registration 
+										  // link sent via email
 });
 
 // Set the 'fullname' virtual property
@@ -92,7 +94,7 @@ UserSchema.pre('save', function(next) {
 UserSchema.methods.hashPassword = function(password) {
 	return crypto.pbkdf2Sync(password, this.salt, 10000, 64).toString('base64');
 };
-
+//instance method
 // Create an instance method for authenticating user
 UserSchema.methods.authenticate = function(password) {
 	return this.password === this.hashPassword(password);
@@ -145,6 +147,50 @@ UserSchema.set('toJSON', {
 //         return retJson;
 //     }
 // });
+
+  //class methods
+  UserSchema.statics.isRegisteredUser = function (username, password, done) {
+		// Use the 'User' model 'findOne' method to find a user with the current username
+		this.findOne({
+		username: username
+		}, function (err, user) {
+		// If an error occurs continue to the next middleware
+		if (err) {
+			return done(err);
+		}
+		// If a user was not found, continue to the next middleware with an error message
+		if (!user) {
+			return done(null, false, {
+			message: 'Unknown user'
+			});
+		}
+		// If the password is incorrect, continue to the next middleware with an error message
+		if (!user.authenticate(password)) {
+			return done(null, false, {
+			message: 'Invalid password'
+			});
+		}
+		// Otherwise, continue to the next middleware with the user object
+		return done(null, user);
+		});
+	};
+	UserSchema.statics.findTheUserByUsername = function (username, done) {
+		// Use the 'User' model 'findOne' method to find a user with the current username
+		this.findOne({
+		username: username
+		}, function (err, user) {
+		// If an error occurs continue to the next middleware
+		if (err) {
+			return done(err);
+		}
+		// If a user was not found, continue to the next middleware with an error message
+		if (!user) {
+			return done(null, false, {
+			message: 'Unknown user'
+			});
+		}
+			return done(null,user);
+		});};
 
 
 // Create the 'User' model out of the 'UserSchema'
