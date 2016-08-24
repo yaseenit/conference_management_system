@@ -32,7 +32,7 @@ var UserSchema = new Schema({
 	},
 	role: {
         type: String,
-        enum : ['USER','REVIWER','AUTHOR','CHAIR'],
+        enum : ['USER','REVIEWER','AUTHOR','CHAIR'],
         default : 'USER'
     },
 	institution:{type: String},

@@ -1,7 +1,7 @@
 var Email = {
     service: {type: String},
      auth: {
-        user:{type:String},
+        user:{type:String,unique:true},
         pass:{type:String}
     },
     from:{type:String}, // sender address

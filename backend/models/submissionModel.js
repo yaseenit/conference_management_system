@@ -6,9 +6,14 @@ var submissionModel = new Schema({
     abstract: {type: String},
     authorGivenName:{type:String},
     authorFamilyName:{type:String},
-    authorEmail:{type:String},
+    authorEmail:{type:String, unique:true, required:true},
     keywords:[{type:String}],
-    status: {type: Boolean, default:false},
+    status:{
+        type: String,
+        enum : ['incompleted', 'completed', 'closed', 'accepted', 'rejected'],
+        default : 'incompleted'
+    },     
+   // {type: Boolean, default:false},
     filename:{type:String}
    // submissionId:{type:String} //this is actually meant to be the author
 });

@@ -81,6 +81,7 @@ module.exports = function (db) {
 	require('../routes/articlesRoutes.js')(app);
 	require('../routes/uploadRoutes')(app);
 	require('../routes/submissionRoutes')(app);
+	require('../routes/reviewRoutes')(app);
 	require('../routes/auth');
 
 	// Auth Middleware - This will check if the token is valid
