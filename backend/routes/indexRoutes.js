@@ -11,7 +11,7 @@ module.exports = function(app) {
     //       });
 
 	var auth = require('./auth.js');
-	//var products = require('./products.js');
+	var submissionRoutes = require('./submissionRoutes')(app);
 	//var user = require('./users.js');
 	
 
@@ -45,7 +45,12 @@ module.exports = function(app) {
 	// /*
 	// * Routes that can be accessed only by autheticated users
 	// */
-	// app.get('/api/v1/submission', products.getAll);
+	app.get('/api/v1/submissions/',submissionRoutes.getAll);
+	app.post('/api/v1/submissions/',submissionRoutes.create);
+	// app.get('/api/v1/submissions/:submissionId', submissionRoutes.getOne);
+	// app.put('/api/v1/submissions/:submissionId',submissionRoutes.update);
+	// app.delete('/api/v1/submissions/:submissionId',submissionRoutes.remove);
+	// app.patch('/api/v1/submissions/:submissionId',submissionRoutes.patch);
 	// app.get('/api/v1/submission/:id', products.getOne);
 	// app.post('/api/v1/submission/', products.create);
 	// app.put('/api/v1/submission/:id', products.update);
