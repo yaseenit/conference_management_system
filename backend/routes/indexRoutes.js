@@ -22,7 +22,7 @@ module.exports = function(app) {
 	*/
 	app.get('/', function (req, res) { // welcoming
 	var welcome = {
-		message: "Welcome to CMS API.",
+		message: "Hooray! welcome to our CMS API.",
 		code: 200
 	};
 	res.json(welcome);
@@ -38,6 +38,7 @@ module.exports = function(app) {
 
 	app.post('/login', auth.login);
 	app.post('/register', auth.register);
+	app.get('/confirm_registertion/:token', auth.confirm_registertion);
 
 /****************************************************/
 
