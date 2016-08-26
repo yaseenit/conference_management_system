@@ -75,7 +75,6 @@ var auth = {
 
   confirm_registertion: function (req, res) {
     var token = req.params.token;
-    console.log("token: " + token);
     var errorMessage;
     if (token) {
       try {

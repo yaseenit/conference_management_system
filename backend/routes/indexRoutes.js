@@ -5,10 +5,7 @@
 module.exports = function(app) {
 	// Load the 'index' controller
 	var index = require('../controllers/indexController');
-
-	// app.get('/ping',function(req, res){
-    //     res.json(ping);
-    //       });
+	var user = require('../controllers/userController');
 
 	var auth = require('./auth.js');
 	//var products = require('./products.js');
@@ -55,7 +52,13 @@ module.exports = function(app) {
 	// /*
 	// * Routes that can be accessed only by authenticated & authorized users
 	// */
-	// app.get('/api/v1/chair/users', user.getAll);
+
+    app.get('/api/v1/chair/submissions', user.getAllSubmissions);
+	app.get('/api/v1/chair/authors', user.getAllAuthors);
+	app.get('/api/v1/chair/reviewers', user.getAllReviewers);
+	app.get('/api/v1/chair/reviews', user.getAllReviews);
+
+    // app.get('/api/v1/chair/users', user.getAll);
 	// app.get('/api/v1/chair/user/:id', user.getOne);
 	// app.post('/api/v1/chair/user/', user.create);
 	// app.put('/api/v1/chair/user/:id', user.update);

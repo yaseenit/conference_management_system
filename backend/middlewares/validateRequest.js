@@ -44,6 +44,7 @@ module.exports = function (req, res, next) {
             }
             if (user) {
                 if ((req.url.indexOf('chair') >= 0 && user.role == 'chair') || (req.url.indexOf('chair') < 0 && req.url.indexOf('/api/v1/') >= 0)) {
+                    req.user = user;
                     next(); // To move to next middleware
                 } else {
                     res.status(403);

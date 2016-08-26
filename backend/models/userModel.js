@@ -36,16 +36,11 @@ var UserSchema = new Schema({
         default : 'USER'
     },
 	institution:{type: String},
-	institution_city:{type: String},
-    institution_state:{type: String},
-    institution_country:{type: String},
-    institution_postal_code:{type: String},
-	institution_street:{type: String},
     user_city:{type: String},
     user_state:{type: String},
     user_country:{type: String},
 	user_postal_code:{type: String},
-	user_street:{type: String},
+	user_address:{type: String},
 	salt: {
 		type: String
 	},
@@ -61,9 +56,11 @@ var UserSchema = new Schema({
 		// Create a default 'created' value
 		default: Date.now
 	},
-	is_confirmed: {type: Boolean, default:false}// get true value if the user confirms their 
+	is_confirmed: {type: Boolean, default:false},// get true value if the user confirms their 
 	                                      // registration by clicking on a registration 
 										  // link sent via email
+reviews:[ {type: mongoose.Schema.Types.ObjectId, ref: 'Review'} ],
+submissions:[ {type: mongoose.Schema.Types.ObjectId, ref: 'Submission'} ]
 });
 
 // Set the 'fullname' virtual property
@@ -99,6 +96,7 @@ UserSchema.methods.hashPassword = function(password) {
 UserSchema.methods.authenticate = function(password) {
 	return this.password === this.hashPassword(password);
 };
+
 
 // // Find possible not used username
 // UserSchema.statics.findUniqueUsername = function(username, suffix, callback) {

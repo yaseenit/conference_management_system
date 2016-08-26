@@ -1,4 +1,5 @@
 var Email = require('../models/emailModel');
+
 var reviewController = function (Review) {
 
     var post = function (req, res) {
@@ -56,7 +57,8 @@ var reviewController = function (Review) {
 
     return {
         post: post,
-        get: get
+        get: get,
+
     }
 }
 

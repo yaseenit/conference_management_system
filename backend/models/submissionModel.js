@@ -11,11 +11,17 @@ var submissionModel = new Schema({
     status:{
         type: String,
         enum : ['incompleted', 'completed', 'closed', 'accepted', 'rejected'],
-        default : 'incompleted'
+        default : 'incompleted',
+        trim: true,
+		lowercase: true
     },     
    // {type: Boolean, default:false},
-    filename:{type:String}
-   // submissionId:{type:String} //this is actually meant to be the author
+    filename:{type:String},
+    deadline: {
+		type: Date,
+		// Create a default 'created' value
+		default: Date.now + 14
+	}
 });
 
 

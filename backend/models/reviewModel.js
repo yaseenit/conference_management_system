@@ -22,7 +22,12 @@ var reviewModel = new Schema({
     reviewers:[
         {type:String}
         ],
-    reviewerEmail:{type:String, unique:true}
+    reviewerEmail:{type:String, unique:true},
+    deadline: {
+		type: Date,
+		// Create a default 'created' value
+		default: Date.now + 14
+	}
     //review phase i moved it to the conference model
 });
 
