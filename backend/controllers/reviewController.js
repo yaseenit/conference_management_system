@@ -20,9 +20,10 @@ var reviewController = function (Review) {
             res.send(detailedcommentError);
         }
         else {
-            review.save(function (err, review) {
+            review.save(function (err) {
                 if (err) {
-                    console.log(err);
+                    res.status(500).send(err);
+                    //console.log(err);
                 }
                 else {
                     res.status(201);
