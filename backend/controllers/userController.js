@@ -73,8 +73,6 @@ var userController = function (User) {
                     res.json(submissions);
             });
     }
-
-
     return {
         post: post,
         get: get,
@@ -82,7 +80,6 @@ var userController = function (User) {
         getAllReviewers: getAllReviewers,
         getAllReviews: getAllReviews,
         getAllSubmissions: getAllSubmissions
-
     }
 }
 

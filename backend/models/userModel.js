@@ -25,22 +25,23 @@ var UserSchema = new Schema({
 		type: String,
 		// Validate the 'password' value length
 		validate: [
-			function(password) {
+			function (password) {
 				return password && password.length > 6;
 			}, 'Password should be longer'
 		]
 	},
 	role: {
         type: String,
-        enum : ['USER','REVIEWER','AUTHOR','CHAIR'],
-        default : 'USER'
+        enum: ['user', 'reviewer', 'author', 'chair'],
+        default: 'user',
+		lowercase: true
     },
-	institution:{type: String},
-    user_city:{type: String},
-    user_state:{type: String},
-    user_country:{type: String},
-	user_postal_code:{type: String},
-	user_address:{type: String},
+	institution: { type: String },
+    user_city: { type: String },
+    user_state: { type: String },
+    user_country: { type: String },
+	user_postal_code: { type: String },
+	user_address: { type: String },
 	salt: {
 		type: String
 	},
@@ -56,11 +57,11 @@ var UserSchema = new Schema({
 		// Create a default 'created' value
 		default: Date.now
 	},
-	is_confirmed: {type: Boolean, default:false},// get true value if the user confirms their 
-	                                      // registration by clicking on a registration 
-										  // link sent via email
-reviews:[ {type: mongoose.Schema.Types.ObjectId, ref: 'Review'} ],
-submissions:[ {type: mongoose.Schema.Types.ObjectId, ref: 'Submission'} ]
+	is_confirmed: { type: Boolean, default: false },// get true value if the user confirms their 
+	// registration by clicking on a registration 
+	// link sent via email
+	reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],
+	submissions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Submission' }]
 });
 
 // Set the 'fullname' virtual property
@@ -78,7 +79,7 @@ submissions:[ {type: mongoose.Schema.Types.ObjectId, ref: 'Submission'} ]
 //      return this.institution_street + ' ' + this.institution_postal_code + ' ' + this.institution_city+ ' ' + this.institution_state + ' ' + this.institution_country;
 // });
 // Use a pre-save middleware to hash the password
-UserSchema.pre('save', function(next) {
+UserSchema.pre('save', function (next) {
 	if (this.password) {
 		this.salt = new Buffer(crypto.randomBytes(16).toString('base64'), 'base64');
 		this.password = this.hashPassword(this.password);
@@ -88,12 +89,12 @@ UserSchema.pre('save', function(next) {
 });
 
 // Create an instance method for hashing a password
-UserSchema.methods.hashPassword = function(password) {
+UserSchema.methods.hashPassword = function (password) {
 	return crypto.pbkdf2Sync(password, this.salt, 10000, 64).toString('base64');
 };
 //instance method
 // Create an instance method for authenticating user
-UserSchema.methods.authenticate = function(password) {
+UserSchema.methods.authenticate = function (password) {
 	return this.password === this.hashPassword(password);
 };
 
@@ -127,7 +128,7 @@ UserSchema.methods.authenticate = function(password) {
 UserSchema.set('toJSON', {
 	getters: true,
 	virtuals: true,
-    transform: function(doc, ret, options) {
+    transform: function (doc, ret, options) {
         delete ret.password;
 		delete ret.salt;
         delete ret.__v;
@@ -146,12 +147,12 @@ UserSchema.set('toJSON', {
 //     }
 // });
 
-  //class methods
-  UserSchema.statics.isRegisteredUser = function (username, password, done) {
-		// Use the 'User' model 'findOne' method to find a user with the current username
-		this.findOne({
+//class methods
+UserSchema.statics.isRegisteredUser = function (username, password, done) {
+	// Use the 'User' model 'findOne' method to find a user with the current username
+	this.findOne({
 		username: username
-		}, function (err, user) {
+	}, function (err, user) {
 		// If an error occurs continue to the next middleware
 		if (err) {
 			return done(err);
@@ -159,24 +160,24 @@ UserSchema.set('toJSON', {
 		// If a user was not found, continue to the next middleware with an error message
 		if (!user) {
 			return done(null, false, {
-			message: 'Unknown user'
+				message: 'Unknown user'
 			});
 		}
 		// If the password is incorrect, continue to the next middleware with an error message
 		if (!user.authenticate(password)) {
 			return done(null, false, {
-			message: 'Invalid password'
+				message: 'Invalid password'
 			});
 		}
 		// Otherwise, continue to the next middleware with the user object
 		return done(null, user);
-		});
-	};
-	UserSchema.statics.findTheUserByUsername = function (username, done) {
-		// Use the 'User' model 'findOne' method to find a user with the current username
-		this.findOne({
+	});
+};
+UserSchema.statics.findTheUserByUsername = function (username, done) {
+	// Use the 'User' model 'findOne' method to find a user with the current username
+	this.findOne({
 		username: username
-		}, function (err, user) {
+	}, function (err, user) {
 		// If an error occurs continue to the next middleware
 		if (err) {
 			return done(err);
@@ -184,12 +185,13 @@ UserSchema.set('toJSON', {
 		// If a user was not found, continue to the next middleware with an error message
 		if (!user) {
 			return done(null, false, {
-			message: 'Unknown user'
+				message: 'Unknown user'
 			});
 		}
-			return done(null,user);
-		});};
+		return done(null, user);
+	});
+};
 
 
 // Create the 'User' model out of the 'UserSchema'
-mongoose.model('User', UserSchema);
+module.exports = mongoose.model('User', UserSchema);

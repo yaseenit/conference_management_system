@@ -13,27 +13,31 @@ var submissionController = function (Submission) {
         // }
         //else {
         submission.save(function (err) {
-            if (err)
+            if (err) {
                 res.status(500).send(err);
+                return;
+            }
             else {
                 var user = req.user;
-                submission.save();
                 user.submissions.push(submission._id);
                 user.save(function (err, user) {
                     if (err) {
+                        submission.remove();
                         res.status(500).send(err);
                         return;
                     }
-                    console.log('a new user submission saved:', user.submissions);
+                    else {
+                        res.status(201);
+                        res.send(submission);
+                        Email.to = user.username;
+                        Email.subject = "CMS Submission Confirmation mail";
+                        Email.text = "Dear Mr/Ms " + req.body.authorFamilyName + "you've successfully submitted a new pape with title " + req.body.title;
+                        Email.html = "<p>Dear Mr/Ms " + req.body.authorFamilyName + ",<br>You have successfully submitted a new paper with title " + req.body.title + "<br>Best of luck with the Review Process</p>";
+                        // res.send(submission._id);
+                        var emailController = require('../controllers/emailController')(Email);
+                    }
                 });
-                res.status(201);
-                res.send(submission);
-                Email.to = req.body.authorEmail;
-                Email.subject = "CMS Submission Confirmation mail";
-                Email.text = "Dear Mr/Ms " + req.body.authorFamilyName + "you've successfully submitted a new pape with title " + req.body.title;
-                Email.html = "<p>Dear Mr/Ms " + req.body.authorFamilyName + ",<br>You have successfully submitted a new paper with title " + req.body.title + "<br>Best of luck with the Review Process</p>";
-                // res.send(submission._id);
-                var emailController = require('../controllers/emailController')(Email);
+
             }
         }
         );

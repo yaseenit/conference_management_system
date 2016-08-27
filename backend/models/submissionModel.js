@@ -20,7 +20,7 @@ var submissionModel = new Schema({
     deadline: {
 		type: Date,
 		// Create a default 'created' value
-		default: Date.now + 14
+		default: +new Date() + 14*24*60*60*1000
 	}
 });
 

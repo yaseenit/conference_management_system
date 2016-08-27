@@ -23,21 +23,31 @@ var reviewController = function (Review) {
             review.save(function (err) {
                 if (err) {
                     res.status(500).send(err);
-                    //console.log(err);
+                    return;
                 }
                 else {
-                    res.status(201);
-                    res.send(review);
-                    Email.to = req.body.reviewerEmail;
-                    Email.subject = "CMS Review Delivery Confirmation mail";
-                    Email.text = "Dear Reviewer,you've successfully reviewed a submission ";//+req.body.title;
-                    Email.html = "<p>Dear Reviewer,<br>You have successfully reviewed a new paper. <br> Thanks a lot </p>"; //with title " +req.body.title+"<br>Best of luck with the Review Process</p>";
-                    // res.send(review._id);
-                    var emailController = require('../controllers/emailController')(Email);
-
-
+                    var user = req.user;
+                    user.reviews.push(review._id);
+                    user.save(function (err, user) {
+                        if (err) {
+                            review.remove();
+                            res.status(500).send(err);
+                            return;
+                        }
+                        else {
+                            res.status(201);
+                            res.send(review);
+                            Email.to = user.username;
+                            Email.subject = "CMS Review Delivery Confirmation mail";
+                            Email.text = "Dear Reviewer,you've successfully reviewed a submission ";//+req.body.title;
+                            Email.html = "<p>Dear Reviewer,<br>You have successfully reviewed a new paper. <br> Thanks a lot </p>"; //with title " +req.body.title+"<br>Best of luck with the Review Process</p>";
+                            // res.send(review._id);
+                            var emailController = require('../controllers/emailController')(Email);
+                        }
+                    });
                 }
-            });
+            }
+            );
         }
     }
 

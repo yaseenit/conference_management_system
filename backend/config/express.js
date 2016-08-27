@@ -76,13 +76,13 @@ module.exports = function (db) {
 	});
 
 	// Load the routing files
-	require('../routes/indexRoutes.js')(app);
-	//require('../routes/usersRoutes.js')(app);
-	require('../routes/articlesRoutes.js')(app);
-	require('../routes/uploadRoutes')(app);
-	require('../routes/submissionRoutes')(app);
-	require('../routes/reviewRoutes')(app);
-	require('../routes/auth');
+	// require('../routes/indexRoutes.js')(app);
+	// //require('../routes/usersRoutes.js')(app);
+	// require('../routes/articlesRoutes.js')(app);
+	// require('../routes/uploadRoutes')(app);
+	// require('../routes/submissionRoutes')(app);
+	// require('../routes/reviewRoutes')(app);
+	// require('../routes/auth');
 
 	// Auth Middleware - This will check if the token is valid
 	// Only the requests that start with /api/v1/* will be checked for the token.
@@ -90,7 +90,7 @@ module.exports = function (db) {
 	// are sure that authentication is not needed
 	app.all('/api/v1/*', [require('../middlewares/validateRequest')]);//The middleware to authenticate 
 	//and authorize the request.
-
+    require('../routes/indexRoutes.js')(app);
 	//app.use('/', require('../routes'));
 
 	// If no route is matched by now, it must be a 404

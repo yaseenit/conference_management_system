@@ -1,7 +1,6 @@
 var jwt = require('jwt-simple');
 var User = require('mongoose').model('User')
 var Email = require('../models/emailModel');
-var os = require("os");
 var async = require('async');
 
 
@@ -20,7 +19,6 @@ var auth = {
       });
       return;
     }
-
     User.isRegisteredUser(username, password, function (err, user, message) {
       if (err) {
         res.status(500);
@@ -59,9 +57,7 @@ var auth = {
       user.save(function (err) {
         // If an error occurs, use flash messages to report the error
         if (err) {
-          // Use the error handling method to get the error message
-          var message = getErrorMessage(err);
-          return res.status(400).json({ "message": message });
+          return res.status(400).json({ "message": err });
         }
 
         // If the user was created successfully 
@@ -164,33 +160,7 @@ function expiresIn(numDays) {
   var dateObj = new Date();
   return dateObj.setDate(dateObj.getDate() + numDays);
 }
-// Create a new error handling controller method
-function getErrorMessage(err) {
-  // Define the error message variable
-  var message = '';
 
-  // If an internal MongoDB error occurs get the error message
-  if (err.code) {
-    switch (err.code) {
-      // If a unique index error occurs set the message error
-      case 11000:
-      case 11001:
-        message = 'Username already exists';
-        break;
-      // If a general error occurs set the message error
-      default:
-        message = 'Something went wrong';
-    }
-  } else {
-    // Grab the first error message from a list of possible errors
-    for (var errName in err.errors) {
-      if (err.errors[errName].message) message = err.errors[errName].message;
-    }
-  }
-
-  // Return the message error
-  return message;
-}
 
 function sendConfirmationEmail(user,host) {
   Email.to = user.username;
