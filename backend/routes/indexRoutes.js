@@ -9,6 +9,7 @@ module.exports = function (app) {
 	var auth = require('./auth.js');
 	var submissionRoutes = require('./submissionRoutes')(app);
 	var userRoutes = require('./usersRoutes');
+	var taskController = require('../controllers/taskController')();
 
 	//var user = require('./users.js');
 
@@ -51,7 +52,7 @@ module.exports = function (app) {
 	app.post('/api/v1/submissions/', submissionRoutes.create);
 	// app.get('/api/v1/submissions/:submissionId', submissionRoutes.getOne);
 	// app.put('/api/v1/submissions/:submissionId',submissionRoutes.update);
-	// app.delete('/api/v1/submissions/:submissionId',submissionRoutes.remove);
+    app.delete('/api/v1/submissions/:submissionId', submissionRoutes.remove);
 	// app.patch('/api/v1/submissions/:submissionId',submissionRoutes.patch);
 	// app.get('/api/v1/submission/:id', products.getOne);
 	// app.post('/api/v1/submission/', products.create);
@@ -66,6 +67,14 @@ module.exports = function (app) {
 	app.get('/api/v1/chair/authors', userRoutes.getAllAuthors);
 	app.get('/api/v1/chair/reviewers', userRoutes.getAllReviewers);
 	app.get('/api/v1/chair/reviews', userRoutes.getAllReviews);
+
+
+	//	app.get('/api/v1/chair/task/:taskID', userRoutes.getTask);
+	console.log(taskController);
+    app.post('/api/v1/chair/task/', taskController.createTask);
+	app.get('/api/v1/chair/task/', taskController.getAllTasks);
+	//	app.put('/api/v1/chair/task/:taskID', userRoutes.doEditTask);
+ //   app.delete('/api/v1/chair/task/:taskID', userRoutes.deleteTask);
 
     // app.get('/api/v1/chair/users', user.getAll);
 	// app.get('/api/v1/chair/user/:id', user.getOne);
