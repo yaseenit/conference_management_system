@@ -51,7 +51,7 @@ module.exports = function (app) {
 	app.post('/api/v1/submissions/', submissionRoutes.create);
 	// app.get('/api/v1/submissions/:submissionId', submissionRoutes.getOne);
 	// app.put('/api/v1/submissions/:submissionId',submissionRoutes.update);
-	// app.delete('/api/v1/submissions/:submissionId',submissionRoutes.remove);
+    app.delete('/api/v1/submissions/:submissionId',submissionRoutes.remove);
 	// app.patch('/api/v1/submissions/:submissionId',submissionRoutes.patch);
 	// app.get('/api/v1/submission/:id', products.getOne);
 	// app.post('/api/v1/submission/', products.create);

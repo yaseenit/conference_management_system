@@ -113,7 +113,18 @@ var submissionController = function (Submission) {
             if (err)
                 res.status(500).send(err);
             else {
-                res.status(204).send('Removed');
+                var user = req.user;
+                user.submissions.pull(submission._id);
+                user.save(function (err, user) {
+                    if (err) {
+                        req.submission.save();
+                        res.status(500).send(err);
+                        return;
+                    }
+                    else {
+                        res.status(204).json({message:"Submission has be deleted.",code:204});
+                    }
+                });
             }
         });
     };

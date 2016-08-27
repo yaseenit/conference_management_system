@@ -7,8 +7,8 @@ var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
 // Define a new 'UserSchema'
 var UserSchema = new Schema({
-	firstName: String,
-	lastName: String,
+	givenName: String,
+	familyName: String,
 	username: {
 		type: String,
 		// Validate the email format
@@ -36,12 +36,12 @@ var UserSchema = new Schema({
         default: 'user',
 		lowercase: true
     },
-	institution: { type: String },
-    user_city: { type: String },
-    user_state: { type: String },
-    user_country: { type: String },
-	user_postal_code: { type: String },
-	user_address: { type: String },
+	institute: { type: String },
+    city: { type: String },
+    state: { type: String },
+    country: { type: String },
+	zipCode: { type: String },
+	address: { type: String },
 	salt: {
 		type: String
 	},
@@ -60,8 +60,8 @@ var UserSchema = new Schema({
 	is_confirmed: { type: Boolean, default: false },// get true value if the user confirms their 
 	// registration by clicking on a registration 
 	// link sent via email
-	reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],
-	submissions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Submission' }]
+	reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],//review id 
+	submissions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Submission' }]// a submission id here that this user is author for this submission
 });
 
 // Set the 'fullname' virtual property
