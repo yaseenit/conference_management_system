@@ -5,21 +5,6 @@ var reviewController = function (Review) {
     var post = function (req, res) {
         var review = new Review(req.body);
 
-        // if (!req.body.summary) {
-        //     res.status(400);
-        //     var summaryError = {
-        //         "Error": "No Summary for the Review!"
-        //     };
-        //     res.send(summaryError);
-        // }
-        // else if (!req.body.detailedComments) {
-        //     res.status(400);
-        //     var detailedcommentError = {
-        //         "Error": "No detailed Comments are given"
-        //     };
-        //     res.send(detailedcommentError);
-        // }
-        // else {
         review.save(function (err) {
             if (err) {
                 res.status(500).send(err);
@@ -66,13 +51,17 @@ var reviewController = function (Review) {
         });
     }
 
- var getone = function (req, res, next) {
+
+
+
+ var getone = function (req, res) {
         Review.findById(req.params.reviewId, function (err, review) {
             if (err)
                 res.status(500).send(err);
             else if (review) {
                 req.review = review;
-                next();
+                res.json(review);
+                
             }
             else {
                 res.status(404).send('no review for the requested review Id is found');
@@ -80,26 +69,37 @@ var reviewController = function (Review) {
         });
     }
 
- var remove = function (req, res) {
-        req.review.remove(function (err) {
+ 
+    var remove = function (req, res) {
+        Review.findById(req.params.reviewId, function (err, review) {
             if (err)
                 res.status(500).send(err);
-            else {
-                var user = req.user;
-                user.reviews.pull(review._id);
-                user.save(function (err, user) {
-                    if (err) {
-                        req.review.save();
+            else if (review) {
+                req.review = review;
+                req.review.remove(function (err) {
+                    if (err)
                         res.status(500).send(err);
-                        return;
-                    }
                     else {
-                        res.status(204).json({message:"Review has be deleted.",code:204});
+                        var user = req.user;
+                        user.reviews.pull(review._id);
+                        user.save(function (err, user) {
+                            if (err) {
+                                req.review.save();
+                                res.status(500).send(err);
+                                return;
+                            }
+                            else {
+                                res.status(204).json({ message: "review has be deleted.", code: 204 });
+                            }
+                        });
                     }
                 });
             }
+            else {
+                res.status(404).send('no review for the requested submissionId is found to be deleted');
+            }
         });
-    };
+    }
     return {
         post: post,
         get: get,
