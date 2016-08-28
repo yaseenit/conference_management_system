@@ -13,16 +13,8 @@ var getOne = submissionController.getone;
 var getAll=submissionController.get;
 var create=submissionController.post;
 var update=submissionController.put;
-var remove=submissionController.remove;
+var remove=submissionController.removed;
 var patch=submissionController.patch;
-
-
-// app.post(submissionController.post);
-// app.get(submissionController.get);
-// app.get(submissionController.getone);
-// app.delete(submissionController.remove);
-// app.put(submissionController.put);
-// app.patch(submissionController.patch);
 
     return {
         getOne: getOne,

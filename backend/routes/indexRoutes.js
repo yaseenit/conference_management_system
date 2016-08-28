@@ -8,8 +8,9 @@ module.exports = function (app) {
 
 	var auth = require('./auth.js');
 	var submissionRoutes = require('./submissionRoutes')(app);
+	var reviewRoutes=require('./reviewRoutes')(app);
 	var userRoutes = require('./usersRoutes');
-
+    var uploadroutes=require('./uploadRoutes')(app);
 	//var user = require('./users.js');
 
 
@@ -40,16 +41,18 @@ module.exports = function (app) {
 
 	/****************************************************/
 
-	var Review = require('../models/reviewModel');
-	var reviewController = require('../controllers/reviewController')(Review)
-	app.post('/api/v1/review/', reviewController.post);
-
+	//var Review = require('../models/reviewModel');
+//	var reviewController = require('../controllers/reviewController')(Review)
+	app.post('/api/v1/review/', reviewRoutes.create);
+    app.get('/api/v1/review/',reviewRoutes.getAll);
+	app.delete('/api/v1/review/:reviewId',reviewRoutes.remove);
+	app.get('/api/v1/submissions/:reviewId', submissionRoutes.getOne);
 	// /*
 	// * Routes that can be accessed only by autheticated users
 	// */
 	app.get('/api/v1/submissions/', submissionRoutes.getAll);
 	app.post('/api/v1/submissions/', submissionRoutes.create);
-	// app.get('/api/v1/submissions/:submissionId', submissionRoutes.getOne);
+	 app.get('/api/v1/submissions/:submissionId', submissionRoutes.getOne);
 	// app.put('/api/v1/submissions/:submissionId',submissionRoutes.update);
     app.delete('/api/v1/submissions/:submissionId',submissionRoutes.remove);
 	// app.patch('/api/v1/submissions/:submissionId',submissionRoutes.patch);

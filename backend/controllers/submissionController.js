@@ -60,13 +60,19 @@ var submissionController = function (Submission) {
         });
     }
 
-    var getone = function (req, res, next) {
+
+
+
+    var getone = function (req, res) {
+        // var subid=req.params.submissionId;
+        //console.log(subid+'helloo');
         Submission.findById(req.params.submissionId, function (err, submission) {
             if (err)
                 res.status(500).send(err);
             else if (submission) {
                 req.submission = submission;
-                next();
+                res.json(submission);
+                // next();
             }
             else {
                 res.status(404).send('no submission for the requested submissionId is found');
@@ -108,33 +114,43 @@ var submissionController = function (Submission) {
         });
     }
 
-    var remove = function (req, res) {
-        req.submission.remove(function (err) {
+    var removed = function (req, res) {
+        Submission.findById(req.params.submissionId, function (err, submission) {
             if (err)
                 res.status(500).send(err);
-            else {
-                var user = req.user;
-                user.submissions.pull(submission._id);
-                user.save(function (err, user) {
-                    if (err) {
-                        req.submission.save();
+            else if (submission) {
+                req.submission = submission;
+                req.submission.remove(function (err) {
+                    if (err)
                         res.status(500).send(err);
-                        return;
-                    }
                     else {
-                        res.status(204).json({message:"Submission has be deleted.",code:204});
+                        var user = req.user;
+                        user.submissions.pull(submission._id);
+                        user.save(function (err, user) {
+                            if (err) {
+                                req.submission.save();
+                                res.status(500).send(err);
+                                return;
+                            }
+                            else {
+                                res.status(204).json({ message: "Submission has be deleted.", code: 204 });
+                            }
+                        });
                     }
                 });
             }
+            else {
+                res.status(404).send('no submission for the requested submissionId is found to be deleted');
+            }
         });
-    };
+    }
 
     return {
         post: post,
         get: get,
         getone: getone,
         put: put,
-        remove: remove,
+        removed: removed,
         patch: patch
 
     }
