@@ -7,12 +7,12 @@ var async = require('async');
 var auth = {
 
   login: function (req, res) {
-
+    console.log(req);
     var username = req.body.username || '';
     var password = req.body.password || '';
 
     if (username == '' || password == '') {
-      res.status(200);
+      res.status(400);
       res.json({
         "status": 401,
         "message": "Invalid credentials"
@@ -28,7 +28,6 @@ var auth = {
         });
       }
       if (!user) {
-        res.status(200);
         res.json({
           "status": 401,
           "message": message.message
@@ -36,6 +35,8 @@ var auth = {
       }
       if (user) {
         res.json(genToken(user));
+        console.log(res);
+
       }
       //This code gets run after the async operation gets run
     });
@@ -166,8 +167,8 @@ function sendConfirmationEmail(user,host) {
   Email.to = user.username;
   Email.subject = "CMS: Registration Confirmation";
   var name = user.username.substring(0, user.username.lastIndexOf("@"));
-  if (user.lastName) {
-    name = user.lastName;
+  if (user.familyName) {
+    name = user.familyName;
   }
   //req.headers.host
   confirm_link = 'http://'+ host + '/confirm_registertion/' + genToken(user).token;
