@@ -7,7 +7,6 @@ var async = require('async');
 var auth = {
 
   login: function (req, res) {
-    console.log(req);
     var username = req.body.username || '';
     var password = req.body.password || '';
 
@@ -35,8 +34,7 @@ var auth = {
       }
       if (user) {
         res.json(genToken(user));
-        console.log(res);
-
+        console.log(res.body);
       }
       //This code gets run after the async operation gets run
     });
