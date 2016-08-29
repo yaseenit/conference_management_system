@@ -81,6 +81,7 @@ var UserSchema = new Schema({
 	reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],//review id 
 	submissions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Submission' }],// a submission id here that this user is author for this submission
 	tasks: [taskSchema]
+
 });
 
 // Set the 'fullname' virtual property

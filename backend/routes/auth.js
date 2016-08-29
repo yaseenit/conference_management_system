@@ -12,7 +12,7 @@ var auth = {
     var password = req.body.password || '';
 
     if (username == '' || password == '') {
-      res.status(401);
+      res.status(200);
       res.json({
         "status": 401,
         "message": "Invalid credentials"
@@ -28,7 +28,7 @@ var auth = {
         });
       }
       if (!user) {
-        res.status(401);
+        res.status(200);
         res.json({
           "status": 401,
           "message": message.message

@@ -18,6 +18,9 @@ var userRoutes = function (app) {
 	var getAllReviewers = userController.getAllReviewers;
 	var getAllReviews = userController.getAllReviews;
 	var getAllSubmissions = userController.getAllSubmissions;
+	var createTask = userController.createTask;
+	var getAllTasks = userController.getAllTasks;
+	var editTask = userController.editTask;
 
     return {
         getOne: getOne,
@@ -29,7 +32,10 @@ var userRoutes = function (app) {
 		getAllAuthors: getAllAuthors,
 		getAllReviewers: getAllReviewers,
 		getAllReviews: getAllReviews,
-		getAllSubmissions: getAllSubmissions
+		getAllSubmissions: getAllSubmissions,
+		createTask: createTask,
+		getAllTasks: getAllTasks,
+		editTask: editTask
     }
 }
 module.exports = userController;

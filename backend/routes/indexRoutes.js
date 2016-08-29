@@ -8,9 +8,10 @@ module.exports = function (app) {
 
 	var auth = require('./auth.js');
 	var submissionRoutes = require('./submissionRoutes')(app);
+	var reviewRoutes=require('./reviewRoutes')(app);
 	var userRoutes = require('./usersRoutes');
 	var taskController = require('../controllers/taskController')();
-
+    var uploadroutes=require('./uploadRoutes')(app);
 	//var user = require('./users.js');
 
 
@@ -41,16 +42,18 @@ module.exports = function (app) {
 
 	/****************************************************/
 
-	var Review = require('../models/reviewModel');
-	var reviewController = require('../controllers/reviewController')(Review)
-	app.post('/api/v1/review/', reviewController.post);
-
+	//var Review = require('../models/reviewModel');
+//	var reviewController = require('../controllers/reviewController')(Review)
+	app.post('/api/v1/review/', reviewRoutes.create);
+    app.get('/api/v1/review/',reviewRoutes.getAll);
+	app.delete('/api/v1/review/:reviewId',reviewRoutes.remove);
+	app.get('/api/v1/review/:reviewId', reviewRoutes.getOne);
 	// /*
 	// * Routes that can be accessed only by autheticated users
 	// */
 	app.get('/api/v1/submissions/', submissionRoutes.getAll);
 	app.post('/api/v1/submissions/', submissionRoutes.create);
-	// app.get('/api/v1/submissions/:submissionId', submissionRoutes.getOne);
+	 app.get('/api/v1/submissions/:submissionId', submissionRoutes.getOne);
 	// app.put('/api/v1/submissions/:submissionId',submissionRoutes.update);
     app.delete('/api/v1/submissions/:submissionId', submissionRoutes.remove);
 	// app.patch('/api/v1/submissions/:submissionId',submissionRoutes.patch);
@@ -58,6 +61,10 @@ module.exports = function (app) {
 	// app.post('/api/v1/submission/', products.create);
 	// app.put('/api/v1/submission/:id', products.update);
 	// app.delete('/api/v1/submission/:id', products.delete);
+
+   	app.get('/api/v1/tasks/', taskController.get);
+
+
 
 	// /*
 	// * Routes that can be accessed only by authenticated & authorized users
@@ -70,9 +77,9 @@ module.exports = function (app) {
 
 
 	//	app.get('/api/v1/chair/task/:taskID', userRoutes.getTask);
-	console.log(taskController);
-    app.post('/api/v1/chair/task/', taskController.createTask);
-	app.get('/api/v1/chair/task/', taskController.getAllTasks);
+    app.post('/api/v1/chair/tasks/', userRoutes.createTask);
+	app.get('/api/v1/chair/tasks/', userRoutes.getAllTasks);
+	app.put('/api/v1/chair/tasks/:taskId',userRoutes.editTask);
 	//	app.put('/api/v1/chair/task/:taskID', userRoutes.doEditTask);
  //   app.delete('/api/v1/chair/task/:taskID', userRoutes.deleteTask);
 
