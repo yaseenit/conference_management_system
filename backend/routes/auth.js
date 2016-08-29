@@ -33,8 +33,9 @@ var auth = {
         });
       }
       if (user) {
-        res.json(genToken(user));
-        console.log(res.body);
+        var response = genToken(user);
+        console.log(response);
+        res.json(response);
       }
       //This code gets run after the async operation gets run
     });
