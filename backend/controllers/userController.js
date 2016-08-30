@@ -176,7 +176,30 @@ var userController = function (User) {
 
     }
     var editProfile = function (req, res) {
+        if (req.body.givenName)
+            req.user.givenName = req.body.givenName;
+        if (req.body.familyName)
+            req.user.familyName = req.body.familyName;
+        if (req.body.institute)
+            req.user.institute = req.body.institute;
+        if (req.body.city)
+            req.user.city = req.body.city;
+        if (req.body.state)
+            req.user.state = req.body.state;
+        if (req.body.country)
+            req.user.country = req.body.country;
+        if (req.body.zipCode)
+            req.user.zipCode = req.body.zipCode;
+        if (req.body.address)
+            req.user.address = req.body.address;
 
+        req.user.save(function (err) {
+            if (err)
+                res.status(500).send(err);
+            else {
+                res.json(req.user);
+            }
+        });
     }
     var deleteProfile = function (req, res) {
 
