@@ -11,7 +11,7 @@ module.exports = function (app) {
 	var reviewRoutes = require('./reviewRoutes')(app);
 	var userRoutes = require('./usersRoutes');
 	var taskController = require('../controllers/taskController')();
-	var randomstring = require("randomstring");
+//	var randomstring = require("randomstring");
 
 	//var user = require('./users.js');
 
@@ -45,8 +45,8 @@ module.exports = function (app) {
     var multer = require('multer');
 	app.post('/api/v1/upload/', function (req, res) {
 		console.log(req.body);
-		console.log(randomstring.generate());
-		require("fs").writeFile("./submissions/"+randomstring.generate(), req.body.based64_data, 'base64', function (err) {
+	//	console.log(randomstring.generate());
+		require("fs").writeFile("./submissions/"+req.body.file_name, req.body.based64_data, 'base64', function (err) {
 			console.log(err);
 		});
 		res.json({ message: "file uploaded." });
