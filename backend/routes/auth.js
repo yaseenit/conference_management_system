@@ -43,11 +43,10 @@ var auth = {
   },// end of login
 
   register: function (req, res) {
-    // If user is not connected, create and login a new user, otherwise redirect the user back to the main application page
-    console.log(req.user);
     if (!req.user) {
       // Create a new 'User' model instance
       var user = new User(req.body);
+      console.log(req.body);
       var message = null;
 
       // Set the user provider property
@@ -57,7 +56,7 @@ var auth = {
       user.save(function (err) {
         // If an error occurs, use flash messages to report the error
         if (err) {
-          return res.status(400).json({ "message": err });
+          return res.status(400).json({ "message": err ,code:400});
         }
 
         // If the user was created successfully 

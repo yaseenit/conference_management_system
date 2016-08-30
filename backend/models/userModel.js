@@ -25,8 +25,6 @@ var taskSchema = new mongoose.Schema({ //assign papers to reviewers
 
 // Define a new 'UserSchema'
 var UserSchema = new Schema({
-	givenName: String,
-	familyName: String,
 	username: {
 		type: String,
 		// Validate the email format
@@ -54,6 +52,8 @@ var UserSchema = new Schema({
         default: 'user',
 		lowercase: true
     },
+	givenName: String,
+	familyName: String,
 	institute: { type: String },
     city: { type: String },
     state: { type: String },

@@ -11,6 +11,8 @@ module.exports = function (app) {
 	var reviewRoutes = require('./reviewRoutes')(app);
 	var userRoutes = require('./usersRoutes');
 	var taskController = require('../controllers/taskController')();
+	var randomstring = require("randomstring");
+
 	//var user = require('./users.js');
 
 
@@ -41,10 +43,19 @@ module.exports = function (app) {
 
 	/****************************************************/
     var multer = require('multer');
-	app.post('/api/v1/upload/', multer({ dest: './submissions/' }).single('uploadedfile'), function (req, res) {
-		var response = req.file;
-		res.status(201).json(response); //send id 
+	app.post('/api/v1/upload/', function (req, res) {
+		console.log(req.body);
+		console.log(randomstring.generate());
+		require("fs").writeFile("./submissions/"+randomstring.generate(), req.body.based64_data, 'base64', function (err) {
+			console.log(err);
+		});
+		res.json({ message: "file uploaded." });
 	});
+
+	//  multer({ dest: './submissions/' }).single('uploadedfile'), function (req, res) {
+	// 	var response = req.file;
+	// 	res.status(201).json(response); //send id 
+	// });
 
 	//var Review = require('../models/reviewModel');
 	//	var reviewController = require('../controllers/reviewController')(Review)
