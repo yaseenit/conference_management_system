@@ -8,10 +8,9 @@ module.exports = function (app) {
 
 	var auth = require('./auth.js');
 	var submissionRoutes = require('./submissionRoutes')(app);
-	var reviewRoutes=require('./reviewRoutes')(app);
+	var reviewRoutes = require('./reviewRoutes')(app);
 	var userRoutes = require('./usersRoutes');
 	var taskController = require('../controllers/taskController')();
-    var uploadroutes=require('./uploadRoutes')(app);
 	//var user = require('./users.js');
 
 
@@ -41,19 +40,31 @@ module.exports = function (app) {
 	app.get('/confirm_registertion/:token', auth.confirm_registertion);
 
 	/****************************************************/
+    var multer = require('multer');
+	app.post('/api/v1/upload/', multer({ dest: './submissions/' }).single('uploadedfile'), function (req, res) {
+		var response = req.file;
+		res.status(201).json(response); //send id 
+	});
 
 	//var Review = require('../models/reviewModel');
-//	var reviewController = require('../controllers/reviewController')(Review)
+	//	var reviewController = require('../controllers/reviewController')(Review)
+    app.get('/api/v1/profile/', userRoutes.getProfile);
+    app.post('/api/v1/profile/', userRoutes.editProfile);
+	app.delete('/api/v1/profile/', userRoutes.deleteProfile);
+
+
+
+
 	app.post('/api/v1/review/', reviewRoutes.create);
-    app.get('/api/v1/review/',reviewRoutes.getAll);
-	app.delete('/api/v1/review/:reviewId',reviewRoutes.remove);
+    app.get('/api/v1/review/', reviewRoutes.getAll);
+	app.delete('/api/v1/review/:reviewId', reviewRoutes.remove);
 	app.get('/api/v1/review/:reviewId', reviewRoutes.getOne);
 	// /*
 	// * Routes that can be accessed only by autheticated users
 	// */
 	app.get('/api/v1/submissions/', submissionRoutes.getAll);
 	app.post('/api/v1/submissions/', submissionRoutes.create);
-	 app.get('/api/v1/submissions/:submissionId', submissionRoutes.getOne);
+	app.get('/api/v1/submissions/:submissionId', submissionRoutes.getOne);
 	// app.put('/api/v1/submissions/:submissionId',submissionRoutes.update);
     app.delete('/api/v1/submissions/:submissionId', submissionRoutes.remove);
 	// app.patch('/api/v1/submissions/:submissionId',submissionRoutes.patch);
@@ -79,11 +90,11 @@ module.exports = function (app) {
 	//	app.get('/api/v1/chair/task/:taskID', userRoutes.getTask);
     app.post('/api/v1/chair/tasks/', userRoutes.createTask);
 	app.get('/api/v1/chair/tasks/', userRoutes.getAllTasks);
-	app.put('/api/v1/chair/tasks/:taskId',userRoutes.editTask);
+	app.put('/api/v1/chair/tasks/:taskId', userRoutes.editTask);
 	//	app.put('/api/v1/chair/task/:taskID', userRoutes.doEditTask);
- //   app.delete('/api/v1/chair/task/:taskID', userRoutes.deleteTask);
+	//   app.delete('/api/v1/chair/task/:taskID', userRoutes.deleteTask);
 
-    // app.get('/api/v1/chair/users', user.getAll);
+	//	app.get('/api/v1/chair/users', user.getAll);
 	// app.get('/api/v1/chair/user/:id', user.getOne);
 	// app.post('/api/v1/chair/user/', user.create);
 	// app.put('/api/v1/chair/user/:id', user.update);

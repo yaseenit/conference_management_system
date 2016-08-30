@@ -128,7 +128,7 @@ var userController = function (User) {
         }
         else {
             var taskId = req.params.taskId;
-            var query = {username:req.body.username }
+            var query = { username: req.body.username }
             User.findOne(query, function (err, user) {
                 if (err)
                     res.status(500).send(err);
@@ -164,6 +164,24 @@ var userController = function (User) {
             });
         }
     }
+
+    var getProfile = function (req, res) {
+
+        if (req.user) {
+            res.json(req.user);
+        } else {//should not reach here
+            res.status(500).json({ message: "request for unlogged in user", code: 500 })
+        }
+
+
+    }
+    var editProfile = function (req, res) {
+
+    }
+    var deleteProfile = function (req, res) {
+
+    }
+
     return {
         post: post,
         get: get,
@@ -173,7 +191,12 @@ var userController = function (User) {
         getAllSubmissions: getAllSubmissions,
         createTask: createTask,
         getAllTasks: getAllTasks,
-        editTask: editTask
+        editTask: editTask,
+
+
+        getProfile: getProfile,
+        editProfile: editProfile,
+        deleteProfile: deleteProfile
     }
 }
 

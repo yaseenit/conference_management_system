@@ -22,6 +22,13 @@ var userRoutes = function (app) {
 	var getAllTasks = userController.getAllTasks;
 	var editTask = userController.editTask;
 
+    var getProfile=userController.getProfile;
+    var editProfile=userController.editProfile;
+	var deleteProfile=userController.deleteProfile;
+
+
+
+
     return {
         getOne: getOne,
         getAll: getAll,
@@ -35,7 +42,11 @@ var userRoutes = function (app) {
 		getAllSubmissions: getAllSubmissions,
 		createTask: createTask,
 		getAllTasks: getAllTasks,
-		editTask: editTask
+		editTask: editTask,
+
+		getProfile:getProfile,
+		editProfile:editProfile,
+		deleteProfile:deleteProfile
     }
 }
 module.exports = userController;
