@@ -11,6 +11,8 @@ module.exports = function (app) {
 	var reviewRoutes = require('./reviewRoutes')(app);
 	var userRoutes = require('./usersRoutes');
 	var taskController = require('../controllers/taskController')();
+	var downloadController = require('../controllers/downloadFileController')();
+
 	var randomstring = require("randomstring");
 
 	//var user = require('./users.js');
@@ -56,6 +58,11 @@ module.exports = function (app) {
 	// 	var response = req.file;
 	// 	res.status(201).json(response); //send id 
 	// });
+
+
+	app.get('/api/v1/download/:fileID', downloadController.getFile);
+
+
 
 	//var Review = require('../models/reviewModel');
 	//	var reviewController = require('../controllers/reviewController')(Review)
