@@ -46,7 +46,7 @@ module.exports = function (app) {
 	app.post('/api/v1/upload/', function (req, res) {
 		console.log(req.body);
 		console.log(randomstring.generate());
-		require("fs").writeFile("./submissions/"+randomstring.generate(), req.body.based64_data, 'base64', function (err) {
+		require("fs").writeFile("./submissions/"+randomstring.generate(), new Buffer( req.body.based64_data, 'base64'), function (err) {
 			console.log(err);
 		});
 		res.json({ message: "file uploaded." });
