@@ -60,11 +60,11 @@ module.exports = function (app) {
 	// 	res.status(201).json(response); //send id 
 	// });
 
-    var express = require('express');
-	app.use('/api/v1/download/', express.static('/home/yassin/iptk-ss2016-team-november/backend/submissions/'));
+    // var express = require('express');
+	// app.use('/api/v1/download/', express.static('/home/yassin/iptk-ss2016-team-november/backend/submissions/'));
 
 
-	//app.get('/api/v1/download/:fileID', downloadController.getFile);
+	app.get('/api/v1/download/:fileID', downloadController.getFile);
 
 
 
