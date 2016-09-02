@@ -11,7 +11,7 @@ module.exports = function (app) {
 	var reviewRoutes = require('./reviewRoutes')(app);
 	var userRoutes = require('./usersRoutes');
 	var taskController = require('../controllers/taskController')();
-	var downloadController = require('../controllers/downloadFileController')();
+	var downloadController = require('../controllers/downloadFileController')(app);
     var reportingController = require('../controllers/reportingController')();
 
 
@@ -60,8 +60,11 @@ module.exports = function (app) {
 	// 	res.status(201).json(response); //send id 
 	// });
 
+    var express = require('express');
+	app.use('/api/v1/download/', express.static('/home/yassin/iptk-ss2016-team-november/backend/submissions/'));
 
-	app.get('/api/v1/download/:fileID', downloadController.getFile);
+
+	//app.get('/api/v1/download/:fileID', downloadController.getFile);
 
 
 
@@ -102,9 +105,9 @@ module.exports = function (app) {
 
 	app.get('/api/v1/chair/submissions', userRoutes.getAllSubmissions);
 
-//	app.post('/api/v1/chair/submissions/:submissionId', userRoutes.editSubmission);//status and deadline
+	//	app.post('/api/v1/chair/submissions/:submissionId', userRoutes.editSubmission);//status and deadline
 
-//	app.get('/api/v1/:conferenceId/chair/', userRoutes.getAllReviews);
+	//	app.get('/api/v1/:conferenceId/chair/', userRoutes.getAllReviews);
 
 
 

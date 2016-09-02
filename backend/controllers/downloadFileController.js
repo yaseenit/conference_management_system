@@ -4,7 +4,7 @@ var fs = require('fs');
 var uploadedFilesPath = require('../config/configurations').uploadedFilesPath;
 
 
-var downloadController = function () {
+var downloadController = function (app) {
 
     var get = function (req, res) {
         var filename = req.params.fileID;
@@ -13,6 +13,8 @@ var downloadController = function () {
             if (err == null) {
                 if (req.user.role.toLowerCase() == 'chair') //|| req.user.submissions.contains.contains(filename) || reviwes.contains(filename) ) // TODO check if the user have access to this file
                 {
+
+
                     res.download(uploadedFilesPath + filename, filename, function (err) {
                         if (err) {
                             // Handle error, but keep in mind the response may be partially-sent
