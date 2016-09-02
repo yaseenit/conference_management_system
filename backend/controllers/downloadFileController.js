@@ -13,9 +13,15 @@ var downloadController = function () {
             if (err == null) {
                 if (req.user.role.toLowerCase() == 'chair') //|| req.user.submissions.contains.contains(filename) || reviwes.contains(filename) ) // TODO check if the user have access to this file
                 {
-                    res.setHeader('Content-Type', 'application/pdf');
-                    res.setHeader('Content-Disposition', 'attachment; filename=quote.pdf');
-                    res.sendFile("/home/yassin/iptk-ss2016-team-november/backend/submissions/iybklO00WWmoooHaTwkRXZp98jCQuGwZ.pdf");
+                    res.download(uploadedFilesPath + filename, filename, function (err) {
+                        if (err) {
+                            // Handle error, but keep in mind the response may be partially-sent
+                            // so check res.headersSent
+                            console.log(err);
+                        } else {
+                            // decrement a download credit, etc.
+                        }
+                    });
                 }
                 else {
                     res.status(403).json({ message: "Sorry! you can't see that.", code: 403 });
