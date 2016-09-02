@@ -24,6 +24,7 @@ var submissionModel = new Schema({
     },
     // {type: Boolean, default:false},
     fileName: { type: String },
+    generatedFileName: { type: String },
     deadline: {
         type: Date,
         // Create a default 'created' value

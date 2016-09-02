@@ -8,10 +8,12 @@ var patg
 var submissionController = function (Submission) {
 
     var post = function (req, res) {
-        console.log(req.body);
         var submission = new Submission(req.body);
+        var generatedFileName = randomstring.generate();
+        submission.generatedFileName = generatedFileName;
+        console.log(submission);
 
-        fs.writeFile(uploadedFilesPath + randomstring.generate(), new Buffer(req.body.based64_data, 'base64'), function (err) {
+        fs.writeFile(uploadedFilesPath + generatedFileName, new Buffer(req.body.based64_data, 'base64'), function (err) {
             if (err) {
                 res.status(500).send(err);
                 console.log(err);
@@ -36,10 +38,12 @@ var submissionController = function (Submission) {
                                 res.status(201);
                                 res.send(submission);
                                 Email.to = user.username;
+                                var name = user.username.substring(0, user.username.lastIndexOf("@"));
+                                if (user.familyName) {
+                                    name = user.familyName;
+                                }
                                 Email.subject = "CMS Submission Confirmation mail";
-                                Email.text = "Dear Mr/Ms " + req.body.authorFamilyName + "you've successfully submitted a new pape with title " + req.body.title;
-                                Email.html = "<p>Dear Mr/Ms " + req.body.authorFamilyName + ",<br>You have successfully submitted a new paper with title " + req.body.title + "<br>Best of luck with the Review Process</p>";
-                                // res.send(submission._id);
+                                Email.html = "<p>Dear Mr/Ms " + name + ",<br>You have successfully submitted a new paper with title " + req.body.title + "<br>Best of luck with the reviewing process. Thank you.</p>";
                                 var emailController = require('../controllers/emailController')(Email);
                             }
                         });
