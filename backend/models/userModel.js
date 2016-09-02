@@ -101,7 +101,7 @@ var UserSchema = new Schema({
 // Use a pre-save middleware to hash the password
 UserSchema.pre('save', function (next) {
 	if (this.password) {
-		this.salt = new Buffer(crypto.randomBytes(16).toString('base64'), 'base64');
+		this.salt = new Buffer(crypto.randomBytes(16)).toString('base64');
 		this.password = this.hashPassword(this.password);
 	}
 
