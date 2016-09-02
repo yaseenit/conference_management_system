@@ -13,6 +13,8 @@ var downloadController = function () {
             if (err == null) {
                 if (req.user.role.toLowerCase() == 'chair') //|| req.user.submissions.contains.contains(filename) || reviwes.contains(filename) ) // TODO check if the user have access to this file
                 {
+                    res.setHeader('Content-Type', 'application/pdf');
+                    res.setHeader('Content-Disposition', 'attachment; filename=quote.pdf');
                     res.sendFile("/home/yassin/iptk-ss2016-team-november/backend/submissions/iybklO00WWmoooHaTwkRXZp98jCQuGwZ.pdf");
                 }
                 else {
