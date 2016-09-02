@@ -14,7 +14,6 @@ var downloadController = function (app) {
                 if (req.user.role.toLowerCase() == 'chair') //|| req.user.submissions.contains.contains(filename) || reviwes.contains(filename) ) // TODO check if the user have access to this file
                 {
 
-                    res.setEncoding('binary');
                     res.download(uploadedFilesPath + filename, filename, function (err) {
                         if (err) {
                             // Handle error, but keep in mind the response may be partially-sent
