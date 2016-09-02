@@ -19,8 +19,8 @@ var reviewModel = new Schema({
     strongPoints: { type: String },
         weakPoints: { type: String },
         detailedComments: { type: String, required: 'Detailed Comments are required' },
-        fileName: { type: String },
-        reviewers: [
+        fileName: { type: String },//to be deleted
+        reviewers: [//to be deleted
             { type: String }
         ],
         deadline: {

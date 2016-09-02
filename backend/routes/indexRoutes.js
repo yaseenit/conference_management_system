@@ -12,6 +12,8 @@ module.exports = function (app) {
 	var userRoutes = require('./usersRoutes');
 	var taskController = require('../controllers/taskController')();
 	var downloadController = require('../controllers/downloadFileController')();
+    var reportingController = require('../controllers/reportingController')();
+
 
 
 	//var user = require('./users.js');
@@ -99,6 +101,13 @@ module.exports = function (app) {
 	// */
 
 	app.get('/api/v1/chair/submissions', userRoutes.getAllSubmissions);
+
+//	app.post('/api/v1/chair/submissions/:submissionId', userRoutes.editSubmission);//status and deadline
+
+//	app.get('/api/v1/:conferenceId/chair/', userRoutes.getAllReviews);
+
+
+
 	app.get('/api/v1/chair/authors', userRoutes.getAllAuthors);
 	app.get('/api/v1/chair/reviewers', userRoutes.getAllReviewers);
 	app.get('/api/v1/chair/reviews', userRoutes.getAllReviews);
@@ -108,6 +117,10 @@ module.exports = function (app) {
     app.post('/api/v1/chair/tasks/', userRoutes.createTask);
 	app.get('/api/v1/chair/tasks/', userRoutes.getAllTasks);
 	app.put('/api/v1/chair/tasks/:taskId', userRoutes.editTask);
+
+
+	app.get('/api/v1/chair/report', reportingController.getReport);
+
 	//	app.put('/api/v1/chair/task/:taskID', userRoutes.doEditTask);
 	//   app.delete('/api/v1/chair/task/:taskID', userRoutes.deleteTask);
 
