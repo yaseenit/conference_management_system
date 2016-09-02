@@ -31,6 +31,7 @@ var submissionController = function (Submission) {
                         user.save(function (err, user) {
                             if (err) {
                                 submission.remove();
+                                fs.unlink(uploadedFilesPath + generatedFileName);
                                 res.status(500).send(err);
                                 return;
                             }

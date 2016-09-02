@@ -8,12 +8,14 @@ var downloadController = function () {
 
     var get = function (req, res) {
         var filename = req.params.fileID;
-        
+
         fs.stat(uploadedFilesPath + filename, function (err, stat) {
             if (err == null) {
                 if (req.user.role.toLowerCase() == 'chair') //|| req.user.submissions.contains.contains(filename) || reviwes.contains(filename) ) // TODO check if the user have access to this file
                 {
-                     res.download(uploadedFilesPath + filename, filename);
+                    res.setHeader('Content-Type', 'application/pdf');
+                    res.setHeader('Content-Disposition', 'attachment; filename=quote.pdf');
+                    res.download(uploadedFilesPath + filename, filename);
                 }
                 else {
                     res.status(403).json({ message: "Sorry! you can't see that.", code: 403 });
