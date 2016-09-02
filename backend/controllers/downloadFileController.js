@@ -13,8 +13,6 @@ var downloadController = function () {
             if (err == null) {
                 if (req.user.role.toLowerCase() == 'chair') //|| req.user.submissions.contains.contains(filename) || reviwes.contains(filename) ) // TODO check if the user have access to this file
                 {
-                    res.setHeader('Content-Type', 'application/pdf');
-                    res.setHeader('Content-Disposition', 'attachment; filename=quote.pdf');
                     res.download(uploadedFilesPath + filename, filename);
                 }
                 else {
