@@ -13,7 +13,6 @@ module.exports = function (app) {
 	var taskController = require('../controllers/taskController')();
 	var downloadController = require('../controllers/downloadFileController')();
 
-	var randomstring = require("randomstring");
 
 	//var user = require('./users.js');
 
@@ -44,15 +43,15 @@ module.exports = function (app) {
 	app.get('/confirm_registertion/:token', auth.confirm_registertion);
 
 	/****************************************************/
-    var multer = require('multer');
-	app.post('/api/v1/upload/', function (req, res) {
-		console.log(req.body);
-		console.log(randomstring.generate());
-		require("fs").writeFile("./submissions/"+randomstring.generate(), new Buffer( req.body.based64_data, 'base64'), function (err) {
-			console.log(err);
-		});
-		res.json({ message: "file uploaded." });
-	});
+    // var multer = require('multer');
+	// app.post('/api/v1/upload/', function (req, res) {
+	// 	console.log(req.body);
+	// 	console.log(randomstring.generate());
+	// 	require("fs").writeFile("./submissions/"+randomstring.generate(), new Buffer( req.body.based64_data, 'base64'), function (err) {
+	// 		console.log(err);
+	// 	});
+	// 	res.json({ message: "file uploaded." });
+	// });
 
 	//  multer({ dest: './submissions/' }).single('uploadedfile'), function (req, res) {
 	// 	var response = req.file;
