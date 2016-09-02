@@ -1,46 +1,55 @@
 var Email = require('../models/emailModel');
+var fs = require("fs");
+var uploadedFilesPath = require('../config/configurations').uploadedFilesPath;
+
+var patg
 var submissionController = function (Submission) {
 
     var post = function (req, res) {
+        console.log(req.body);
         var submission = new Submission(req.body);
-        //a submission must have a title
-        // if (!req.body.title) {
-        //     res.status(400);
-        //     var titleError = {
-        //         "Error": "No title is found"
-        //     };
-        //     res.send(titleError);
-        // }
-        //else {
-        submission.save(function (err) {
+
+        fs.writeFile(uploadedFilesPath + randomstring.generate(), new Buffer(req.body.based64_data, 'base64'), function (err) {
             if (err) {
                 res.status(500).send(err);
-                return;
+                console.log(err);
             }
             else {
-                var user = req.user;
-                user.submissions.push(submission._id);
-                user.save(function (err, user) {
+                submission.save(function (err) {
                     if (err) {
-                        submission.remove();
                         res.status(500).send(err);
+                        console.log(err);
                         return;
                     }
                     else {
-                        res.status(201);
-                        res.send(submission);
-                        Email.to = user.username;
-                        Email.subject = "CMS Submission Confirmation mail";
-                        Email.text = "Dear Mr/Ms " + req.body.authorFamilyName + "you've successfully submitted a new pape with title " + req.body.title;
-                        Email.html = "<p>Dear Mr/Ms " + req.body.authorFamilyName + ",<br>You have successfully submitted a new paper with title " + req.body.title + "<br>Best of luck with the Review Process</p>";
-                        // res.send(submission._id);
-                        var emailController = require('../controllers/emailController')(Email);
-                    }
-                });
+                        var user = req.user;
+                        user.submissions.push(submission._id);
+                        user.save(function (err, user) {
+                            if (err) {
+                                submission.remove();
+                                res.status(500).send(err);
+                                return;
+                            }
+                            else {
+                                res.status(201);
+                                res.send(submission);
+                                Email.to = user.username;
+                                Email.subject = "CMS Submission Confirmation mail";
+                                Email.text = "Dear Mr/Ms " + req.body.authorFamilyName + "you've successfully submitted a new pape with title " + req.body.title;
+                                Email.html = "<p>Dear Mr/Ms " + req.body.authorFamilyName + ",<br>You have successfully submitted a new paper with title " + req.body.title + "<br>Best of luck with the Review Process</p>";
+                                // res.send(submission._id);
+                                var emailController = require('../controllers/emailController')(Email);
+                            }
+                        });
 
+                    }
+                }
+                );
             }
-        }
-        );
+        });
+        //res.json({ message: "file uploaded." });
+
+
 
         // }
     }
@@ -149,7 +158,7 @@ var submissionController = function (Submission) {
                         return;
                     }
                     else {
-                        res.status(204).json({message:"Submission has be deleted.",code:204});
+                        res.status(204).json({ message: "Submission has be deleted.", code: 204 });
                     }
                 });
                 res.status(404).send('no submission for the requested submissionId is found to be deleted');
