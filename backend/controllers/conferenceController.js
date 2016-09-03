@@ -1,22 +1,29 @@
 var Conference = require('../models/ConferenceModel');
 
 
-var conferenceController = function(){
+var conferenceController = function () {
 
-    var post = function(req, res){
+    var post = function (req, res) {
         var conference = new Conference(req.body);
 
-            conference.save();
-            res.status(201);
-            res.json(conference);
+        conference.save(function (err) {
+            if (err) {
+                res.status(500).send(err);
+            } else {
+                res.status(201);
+                res.json(conference);
+            }
+
+        });
+
     }
 
-    var get = function(req,res){
+    var get = function (req, res) {
     }
 
     return {
         post: post,
-        get:get
+        get: get
     }
 }
 
