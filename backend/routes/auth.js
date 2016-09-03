@@ -59,7 +59,7 @@ var auth = {
         if (err) {
           return res.status(400).json({ "message": err ,code:400});
         }
-
+       //You will receive a confirmation e-mail. Your account will be activated once you visit the link specified in the message.
         // If the user was created successfully 
         sendConfirmationEmail(user,req.headers.host);
         // reply 

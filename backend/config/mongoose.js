@@ -34,7 +34,7 @@ module.exports = function () {
 	require('../models/userModel');
 	require('../models/articleModel');
 	require('../models/submissionModel');
-	require('../models/conferenceModel');
+	//require('../models/conferenceModel');
 	require('../models/reviewModel');
 	// Return the Mongoose connection instance
 	return db;

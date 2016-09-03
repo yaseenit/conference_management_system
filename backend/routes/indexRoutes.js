@@ -13,6 +13,7 @@ module.exports = function (app) {
 	var taskController = require('../controllers/taskController')();
 	var downloadController = require('../controllers/downloadFileController')(app);
     var reportingController = require('../controllers/reportingController')();
+    var conferenceController = require('../controllers/conferenceController')();
 
 
 
@@ -75,6 +76,7 @@ module.exports = function (app) {
 	app.delete('/api/v1/profile/', userRoutes.deleteProfile);
 
 
+   app.post('/api/v1/conference',conferenceController.post);
 
 
 	app.post('/api/v1/review/', reviewRoutes.create);

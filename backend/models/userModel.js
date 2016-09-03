@@ -5,22 +5,6 @@ var mongoose = require('mongoose'),
 	crypto = require('crypto'),
 	Schema = mongoose.Schema;
 
-// Define a new 'TaskSchema'
-
-var taskSchema = new mongoose.Schema({ //assign papers to reviewers
-	taskName: {
-		type: String, required: true
-	},
-	taskDesc: String,
-	createdOn: { type: Date, default: Date.now },
-	createdBy: {
-		type: mongoose.Schema.Types.ObjectId, ref: 'User',
-		required: true
-	},
-	modifiedOn: Date
-	//	assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
-});
-
 
 
 // Define a new 'UserSchema'
@@ -79,8 +63,7 @@ var UserSchema = new Schema({
 	// registration by clicking on a registration 
 	// link sent via email
 	reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],//review id 
-	submissions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Submission' }],// a submission id here that this user is author for this submission
-	tasks: [taskSchema]
+	submissions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Submission' }]// a submission id here that this user is author for this submission
 
 });
 
@@ -115,9 +98,9 @@ UserSchema.methods.hashPassword = function (password) {
 //instance method
 // Create an instance method for authenticating user
 UserSchema.methods.authenticate = function (password) {
-	console.log("input password "+password)
-	console.log("saverd password "+this.password)
-	console.log("hashed password "+this.hashPassword(password))
+	console.log("input password " + password)
+	console.log("saverd password " + this.password)
+	console.log("hashed password " + this.hashPassword(password))
 
 
 	return this.password === this.hashPassword(password);
