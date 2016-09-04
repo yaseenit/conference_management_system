@@ -47,7 +47,7 @@ module.exports = function (req, res, next) {
                // if ((req.url.indexOf('chair') >= 0 && user.role.toLowerCase() == 'chair') || (req.url.indexOf('chair') < 0 && req.url.indexOf('/api/v1/') >= 0)) {
              
              console.log(user.conferences);
-             console.log(req.params.conferenceId);
+             console.log(req.params);
              console.log(user.conferences.indexOf(req.params.conferenceId));
                if ((req.url.indexOf('chair') >= 0 && user.conferences.indexOf(req.params.conferenceId) > -1) || (req.url.indexOf('chair') < 0 && req.url.indexOf('/api/v1/') >= 0)) {
                     req.user = user;
