@@ -44,10 +44,11 @@ export class PaperListComponent implements OnInit
      
 
     }
- getFile(event,fileName)
+ getFile(event,generatedFileName,fileName)
  {
          event.preventDefault();
-         this._paperService.getFile(fileName);
+         console.log(fileName);
+         this._paperService.getFiles(generatedFileName,fileName);
  }
     constructor(private _paperService :AppService)
     {

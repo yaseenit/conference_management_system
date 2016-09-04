@@ -38,10 +38,10 @@
                 </thead>
                 <tbody>
                   <tr  *ngFor='#paper of papers | paperFilter:listFilter'>
-         <td><a [routerLink]="['PaperDetail',{id:paper.id}]">{{paper.title}}</a></td>
+         <td><a [routerLink]="['PaperDetail',{_id:paper._id}]">{{paper.title}}</a></td>
   <td>{{paper.status | lowercase}}</td>
   <td>{{paper.createdOn}}</td>
-     <td><a *ngIf='showFile' href="#" (click)='getFile($event,paper.generatedFileName)' target="_blank"><img src='./app/assets/images/pdf-icon.png' [style.width.px]='imageWidth' [style.height.px]='imageHeight'></a></td>
+     <td><a *ngIf='showFile' href="#" (click)='getFile($event,paper.generatedFileName,paper.fileName)' target="_blank"><img src='./app/assets/images/pdf-icon.png' [style.width.px]='imageWidth' [style.height.px]='imageHeight'></a></td>
  
 <td></td>
         

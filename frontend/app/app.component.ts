@@ -35,6 +35,7 @@ import {Router} from 'angular2/router';
 
 import {ConfirmService} from "./service/confirm.service";
 import {ConfirmComponent} from "./shared/confirm.component";
+import  {CreateConferenceComponent} from "./conference/create-conference.component";
 
 
 @Component({
@@ -50,7 +51,7 @@ import {ConfirmComponent} from "./shared/confirm.component";
   [
     { path: '/welcome', name: 'Welcome', component: WelcomeComponent, useAsDefault: true },
     { path: '/papers', name: 'Papers', component: PaperListComponent },
-    { path: '/paper/:id', name: 'PaperDetail', component: PaperDetailComponent },
+    { path: '/paper/:_id', name: 'PaperDetail', component: PaperDetailComponent },
     { path: '/login', name: 'LogIn', component: LogInComponent },
     { path: '/papercreate', name: 'PaperCreate', component: PaperCreateComponent },
     //for review
@@ -63,6 +64,7 @@ import {ConfirmComponent} from "./shared/confirm.component";
     { path: '/assignReview/:id', name: 'AssigReview', component: AssigReviewComponent },
     { path: '/invitAuthor/:id', name: 'InvitAuthor', component: InvitAuthorComponent },
     { path: '/changePassword', name: 'ChangePassword', component: ChangePasswordComponent }
+{path :'/createconference',name: 'CreateConference',component:CreateConferenceComponent}
 
   ]
 )

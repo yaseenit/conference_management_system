@@ -7,21 +7,52 @@
         <div class='row'>
             <div class='col-md-6'>
                 <div class='row'>
-                    <div class='col-md-3'>title:</div>
+                    <div class='col-md-3'>Tile:</div>
                     <div class='col-md-6'>{{paper.title}}</div>
-                </div>
-                <div class='row'>
-                    <div class='col-md-3'>Id:</div>
-                    <div class='col-md-6'>{{paper.id}}</div>
-                </div>
-                <div class='row'>
-                    <div class='col-md-3'>author:</div>
-                    <div class='col-md-6'>{{paper.author}}</div>
                 </div>
                 <div class='row'>
                     <div class='col-md-3'>status:</div>
                     <div class='col-md-6'>{{paper.status}}</div>
                 </div>
+                <div class='row'>
+                    <div class='col-md-3'>Abstract:</div>
+                    <div class='col-md-6'>{{paper.abstract}}</div>
+                </div>
+               
+                <div class='row'>
+                    <div class='col-md-3'>keywords:</div>
+                    <div class='col-md-6'>{{paper.keywords}}</div>
+                </div>
+
+                <div class='row'>
+                    <div class='col-md-3'>Author:</div>
+                    <div class='col-md-6'>
+
+
+                    <div class='table-responsive'>
+            <table class='table' 
+            *ngIf='paper.authorList && paper.authorList.length' >
+                <thead>
+                    <tr>
+                    
+                        <th>Given Name</th>
+                        <th>Family Name</th>
+                        <th>Email</th>
+                       
+                    </tr>
+                </thead>
+                <tbody>
+                  <tr  *ngFor='#paperAuthor of paper.authorList'>                 
+                        <td>{{paperAuthor.givenName}}</td>
+                        <td>{{paperAuthor.familyName}}</td>
+                         <td>{{paperAuthor.email}}</td>
+        
+                      </tr>
+                </tbody>
+            </table>
+        </div></div>
+                </div>
+               
               
             </div>
 

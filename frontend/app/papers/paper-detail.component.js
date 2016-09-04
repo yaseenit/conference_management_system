@@ -30,13 +30,11 @@ System.register(['angular2/core', '../service/app.service', 'angular2/router'], 
                     this._routeParams = _routeParams;
                     this._router = _router;
                     this.pageTitle = 'Paper Detail';
-                    //  let id=+this._routeParams.get('id');
-                    //  this.pageTitle += `: ${id}`;
                 }
                 PaperDetailComponent.prototype.ngOnInit = function () {
                     if (!this.paper) {
-                        var id = +this._routeParams.get('id');
-                        // this.pageTitle += `: ${id}`;
+                        var id = this._routeParams.get('_id');
+                        //    console.log(id);
                         this.getPaper(id);
                     }
                 };

@@ -17,24 +17,24 @@ import {IPaper} from '../service/app.interface';
         paper: IPaper;
          errorMessage: string;
         constructor(private _paperService: AppService,
-            private _routeParams:RouteParams ,private _router :Router)
+        private _routeParams:RouteParams ,private _router :Router)
         {
-          //  let id=+this._routeParams.get('id');
-          //  this.pageTitle += `: ${id}`;
         }
          ngOnInit() {
         if (!this.paper) {
-            let id = +this._routeParams.get('id');
-            // this.pageTitle += `: ${id}`;
+            
+            let id = this._routeParams.get('_id');
+                //    console.log(id);
             this.getPaper(id);
         }
-    }
+        }
 
-    getPaper(id: number) {
+    getPaper(id: string) {
         this._paperService.getPaper(id)
             .subscribe(
             paper => this.paper = paper,
             error => this.errorMessage = <any>error);
+
     }
         onBack(): void{
             this._router.navigate(['Papers']);

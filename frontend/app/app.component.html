@@ -15,6 +15,9 @@ Conference System</a>
             <li>
                 <a href="#" *ngIf="isLog">List Of Reviewers</a>
             </li>
+             <li>
+                    <a [routerLink]="['CreateConference']" *ngIf="isLog">New Conference</a>
+                </li>
             <li>
                 <a href="#" *ngIf="isLog">View My Profile</a>
             </li>

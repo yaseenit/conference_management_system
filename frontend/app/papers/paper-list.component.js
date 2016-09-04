@@ -52,9 +52,10 @@ System.register(['angular2/core', './paper-filter.pipe', '../shared/star.compone
                             error => this.errorMessage=<any>error
                         );*/
                 };
-                PaperListComponent.prototype.getFile = function (event, fileName) {
+                PaperListComponent.prototype.getFile = function (event, generatedFileName, fileName) {
                     event.preventDefault();
-                    this._paperService.getFile(fileName);
+                    console.log(fileName);
+                    this._paperService.getFiles(generatedFileName, fileName);
                 };
                 PaperListComponent = __decorate([
                     core_1.Component({
