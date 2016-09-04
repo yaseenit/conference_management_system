@@ -1,4 +1,4 @@
-var Conference = require('../models/ConferenceModel');
+var Conference = require('../models/conferenceModel');
 
 
 var conferenceController = function () {
