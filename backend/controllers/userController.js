@@ -169,7 +169,8 @@ var userController = function (User) {
     // }
         if (req.user) {
         User.findById(req.user._id)
-            .populate('reviews','conferences')//,'submissions') TODO
+            .populate('reviews')//,'submissions') TODO
+            .populate('conferences')
             .exec(function (err, user) {
                 if (err)
                     res.status(500).send(err);
