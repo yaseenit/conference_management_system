@@ -44,7 +44,8 @@ module.exports = function (req, res, next) {
                 return;
             }
             if (user) {
-                if ((req.url.indexOf('chair') >= 0 && user.role.toLowerCase() == 'chair') || (req.url.indexOf('chair') < 0 && req.url.indexOf('/api/v1/') >= 0)) {
+               // if ((req.url.indexOf('chair') >= 0 && user.role.toLowerCase() == 'chair') || (req.url.indexOf('chair') < 0 && req.url.indexOf('/api/v1/') >= 0)) {
+               if ((req.url.indexOf('chair') >= 0 && user.conferences.indexOf(req.params.conferenceId) > -1) || (req.url.indexOf('chair') < 0 && req.url.indexOf('/api/v1/') >= 0)) {
                     req.user = user;
                     next(); // To move to next middleware
                 } else {

@@ -46,7 +46,6 @@ var auth = {
     if (!req.user) {
       // Create a new 'User' model instance
       var user = new User(req.body);
-      console.log(req.body);
       var message = null;
 
       // Set the user provider property

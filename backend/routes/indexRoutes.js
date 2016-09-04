@@ -78,6 +78,10 @@ module.exports = function (app) {
 
    app.post('/api/v1/conference',conferenceController.post);
 
+   
+   app.post('/api/v1/chair/conference/:conferenceId/addAuthor',conferenceController.addAuthor);
+
+
 
 	app.post('/api/v1/review/', reviewRoutes.create);
     app.get('/api/v1/review/', reviewRoutes.getAll);
