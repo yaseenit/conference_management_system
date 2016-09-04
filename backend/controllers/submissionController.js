@@ -139,6 +139,8 @@ var submissionController = function (Submission) {
                     else {
                         var user = req.user;
                         user.submissions.pull(submission._id);
+                        //TODO remove reviews and paper
+
                         user.save(function (err, user) {
                             if (err) {
                                 req.submission.save();

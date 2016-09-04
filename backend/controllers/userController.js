@@ -168,7 +168,14 @@ var userController = function (User) {
     //     });
     // }
         if (req.user) {
-            res.json(req.user);
+        User.findById(req.user._id)
+            .populate('reviews','conferences','submissions')
+            .exec(function (err, user) {
+                if (err)
+                    res.status(500).send(err);
+                else
+                    res.json(user);
+            });
         } else {//should not reach here
             res.status(500).json({ message: "request for unlogged in user", code: 500 })
         }
