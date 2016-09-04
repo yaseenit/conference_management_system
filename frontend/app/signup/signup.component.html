@@ -1,0 +1,78 @@
+	 <div class="row">
+							<div class="col-md-8">
+                    <result-messages [(message)]='resultMessage' [(messageType)]='messageType'></result-messages>
+
+                 <fieldset *ngIf="messageType!='success'">
+                    <legend>Sign Up</legend>
+
+  <form [ngFormModel]="form" >
+  
+  <div class="form-group">
+    <label for="givenName">Given Name</label>
+    <input type="text"  class="form-control" id="givenName" placeholder="Given Name"  ngControl="givenName" required >
+      <control-messages [control]="form.controls.givenName"></control-messages>
+
+  </div>
+    <div class="form-group">
+    <label for="familyName">Family Name</label>
+    <input type="text"  class="form-control" id="familyName" placeholder="Family Name"  ngControl="familyName"  required>
+      <control-messages [control]="form.controls.familyName"></control-messages>
+
+  </div>
+   <div class="form-group">
+    <label for="institute">Institute</label>
+    <input type="text"  class="form-control" id="institute" placeholder="Institute Name"  ngControl="institute" required>
+      <control-messages [control]="form.controls.institute"></control-messages>
+
+  </div>
+  <div class="form-group">
+    <label for="email">Email Address</label>
+    <input type="email"  class="form-control" id="email"  placeholder="Email"  ngControl="email" required>
+      <control-messages [control]="form.controls.email"></control-messages>
+
+  </div>
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input type="password"  class="form-control" id="password" placeholder="Password"  ngControl="password" required>
+      <control-messages [control]="form.controls.password"></control-messages>
+  </div>
+  <div class="form-group">
+    <label for="password">Confirm Password</label>
+    <input type="password"  class="form-control" id="rePassword" placeholder="Password"  ngControl="rePassword" required>
+      <control-messages [control]="form.controls.rePassword"></control-messages>
+      <div *ngIf="form.hasError('passwordNotMatch')" class="errorMsg">Passwords do not match.</div>
+
+  </div>
+
+
+  <div class="form-group">
+    <label for="address">address</label>
+    <input type="text"  class="form-control" id="address" placeholder="address"  ngControl="address" [(ngModel)] ="address"  (setAddress) = "getAddress($event)" googleplace required>
+      <control-messages [control]="form.controls.address"></control-messages>
+
+  </div>
+
+ <div class="form-group">
+    <label for="city">city</label>
+    <input type="text"  class="form-control" id="city" placeholder="city"  ngControl="city" [(ngModel)]="city" >
+  </div>
+
+ <div class="form-group">
+    <label for="state">state</label>
+    <input type="text"  class="form-control" id="state" placeholder="state"  ngControl="state" [(ngModel)]="state" >
+  </div>
+ <div class="form-group">
+    <label for="zipCode">zipCode</label>
+    <input type="text"  class="form-control" id="zipCode" placeholder="zipCode"  ngControl="zipCode" [(ngModel)]="zipCode" >
+  </div>
+  <div class="form-group">
+    <label for="country">country</label>
+    <input type="text"  class="form-control" id="country" placeholder="country"  ngControl="country" [(ngModel)]="country" >
+  </div>
+
+    <button type="submit" class="btn btn-primary btn-block" [disabled]="!form.valid" (click)="signup($event,form.value)">Sign Up</button>
+  </form>
+    </fieldset>
+
+</div>
+	 </div>

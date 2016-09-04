@@ -1,0 +1,147 @@
+<div class="row">
+  <result-messages [(message)]='resultMessage' [(messageType)]='messageType'></result-messages>
+
+  <div class="col-md-12" *ngIf="messageType!='success'">
+    <fieldset>
+      <legend>Author(s)</legend>
+      <div class='has-error' *ngIf='errorMessage'>{{errorMessage}}</div>
+
+      <div class="jumbotron center-block">
+        <form [ngFormModel]="authorForm">
+          <div class="form-group">
+            <label for="abstract">Given Name </label>
+            <input type="text" class="form-control" id="givenName" ngControl="givenName" required>
+            <control-messages [control]="authorForm.controls.givenName"></control-messages>
+          </div>
+
+          <div class="form-group">
+            <label for="abstract">Family Name </label>
+            <input type="text" class="form-control" id="familyName" ngControl="familyName" required>
+            <control-messages [control]="authorForm.controls.familyName"></control-messages>
+            </div>
+          
+
+         <div class="form-group">
+            <label for="abstract">Email </label>
+            <input type="text" class="form-control" id="email" ngControl="email" required>
+            <control-messages [control]="authorForm.controls.email"></control-messages>
+            </div>
+         
+
+          <button type="submit" class="btn btn-default" [disabled]="!authorForm.valid" (click)="addAuthor($event,authorForm.value)"> Add</button>
+        </form>
+      </div>
+      <div class='table-responsive'>
+        <table class='table' *ngIf='paperAuthors && paperAuthors.length'>
+          <thead>
+            <tr>
+
+              <th>Given Name</th>
+              <th>Family Name</th>
+              <th>Email</th>
+              <th>Action</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor='#paperAuthor of paperAuthors'>
+              <td>{{paperAuthor.familyName}}</td>
+              <td>{{paperAuthor.familyName}}</td>
+              <td>{{paperAuthor.email}}</td>
+              <td>
+                <button type="button" class="btn btn-danger" (click)='removeAuthor(paperAuthor.email)'> remove</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </fieldset>
+  
+
+
+<div class="row">
+  
+  <div class="col-md-12" >
+    <fieldset>
+      <legend>Keywords</legend>
+      <div class="jumbotron center-block">
+        <form [ngFormModel]="keywordForm" >
+          <div class="form-group">
+            <label for="keyword">Keyword</label>
+            <input type="text" class="form-control" id="keyword" [(ngModel)]='keyword' ngControl="keyword" (keyup)=search(keyword.value)
+              required>
+                  <control-messages [control]="keywordForm.controls.keyword"></control-messages>
+             
+            <div class="suggestions" *ngIf="filteredList">
+              <div class="list-group">
+
+                <a (click)="select(item)" class="list-group-item" *ngFor="#item of filteredList;#idx = index" [class.complete-selected]="idx == selectedIdx">{{item}}</a>
+
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-default" [disabled]="!keywordForm.valid" (click)="addkeyword($event,keywordForm.value)" > Add</button>
+          
+        </form>
+      </div>
+      <div class='table-responsive'>
+        <table class='table' *ngIf='keywords && keywords.length'>
+          <thead>
+            <tr>
+              <th>Keyword</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor='#keyword of keywords'>
+              <td>{{keyword}}</td>
+              <td>
+                <button type="button" class="btn btn-danger" (click)='removeKeyword(keyword)'> Remove</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </fieldset>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <fieldset>
+      <legend>Paper Details</legend>
+      <div class="jumbotron center-block">
+        <form [ngFormModel]="fileForm">
+          <div class="form-group">
+            <label for="abstract">Abstract </label>
+            <input type="text" class="form-control" id="abstract" placeholder="abstract" ngControl="abstract" required>
+            <control-messages [control]="fileForm.controls.abstract"></control-messages>
+          </div>
+          <div class="form-group">
+            <label for="title">Title </label>
+            <input type="text" class="form-control" id="title" placeholder="Title" ngControl="title" required>
+            <control-messages [control]="fileForm.controls.title"></control-messages>
+          </div>
+          <div class="form-group">
+            <label for="attFile">Attached file </label>
+            <input type="file"   id="attFile" ngControl="attFile" (change)="onChange($event)" required>
+            <control-messages [control]="fileForm.controls.attFile"></control-messages>
+          </div>
+
+<div class="form-group">
+									<label for="attFile" class="col-lg-3 control-label">Attach file</label>
+									<div class="col-lg-8"><input ngControl="attFile" (change)="onChange($event)" required id="file" type="file" required>
+									   <control-messages [control]="fileForm.controls.attFile"></control-messages>
+									   <div class="fieldnote note">File upload limit through this form is 64.0MB.</div>
+									   
+									</div>
+									
+								</div>
+
+          <button type="submit" class="btn btn-default"  (click)="create($event,fileForm.value)"> Submit</button>
+        </form>
+      </div>
+    </fieldset>
+  </div>
+</div>
+</div>
+</div>
