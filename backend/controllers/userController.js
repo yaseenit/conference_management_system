@@ -171,6 +171,7 @@ var userController = function (User) {
         User.findById(req.user._id)
             .populate('reviews')//,'submissions') TODO
             .populate('conferences')
+            .populate('submissions')
             .exec(function (err, user) {
                 if (err)
                     res.status(500).send(err);

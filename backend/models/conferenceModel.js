@@ -5,15 +5,15 @@ var mongoose = require('mongoose'),
 
 var ConferenceSchema = new Schema({
     title: {type: String},
-	// chair: {
-	// 	type: mongoose.Schema.Types.ObjectId, ref: 'User',
-	// 	required: true
-	// },
+	chair: {
+		type: mongoose.Schema.Types.ObjectId, ref: 'User',
+		required: true
+	},
     startdate: {type: Date},
     enddate: {type: Date},
     conferenceLocation:{type: String},
-    status: {type: Boolean, default:false}
-   // authors: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
+    status: {type: Boolean, default:false},
+    authors: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
 });
 
 
