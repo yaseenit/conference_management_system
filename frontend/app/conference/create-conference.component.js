@@ -46,6 +46,7 @@ System.register(['angular2/core', '../service/app.service', 'angular2/common', '
                     });
                 }
                 CreateConferenceComponent.prototype.submit = function (event, value) {
+                    var _this = this;
                     this._conference = new app_interface_1.ConferenceModel();
                     this._conference.authors = this._service.getCurrentUserEmail();
                     this._conference.conferenceLocation = value.conferenceLocation;
@@ -55,11 +56,11 @@ System.register(['angular2/core', '../service/app.service', 'angular2/common', '
                     this._conference.title = value.title;
                     this._service.createConference(this._conference).subscribe(function (response) {
                         console.log(response);
-                        // this.resultMessage="New conference has been created you can invite autho from ";
-                        //  this.messageType="success";
+                        _this.resultMessage = "New conference has been created you can invite autho from ";
+                        _this.messageType = "success";
                     }, function (error) {
-                        //    this.resultMessage="Error , please try again later";
-                        //   this.messageType="error";                 
+                        _this.resultMessage = "Error , please try again later";
+                        _this.messageType = "error";
                     });
                 };
                 CreateConferenceComponent = __decorate([

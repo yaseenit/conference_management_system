@@ -44,12 +44,12 @@ export class CreateConferenceComponent {
       this._service.createConference(this._conference).subscribe(
             response => {
             console.log(response);  
-        // this.resultMessage="New conference has been created you can invite autho from ";
-       //  this.messageType="success";
+         this.resultMessage="New conference has been created you can invite autho from ";
+         this.messageType="success";
         },
              error => {
-     //    this.resultMessage="Error , please try again later";
-      //   this.messageType="error";                 
+        this.resultMessage="Error , please try again later";
+           this.messageType="error";                 
        }
        ); 
     }

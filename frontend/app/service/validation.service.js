@@ -15,7 +15,7 @@ System.register([], function(exports_1, context_1) {
                         'invalidPassword': 'Invalid password. Password must be at least 6 characters long, and contain a number.',
                         'minlength': "Minimum length " + validatorValue.requiredLength,
                         'passwordNotMatch': 'Password not match',
-                        'invalidFileExt': 'File type should be doc ,docx ,pdf'
+                        'invalidFileFormat': 'Invalid File Format - Select only files with .pdf extension'
                     };
                     return config[validatorName];
                 };
@@ -35,13 +35,12 @@ System.register([], function(exports_1, context_1) {
                         return { 'invalidPassword': true };
                     }
                 };
-                ValidationService.checkFileExtention = function (fileName) {
-                    var allowedFiles = [".doc", ".docx", ".pdf"];
-                    var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(" + allowedFiles.join('|') + ")$");
-                    if (fileName.toLowerCase().match(regex))
+                ValidationService.fileValidator = function (fileName) {
+                    if (fileName.match(/^.+\.([pP][dD][fF])$/)) {
                         return null;
+                    }
                     else {
-                        return { 'invalidFileExt': true };
+                        return 'Invalid File Format';
                     }
                 };
                 ValidationService.checkEqualPassword = function (group) {

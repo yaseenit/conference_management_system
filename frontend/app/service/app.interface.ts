@@ -1,6 +1,6 @@
 export interface IPaper{
     title:string;
-    _id:string;
+    id:number;
     status:string;
     fileId:string;
     authorList:PaperAuthor[];
@@ -11,11 +11,10 @@ export interface IPaper{
     deadline:string;
     createdOn:string;
     generatedFileName:string;
-    fileName:string;
 }
 export class ConferenceModel {
     title: string="";
-    chair: string=""
+    chair: Chair=new Chair();
     startdate: Date=new Date();
     enddate:Date=new Date();
     conferenceLocation:string="";
@@ -26,12 +25,20 @@ export class ConferenceModel {
     {
         
     }
-};
+}
+export class Chair{
+    username:string="";
+    _id:string="";
+    constructor()
+    {
+
+    }
+}
 
 export class Paper implements IPaper
 {
     title:string="";
-    _id:string="";
+    id:number=0;
     status:string="";
     author:string="";
     fileId:string="";
@@ -43,7 +50,10 @@ export class Paper implements IPaper
     deadline:string="";
     createdOn:string="";
     generatedFileName:string="";
-    fileName:string="";
+
+    //for review
+    review:Review[]=[];
+    //
     constructor()
     {
         
@@ -68,6 +78,40 @@ export class PaperAuthor implements IPaperAuthor
     }
   
 }
+
+//for review
+export interface IReview
+{
+    
+    expertise:string;
+    evaluation:string;
+    summary:string;
+    strongPoints:string;
+    weakPoints:string;
+    comments:string;
+
+}
+
+export class Review implements IReview
+{
+    
+    expertise:string="";
+    evaluation:string="";
+    summary:string="";
+    strongPoints:string="";
+    weakPoints:string="";
+    comments:string="";
+    constructor(_expertise:string,_evaluation:string,_summary:string,_strongPoints:string,_weakPoints:string,_comments:string)
+    {
+        
+        this.expertise=_expertise;
+        this.evaluation=_evaluation;
+        this.strongPoints=_strongPoints;
+        this.weakPoints=_weakPoints;
+        this.comments=_comments;
+    }
+}
+//
 export interface IUser
 {
     username:string;

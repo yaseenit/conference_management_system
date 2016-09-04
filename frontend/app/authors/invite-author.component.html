@@ -4,16 +4,7 @@
     <div class='has-error' *ngIf='errorMessage'>{{errorMessage}}</div>
 <fieldset>
     <legend>Author(s)</legend>
- <form [ngFormModel]="form" >
-  
-  <div class="form-group">
-    <label for="userName">Author Email Address </label>
-    <input type="text"  class="form-control" id="userName" placeholder="Email"   ngControl="userName" required >
-      <control-messages [control]="form.controls.userName"></control-messages>
-  </div>
-   <button type="submit" class="btn btn-primary btn-block" [disabled]="!form.valid" (click)="Invit($event,form.value)">Invit</button>
-  </form>
- <div class='table-responsive'>
+    <div class='table-responsive'>
             <table class='table' 
             *ngIf='PaperReviewers && PaperReviewers.length' >
                 <thead>
@@ -30,6 +21,16 @@
                 </tbody>
             </table>
         </div>
+ <form [ngFormModel]="form" >
+  
+  <div class="form-group">
+    <label for="userName">Author Email Address </label>
+    <input type="text"  class="form-control" id="userName" placeholder="Email"   ngControl="userName" required >
+      <control-messages [control]="form.controls.userName"></control-messages>
+  </div>
+   <button type="submit" class="btn btn-primary btn-block" [disabled]="!form.valid" (click)="Invit($event,form.value)">Invit</button>
+  </form>
+ 
 </fieldset>
 
    <div class='panel-footer'>

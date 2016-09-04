@@ -12,12 +12,12 @@ Conference System</a>
             <li>
                 <a href="#" *ngIf="isLog">List Of Author</a>
             </li>
-            <li>
-                <a href="#" *ngIf="isLog">List Of Reviewers</a>
-            </li>
              <li>
                     <a [routerLink]="['CreateConference']" *ngIf="isLog">New Conference</a>
                 </li>
+            <li>
+                <a *ngIf="isLog" [routerLink]="['Conference']"  >My Conference</a>
+            </li>
             <li>
                 <a href="#" *ngIf="isLog">View My Profile</a>
             </li>

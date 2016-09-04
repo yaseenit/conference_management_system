@@ -22,7 +22,7 @@ import {LogInComponent} from './login/login.component';
 import {SignUpComponent} from './signup/signup.component';
 
 import {AssigReviewComponent} from './reviewers/assign-review.component';
-import {InvitAuthorComponent} from './authors/invit-author.component';
+import {InviteAuthorComponent} from './authors/invite-author.component';
 
 import {AppService} from './service/app.service';
 import { ValidationService } from './service/validation.service';
@@ -35,9 +35,9 @@ import {Router} from 'angular2/router';
 
 import {ConfirmService} from "./service/confirm.service";
 import {ConfirmComponent} from "./shared/confirm.component";
+
 import  {CreateConferenceComponent} from "./conference/create-conference.component";
-
-
+import {ConferenceComponent} from "./conference/conference.component";
 @Component({
   selector: 'pm-app',
   templateUrl: 'app/app.component.html',
@@ -51,7 +51,7 @@ import  {CreateConferenceComponent} from "./conference/create-conference.compone
   [
     { path: '/welcome', name: 'Welcome', component: WelcomeComponent, useAsDefault: true },
     { path: '/papers', name: 'Papers', component: PaperListComponent },
-    { path: '/paper/:_id', name: 'PaperDetail', component: PaperDetailComponent },
+    { path: '/paper/:id', name: 'PaperDetail', component: PaperDetailComponent },
     { path: '/login', name: 'LogIn', component: LogInComponent },
     { path: '/papercreate', name: 'PaperCreate', component: PaperCreateComponent },
     //for review
@@ -62,9 +62,11 @@ import  {CreateConferenceComponent} from "./conference/create-conference.compone
     { path: '/editProfile', name: 'EditProfile', component: EditProfileComponent },
     { path: '/viewProfile', name: 'ViewProfile', component: ViewProfileComponent }, 
     { path: '/assignReview/:id', name: 'AssigReview', component: AssigReviewComponent },
-    { path: '/invitAuthor/:id', name: 'InvitAuthor', component: InvitAuthorComponent },
-    { path: '/changePassword', name: 'ChangePassword', component: ChangePasswordComponent }
-{path :'/createconference',name: 'CreateConference',component:CreateConferenceComponent}
+    { path: '/inviteAuthor/:id', name: 'InviteAuthor', component: InviteAuthorComponent },
+    { path: '/changePassword', name: 'ChangePassword', component: ChangePasswordComponent },
+    { path: '/conference', name: 'Conference', component: ConferenceComponent },
+    {path :'/createconference',name: 'CreateConference',component:CreateConferenceComponent}
+
 
   ]
 )
@@ -125,7 +127,7 @@ export class AppComponent implements OnInit {
   login(event, value: any) {
     this.messageType = "";
     this.resultMessage = "";
-    event.preventDefault();
+  //  event.preventDefault();
     this._logInService.login(value.email, value.password).subscribe(
       loginResponse => {
         console.log(loginResponse);
@@ -139,6 +141,7 @@ export class AppComponent implements OnInit {
           else {
             localStorage.setItem('token', loginResponse["token"]);
             localStorage.setItem('username', loginResponse["user"].username);
+            localStorage.setItem('_id', loginResponse["user"]._id);
 
             this.isLog = this._logInService.isLog();
             this.currentUser = this._logInService.getCurrentUserEmail();

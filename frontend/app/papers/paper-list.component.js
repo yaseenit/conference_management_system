@@ -54,7 +54,6 @@ System.register(['angular2/core', './paper-filter.pipe', '../shared/star.compone
                 };
                 PaperListComponent.prototype.getFile = function (event, generatedFileName, fileName) {
                     event.preventDefault();
-                    console.log(fileName);
                     this._paperService.getFiles(generatedFileName, fileName);
                 };
                 PaperListComponent = __decorate([

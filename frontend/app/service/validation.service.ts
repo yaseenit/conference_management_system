@@ -7,18 +7,17 @@ export class ValidationService {
             'invalidEmailAddress': 'Invalid email address',
             'invalidPassword': 'Invalid password. Password must be at least 6 characters long, and contain a number.',
             'minlength': `Minimum length ${validatorValue.requiredLength}`,
-            'passwordNotMatch':'Password not match',
-            'invalidFileExt':'File type should be doc ,docx ,pdf'
+            'passwordNotMatch': 'Password not match',
+            'invalidFileFormat': 'Invalid File Format - Select only files with .pdf extension'
 
         };
-
         return config[validatorName];
     }
 
 
 
-     static   emailValidator(control:any) {
-       
+    static emailValidator(control: any) {
+
         if (control.value.match(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/)) {
             return null;
         } else {
@@ -26,35 +25,32 @@ export class ValidationService {
         }
     }
 
-    static passwordValidator(control) {
+    static passwordValidator(control:any) {
         if (control.value.match(/^(?=.*[0-9])[a-zA-Z0-9!@#$%^&*]{6,100}$/)) {
             return null;
         } else {
             return { 'invalidPassword': true };
         }
     }
-    static checkFileExtention(fileName)
-    {       
 
-                var allowedFiles = [".doc", ".docx", ".pdf"];
-        var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(" + allowedFiles.join('|') + ")$");
-        if (fileName.toLowerCase().match(regex))
-           return null;
-        else {
-            return { 'invalidFileExt': true };
+    static fileValidator(fileName : string):string {
+        if (fileName.match(/^.+\.([pP][dD][fF])$/)) {
+            return null;
+        } else {
+            return  'Invalid File Format' ;
         }
-
     }
+    
     static checkEqualPassword(group: ControlGroup) {
-          if (group.controls['password'].value != group.controls['rePassword'].value) {
+        if (group.controls['password'].value != group.controls['rePassword'].value) {
             return {
-            passwordNotMatch: true 
+                passwordNotMatch: true
             };
 
 
         }
         else
-        return null;
+            return null;
     }
 
 }

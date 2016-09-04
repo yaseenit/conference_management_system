@@ -55,7 +55,7 @@ System.register(['angular2/core', '../service/app.service', '../service/app.inte
                     });
                     this.fileForm = ff.group({
                         abstract: ['', common_1.Validators.required],
-                        attFile: ['', common_1.Validators.compose([validation_service_1.ValidationService.fileValidator, common_1.Validators.required])],
+                        attFile: [''],
                         title: ['', common_1.Validators.required]
                     });
                     this.authorForm = fb.group({
@@ -159,8 +159,12 @@ System.register(['angular2/core', '../service/app.service', '../service/app.inte
                     this.files = event.srcElement.files;
                     console.log(this.files);
                     //this.files[0].name;
-                    if (this.files)
-                        console.log(validation_service_1.ValidationService.fileValidator(this.files[0].name));
+                    if (this.files) {
+                        if (validation_service_1.ValidationService.fileValidator(this.files[0].name)) {
+                            this.resultMessage = "file extention should be pdf";
+                            this.messageType = "error";
+                        }
+                    }
                 };
                 PaperCreateComponent.prototype.create = function (event, value) {
                     event.preventDefault();
@@ -175,17 +179,31 @@ System.register(['angular2/core', '../service/app.service', '../service/app.inte
                         this.resultMessage = "Please add the Authors";
                         this.messageType = "error";
                         check = false;
+                        return;
                     }
                     console.log(this.keywords.length);
                     if (this.paper.keywords.length <= 0) {
                         this.resultMessage = "Please add the Keywords";
                         this.messageType = "error";
                         check = false;
+                        return;
+                    }
+                    if (!this.files) {
+                        this.resultMessage = "Please choose file";
+                        this.messageType = "error";
+                        check = false;
+                        return;
                     }
                     if (check) {
-                        this._paperService.paperSubmission(this.paper, this.files);
-                        this.resultMessage = "Paper has been submitted Successfully";
-                        this.messageType = "success";
+                        try {
+                            this._paperService.paperSubmission(this.paper, this.files);
+                            this.resultMessage = "Paper has been submitted Successfully";
+                            this.messageType = "success";
+                        }
+                        catch (err) {
+                            this.resultMessage = "An error ,please try again later";
+                            this.messageType = "error";
+                        }
                     }
                 };
                 PaperCreateComponent = __decorate([

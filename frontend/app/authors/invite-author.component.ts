@@ -13,11 +13,11 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
 
 @Component(
     {
-        templateUrl: 'app/authors/invit-author.component.html',
+        templateUrl: 'app/authors/invite-author.component.html',
 
         directives: [ROUTER_DIRECTIVES,GoogleplaceDirective,ControlMessagesComponent,ResultMessagesComponent],
     })
-    export class InvitAuthorComponent
+    export class InviteAuthorComponent
     {
         form: ControlGroup;
         errorMessage:string;
@@ -33,15 +33,15 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
     }
         ngOnInit() {
         if (this.authorList) {
-            this.ConferenceId = +this._routeParams.get('id');
+            this.ConferenceId = this._routeParams.get('id');
             this.getAuthor(this.ConferenceId);
         }
     }
     getAuthor(id)
     {
-
+        
     }
-    Invit(event,value: any ) {
+    Invit(event:any,value: any ) {
         this.meeageType="";
         this.resultMessage="";
         event.preventDefault();
@@ -51,21 +51,19 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
          this.arrayIndex++;
       //   console.log(value.email);
         // this.clearForm();
-         this._service.invitAuthor(value.userName,this.ConferenceId).subscribe(
+         this._service.inviteAuthor(value.userName,this.ConferenceId).subscribe(
             response => {
-        
+         this.authorList=response["authors"];
          this.resultMessage="author"+value.userName +" has been invited";
          this.meeageType="success";
          console.log(response);
         },
              error => {
-       if(error["status"]==null)
-      {
+     
          this.resultMessage="Error , please try again later";
          this.meeageType="error";
       
-      }
-            error => {}
+      
                  
         }
        );  
