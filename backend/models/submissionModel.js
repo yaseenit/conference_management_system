@@ -11,7 +11,7 @@ var paperAuthor = new mongoose.Schema({
 
 });
 
-var submissionModel = new Schema({
+var submissionSchema = new Schema({
     title: { type: String, required: "A title is required" },
     abstract: { type: String },
     keywords: [{ type: String }],
@@ -32,10 +32,10 @@ var submissionModel = new Schema({
     },
     createdOn: { type: Date, default: Date.now },
     authorList: [paperAuthor],
-    reviewers: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]//list of users who are allowed to review this submission. this list is filled by the chair
+ //   reviewers: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]//list of users who are allowed to review this submission. this list is filled by the chair
 
 
 });
 
 
-module.exports = mongoose.model('Submission', submissionModel);
+module.exports = mongoose.model('Submission', submissionSchema);
