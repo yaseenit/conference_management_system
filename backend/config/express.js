@@ -72,6 +72,7 @@ module.exports = function (db) {
 		if (req.method == 'OPTIONS') {
 			res.status(200).end();
 		} else {
+			console.log(req.body);
 			next();
 		}
 	});
