@@ -3,7 +3,7 @@ var mongoose = require('mongoose'),
 
 
 
-var conferenceModel = new Schema({
+var ConferenceSchema = new Schema({
     title: {type: String},
 	chair: {
 		type: mongoose.Schema.Types.ObjectId, ref: 'User',
@@ -16,4 +16,12 @@ var conferenceModel = new Schema({
     authors: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
 });
 
-module.exports= mongoose.model('Conference', conferenceModel);
+
+// ConferenceSchema.pre('save', function (next) {
+// 	if (this.chair) {
+    // update chair conference array
+
+// 	}
+// 	next();
+// });
+module.exports= mongoose.model('Conference', ConferenceSchema);

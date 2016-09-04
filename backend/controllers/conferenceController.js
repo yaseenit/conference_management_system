@@ -1,4 +1,5 @@
 var Conference = require('../models/conferenceModel');
+var Email = require('../models/emailModel');
 
 
 var conferenceController = function () {
