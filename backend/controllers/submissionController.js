@@ -3,15 +3,12 @@ var fs = require("fs");
 var uploadedFilesPath = require('../config/configurations').uploadedFilesPath;
 var randomstring = require("randomstring");
 
-
-var patg
 var submissionController = function (Submission) {
 
     var post = function (req, res) {
         var submission = new Submission(req.body);
         var generatedFileName = randomstring.generate();
         submission.generatedFileName = generatedFileName;
-        console.log(submission);
 
         fs.writeFile(uploadedFilesPath + generatedFileName, new Buffer(req.body.based64_data, 'base64'), function (err) {
             if (err) {
@@ -91,7 +88,7 @@ var submissionController = function (Submission) {
                 // next();
             }
             else {
-                res.status(404).send('no submission for the requested submissionId is found');
+                res.status(404).json({ message: 'no submission for the requested submissionId is found', code: 404 });
             }
         });
     }

@@ -5,6 +5,25 @@ var mongoose = require('mongoose'),
 	crypto = require('crypto'),
 	Schema = mongoose.Schema;
 
+// Define 'TaskSchema'
+var taskSchema = new mongoose.Schema({ //assign papers to reviewers
+	taskType: {
+		type: String, required: true,
+		enum: ['submitting', 'reviewing']
+
+	},
+	taskDesc: String,
+	createdOn: { type: Date, default: Date.now },
+	createdBy: {
+		type: mongoose.Schema.Types.ObjectId, ref: 'User',
+		required: true
+	},
+	confenrenceId: { type: mongoose.Schema.Types.ObjectId, ref: 'Conference' }, // it takes null if tasktype is reviewing
+	submissioneId: { type: mongoose.Schema.Types.ObjectId, ref: 'Submission' } // it takes null if tasktype is submitting
+
+	//	assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+});
+
 
 
 // Define a new 'UserSchema'
@@ -63,7 +82,9 @@ var UserSchema = new Schema({
 	// registration by clicking on a registration 
 	// link sent via email
 	reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],//review id 
-	submissions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Submission' }]// a submission id here that this user is author for this submission
+	submissions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Submission' }],// a submission id here that this user is author for this submission
+    conferences: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Conference' }],
+	tasks: [taskSchema]
 
 });
 

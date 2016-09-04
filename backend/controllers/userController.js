@@ -14,20 +14,7 @@ var userController = function (User) {
         }
     }
 
-    var get = function (req, res) {
 
-        var query = {};
-
-        if (req.query.genre) {
-            query.genre = req.query.genre;
-        }
-        User.find(query, function (err, users) {
-            if (err)
-                res.status(500).send(err);
-            else
-                res.json(users);
-        });
-    }
     var getAllAuthors = function (req, res) {
         var query = {};
         query.role = "AUTHOR";
@@ -166,7 +153,20 @@ var userController = function (User) {
     }
 
     var getProfile = function (req, res) {
+    // var get = function (req, res) {
 
+    //     var query = {};
+
+    //     if (req.query.genre) {
+    //         query.genre = req.query.genre;
+    //     }
+    //     User.find(query, function (err, users) {
+    //         if (err)
+    //             res.status(500).send(err);
+    //         else
+    //             res.json(users);
+    //     });
+    // }
         if (req.user) {
             res.json(req.user);
         } else {//should not reach here
@@ -220,7 +220,6 @@ var userController = function (User) {
 
     return {
         post: post,
-        get: get,
         getAllAuthors: getAllAuthors,
         getAllReviewers: getAllReviewers,
         getAllReviews: getAllReviews,

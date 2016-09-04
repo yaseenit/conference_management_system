@@ -33,6 +33,7 @@ module.exports = function (req, res, next) {
         // Authorize the user to see if s/he can access our resources
         //var dbUser = User.findByid(decoded.userid); //the logged in user's username
 
+        //TODO user should be activated to do any request else than login
         User.findTheUserByUsername(decoded.userid, function (err, user, message) {
             if (err) {
                 res.status(500);

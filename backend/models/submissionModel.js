@@ -31,7 +31,9 @@ var submissionModel = new Schema({
         default: +new Date() + 14 * 24 * 60 * 60 * 1000
     },
     createdOn: { type: Date, default: Date.now },
-    authorList: [paperAuthor]
+    authorList: [paperAuthor],
+    reviewers: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]//list of users who are allowed to review this submission. this list is filled by the chair
+
 
 });
 
