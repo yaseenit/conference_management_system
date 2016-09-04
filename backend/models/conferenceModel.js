@@ -12,8 +12,8 @@ var ConferenceSchema = new Schema({
     startdate: {type: Date},
     enddate: {type: Date},
     conferenceLocation:{type: String},
-    status: {type: Boolean, default:false},
-    authors: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
+    status: {type: Boolean, default:false}
+   // authors: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
 });
 
 
