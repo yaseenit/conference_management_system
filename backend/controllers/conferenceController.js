@@ -95,13 +95,15 @@ var conferenceController = function () {
                                             if (err) {
                                                 return res.status(500).json({ "message": err, code: 500 });
                                             }
-                                            //You will receive a confirmation e-mail. Your account will be activated once you visit the link specified in the message.
-                                            // If the user was created successfully 
-                                            Email.to = newUser.username;
-                                            var name = newUser.username.substring(0, newUser.username.lastIndexOf("@"));
-                                            Email.subject = "CMS Invitation To Submission Mail";
-                                            Email.html = "<p>Dear Mr/Ms " + name + ",<br>You have been added to conference titled " + conference.title + "<br>Best of luck with the submitting process. Thank you.</p>";
-                                            var emailController = require('../controllers/emailController')(Email);
+                                            else {
+                                                //You will receive a confirmation e-mail. Your account will be activated once you visit the link specified in the message.
+                                                // If the user was created successfully 
+                                                Email.to = newUser.username;
+                                                var name = newUser.username.substring(0, newUser.username.lastIndexOf("@"));
+                                                Email.subject = "CMS Invitation To Submission Mail";
+                                                Email.html = "<p>Dear Mr/Ms " + name + ",<br>You have been added to conference titled " + conference.title + "<br>Best of luck with the submitting process. Thank you.</p>";
+                                                var emailController = require('../controllers/emailController')(Email);
+                                            }
                                         });
                                     } else { // user already existed
                                         user.tasks.push(newTask);
@@ -109,15 +111,15 @@ var conferenceController = function () {
                                             // If an error occurs
                                             if (err) {
                                                 return res.status(500).json({ "message": err, code: 500 });
+                                            } else {
+                                                //You will receive a confirmation e-mail. Your account will be activated once you visit the link specified in the message.
+                                                // If the user was created successfully 
+                                                Email.to = user.username;
+                                                var name = user.username.substring(0, user.username.lastIndexOf("@"));
+                                                Email.subject = "CMS Invitation To Submission Mail";
+                                                Email.html = "<p>Dear Mr/Ms " + name + ",<br>You have been added to conference titled " + conference.title + "<br>Best of luck with the submitting process. Thank you.</p>";
+                                                var emailController = require('../controllers/emailController')(Email);
                                             }
-                                            //You will receive a confirmation e-mail. Your account will be activated once you visit the link specified in the message.
-                                            // If the user was created successfully 
-                                            Email.to = user.username;
-                                            var name = newUser.username.substring(0, user.username.lastIndexOf("@"));
-                                            Email.subject = "CMS Invitation To Submission Mail";
-                                            Email.html = "<p>Dear Mr/Ms " + name + ",<br>You have been added to conference titled " + conference.title + "<br>Best of luck with the submitting process. Thank you.</p>";
-                                            var emailController = require('../controllers/emailController')(Email);
-
                                         });
                                     }
                                     // reply 
