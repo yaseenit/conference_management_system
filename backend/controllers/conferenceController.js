@@ -128,8 +128,8 @@ var conferenceController = function () {
                                                 res.status(500).send(err);
                                             else if (!user) {
                                                 // If it is a new user  
-                                                Email.to = newUser.username;
-                                                var name = newUser.username.substring(0, newUser.username.lastIndexOf("@"));
+                                                Email.to = newAuthor;
+                                                var name = newAuthor.substring(0, newAuthor.lastIndexOf("@"));
                                                 Email.subject = "CMS Invitation To Conference Mail";
                                                 Email.html = "<p>Dear Mr/Ms " + name + ",<br>You have been added to conference titled " + conference.title + "<br>Please go to the website ang register with this email address to be able to do the submission.<br> Best of luck with the submitting process.  Thank you.</p>";
                                                 var emailController = require('../controllers/emailController')(Email);
