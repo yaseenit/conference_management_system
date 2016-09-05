@@ -63,11 +63,9 @@ var submissionController = function (Submission) {
 
     var get = function (req, res) {
 
-        var query = {};
-
-        if (req.query._Id) {
-            query._Id = req.query._Id;
-        }
+        var query = {
+            createdBy:user.username
+        };
         Submission.find(query, function (err, submissions) {
             if (err)
                 res.status(500).send(err);
