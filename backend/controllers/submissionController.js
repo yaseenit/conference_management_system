@@ -9,6 +9,7 @@ var submissionController = function (Submission) {
         var conferenceId = req.params.conferenceId;
         var submission = new Submission(req.body);
         submission.conferenceId = conferenceId;// we need to add this submission to conference
+        submission.createdBy = req.user.username;
         var generatedFileName = randomstring.generate();
         submission.generatedFileName = generatedFileName;
 

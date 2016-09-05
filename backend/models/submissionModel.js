@@ -33,7 +33,8 @@ var submissionSchema = new Schema({
     createdOn: { type: Date, default: Date.now },
     authorList: [paperAuthor],
     conferenceId:{ type: String, required: "ConferenceId is required" },
-    reviewers: [{type: String}]
+    reviewers: [{type: String}],
+    createdBy:{ type: String, required: "Submission Creater Email Address is required" }
  //   reviewers: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]//list of users who are allowed to review this submission. this list is filled by the chair
 
 
