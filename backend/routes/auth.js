@@ -47,28 +47,27 @@ var auth = {
     if (!req.user) {
       // Create a new 'User' model instance
       var user = new User(req.body);
-      var message = null;
 
-      // Set the user provider property
-      user.provider = 'local';
-
-      Task.find({ assignedTo: user.username } , function (err, tasks) {
+      Task.find({ assignedTo: user.username }, function (err, tasks) {
         if (!err) {
           for (var i = 0; i < tasks.length; i++) {
             user.tasks.push(tasks[i].id);
-            // Try saving the new user document
-            user.save(function (err) {
-              // If an error occurs, use flash messages to report the error
-              if (err) {
-                return res.status(400).json({ "message": err, code: 400 });
-              }
-              //You will receive a confirmation e-mail. Your account will be activated once you visit the link specified in the message.
-              // If the user was created successfully 
-              sendConfirmationEmail(user, req.headers.host);
-              // reply 
-              res.json(genToken(user));;
-            });
           }
+          // Try saving the new user document
+          user.save(function (err) {
+            // If an error occurs, use flash messages to report the error
+            if (err) {
+              return res.status(400).json({ "message": err, code: 400 });
+            }
+            //You will receive a confirmation e-mail. Your account will be activated once you visit the link specified in the message.
+            // If the user was created successfully 
+            sendConfirmationEmail(user, req.headers.host);
+            // reply 
+            res.json(genToken(user));;
+          });
+        }
+        else {
+          return res.status(400).json({ "message": err, code: 400 });
         }
       });
     }
