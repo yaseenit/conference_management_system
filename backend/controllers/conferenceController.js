@@ -187,7 +187,7 @@ var conferenceController = function () {
                             }
                             else {
                                 var taskTobeDeleted = {
-                                    conferenceId: conference._id
+                                    'conferenceId': conference._id
                                 }
                                 var query = { username: newAuthor };
                                 User.findOne(query, function (err, user) {
