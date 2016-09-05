@@ -4,9 +4,11 @@ var uploadedFilesPath = require('../config/configurations').uploadedFilesPath;
 var randomstring = require("randomstring");
 
 var submissionController = function (Submission) {
-
+    
     var post = function (req, res) {
+        var conferenceId = req.params.conferenceId;
         var submission = new Submission(req.body);
+        submission.conferenceId = conferenceId;// we need to add this submission to conference
         var generatedFileName = randomstring.generate();
         submission.generatedFileName = generatedFileName;
 

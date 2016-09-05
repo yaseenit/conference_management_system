@@ -1,6 +1,7 @@
 var Conference = require('../models/conferenceModel');
 var Email = require('../models/emailModel');
 var User = require('../models/userModel');
+var Task = require('../models/taskModel');
 
 
 var conferenceController = function () {
@@ -110,52 +111,48 @@ var conferenceController = function () {
                                 return;
                             }
                             else {
-                                var newTask = {
+                                var newTask = new Task({
                                     taskType: "submitting",
                                     taskDesc: conference.title,
                                     createdBy: req.user._id,
-                                    conferenceId: conference._id
-                                }
-                                var query = { username: newAuthor };
-                                User.findOne(query, function (err, user) {
-                                    if (err)
-                                        res.status(500).send(err);
-                                    else if (!user) {
-                                        // Create a new 'User' model instance
-                                        var newUser = new User({ username: newAuthor });
-                                        newUser.tasks.push(newTask);
-                                        newUser.save(function (err) {
-                                            // If an error occurs
-                                            if (err) {
-                                                return res.status(500).json({ "message": err, code: 500 });
-                                            }
-                                            else {
-                                                // If the new user was assigned successfully 
+                                    conferenceId: conference._id,
+                                    assignedTo: newAuthor
+                                });
+                                newTask.save(function (err) {
+                                    if (err) {
+                                        return res.status(500).json({ "message": err, code: 500 });//TODO revert
+                                    } else {
+                                        var query = { username: newAuthor };
+                                        User.findOne(query, function (err, user) {
+                                            if (err)
+                                                res.status(500).send(err);
+                                            else if (!user) {
+                                                // If it is a new user  
                                                 Email.to = newUser.username;
                                                 var name = newUser.username.substring(0, newUser.username.lastIndexOf("@"));
-                                                Email.subject = "CMS Invitation To Submission Mail";
-                                                Email.html = "<p>Dear Mr/Ms " + name + ",<br>You have been added to conference titled " + conference.title + "<br>Best of luck with the submitting process. Thank you.</p>";
+                                                Email.subject = "CMS Invitation To Conference Mail";
+                                                Email.html = "<p>Dear Mr/Ms " + name + ",<br>You have been added to conference titled " + conference.title + "<br>Please go to the website ang register with this email address to be able to do the submission.<br> Best of luck with the submitting process.  Thank you.</p>";
                                                 var emailController = require('../controllers/emailController')(Email);
+                                            } else { // user already existed
+                                                user.tasks.push(newTask.id);
+                                                user.save(function (err) {
+                                                    // If an error occurs
+                                                    if (err) {
+                                                        return res.status(500).json({ "message": err, code: 500 });
+                                                    } else {
+                                                        // If the already existed user was assigned successfully 
+                                                        Email.to = user.username;
+                                                        var name = user.username.substring(0, user.username.lastIndexOf("@"));
+                                                        Email.subject = "CMS Invitation To Submission Mail";
+                                                        Email.html = "<p>Dear Mr/Ms " + name + ",<br>You have been added to conference titled " + conference.title + "<br>Best of luck with the submitting process. Thank you.</p>";
+                                                        var emailController = require('../controllers/emailController')(Email);
+                                                    }
+                                                });
                                             }
-                                        });
-                                    } else { // user already existed
-                                        user.tasks.push(newTask);
-                                        user.save(function (err) {
-                                            // If an error occurs
-                                            if (err) {
-                                                return res.status(500).json({ "message": err, code: 500 });
-                                            } else {
-                                                // If the already existed user was assigned successfully 
-                                                Email.to = user.username;
-                                                var name = user.username.substring(0, user.username.lastIndexOf("@"));
-                                                Email.subject = "CMS Invitation To Submission Mail";
-                                                Email.html = "<p>Dear Mr/Ms " + name + ",<br>You have been added to conference titled " + conference.title + "<br>Best of luck with the submitting process. Thank you.</p>";
-                                                var emailController = require('../controllers/emailController')(Email);
-                                            }
+                                            // reply 
+                                            res.json(conference);
                                         });
                                     }
-                                    // reply 
-                                    res.json(conference);
                                 });
                             }
                         });
@@ -166,8 +163,8 @@ var conferenceController = function () {
     }
     var removeAuthor = function (req, res) {
         var conferenceId = req.params.conferenceId;
-        var newAuthor = req.body.username || '';
-        if (newAuthor == '') {
+        var authorToBeDeleted = req.body.username || '';
+        if (authorToBeDeleted == '') {
             res.status(400);
             res.json({
                 "status": 400,
@@ -187,43 +184,46 @@ var conferenceController = function () {
                     return;
                 }
                 else {
-                    if (conference.authors.indexOf(newAuthor) > -1) {
-                        conference.authors.pull(newAuthor);
+                    if (conference.authors.indexOf(authorToBeDeleted) > -1) {
+                        conference.authors.pull(authorToBeDeleted);
                         conference.save(function (err, user) {
                             if (err) {
                                 res.status(500).send(err);
                                 return;
                             }
                             else {
-                                var taskTobeDeleted = {
-                                    'conferenceId': conferenceId
-                                }
-                                console.log("taskTobeDeleted")
-                                console.log(taskTobeDeleted)
-                                var query = { username: newAuthor };
-                                User.findOne(query, function (err, user) {
-                                    if (err)
-                                        res.status(500).send(err);
-                                    else if (user) { // user is existed
-                                        user.tasks.pull(taskTobeDeleted);//TODO urgent
-                                        user.save(function (err) {
-                                            // If an error occurs
-                                            if (err) {
-                                                return res.status(500).json({ "message": err, code: 500 });
-                                            } else {
-                                                // If the user was created successfully 
-                                                Email.to = user.username;
-                                                var name = user.username.substring(0, user.username.lastIndexOf("@"));
-                                                Email.subject = "CMS Submission Revoking Mail";
-                                                Email.html = "<p>Dear Mr/Ms " + name + ",<br>Your submission privilege has been revoked to conference titled." + conference.title + "<br>Thank you.</p>";
-                                                var emailController = require('../controllers/emailController')(Email);
+
+                                Task.remove({ assignedTo: authorToBeDeleted, 'conferenceId': conferenceId }, function (err, deletedTask) {
+                                    if (err) {
+                                        return res.status(500).json({ "message": err, code: 500 });
+                                    }
+                                    else {
+                                        var query = { username: authorToBeDeleted };
+                                        User.findOne(query, function (err, user) {
+                                            if (err)
+                                                res.status(500).send(err);
+                                            else if (user) { // user is existed
+                                                user.tasks.pull(deletedTask.id);//TODO 
+                                                user.save(function (err) {
+                                                    // If an error occurs
+                                                    if (err) {
+                                                        return res.status(500).json({ "message": err, code: 500 });
+                                                    } else {
+                                                        // If the task was deleted successfully 
+                                                        Email.to = user.username;
+                                                        var name = user.username.substring(0, user.username.lastIndexOf("@"));
+                                                        Email.subject = "CMS Submission Revoking Mail";
+                                                        Email.html = "<p>Dear Mr/Ms " + name + ",<br>Your submission privilege has been revoked to conference titled." + conference.title + "<br>Thank you.</p>";
+                                                        var emailController = require('../controllers/emailController')(Email);
+                                                    }
+                                                });
                                             }
+                                            // reply 
+                                            res.json(conference);
                                         });
                                     }
-                                    // reply 
-                                    res.json(conference);
                                 });
-                            }
+                            }//delete the task
                         });
 
                     }

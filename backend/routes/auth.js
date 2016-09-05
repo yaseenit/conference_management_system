@@ -51,20 +51,26 @@ var auth = {
       // Set the user provider property
       user.provider = 'local';
 
-      // Try saving the new user document
-      user.save(function (err) {
-        // If an error occurs, use flash messages to report the error
-        if (err) {
-          return res.status(400).json({ "message": err ,code:400});
+      Task.find({ assignedTo: username } , function (err, tasks) {
+        if (!err) {
+          for (var i = 0; i < tasks.length; i++) {
+            user.tasks.push(tasks[i].id);
+            // Try saving the new user document
+            user.save(function (err) {
+              // If an error occurs, use flash messages to report the error
+              if (err) {
+                return res.status(400).json({ "message": err, code: 400 });
+              }
+              //You will receive a confirmation e-mail. Your account will be activated once you visit the link specified in the message.
+              // If the user was created successfully 
+              sendConfirmationEmail(user, req.headers.host);
+              // reply 
+              res.json(genToken(user));;
+            });
+          }
         }
-       //You will receive a confirmation e-mail. Your account will be activated once you visit the link specified in the message.
-        // If the user was created successfully 
-        sendConfirmationEmail(user,req.headers.host);
-        // reply 
-        res.json(genToken(user));;
       });
     }
-
   },// end of register
 
   confirm_registertion: function (req, res) {
@@ -160,7 +166,7 @@ function expiresIn(numDays) {
 }
 
 
-function sendConfirmationEmail(user,host) {
+function sendConfirmationEmail(user, host) {
   Email.to = user.username;
   Email.subject = "CMS: Registration Confirmation";
   var name = user.username.substring(0, user.username.lastIndexOf("@"));
@@ -168,8 +174,8 @@ function sendConfirmationEmail(user,host) {
     name = user.familyName;
   }
   //req.headers.host
-  confirm_link = 'http://'+ host + '/confirm_registertion/' + genToken(user).token;
-  Email.html = "<p>Dear Mr/Ms " + name + ",<br>You've successfully registered! please confirm your email by clicking on the following link:   " 
+  confirm_link = 'http://' + host + '/confirm_registertion/' + genToken(user).token;
+  Email.html = "<p>Dear Mr/Ms " + name + ",<br>You've successfully registered! please confirm your email by clicking on the following link:   "
     + confirm_link + "<br>Thank you</p>";
   var emailController = require('../controllers/emailController')(Email);
 };

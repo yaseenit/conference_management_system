@@ -13,7 +13,8 @@ var ConferenceSchema = new Schema({
     enddate: {type: Date},
     conferenceLocation:{type: String},
     status: {type: Boolean, default:false},
-    authors: [{type: String}]
+    authors: [{type: String}],
+  //  submissions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Submission' }]
 });
 
 
