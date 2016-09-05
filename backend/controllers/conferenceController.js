@@ -41,7 +41,32 @@ var conferenceController = function () {
 
     var get = function (req, res) {
     }
-
+    var getById = function (req, res) {
+        var conferenceId = req.params.conferenceId;
+        if (req.user.conferences.indexOf(conferenceId) > -1) {
+            Conference.findById(conferenceId, function (err, conference) {
+                if (err) {
+                    res.status(500).send(err);
+                    return;
+                }
+                else if (!conference) {
+                    res.status(404).json({ message: "conferende not found!", code: 404 });
+                    return;
+                }
+                else {
+                    res.json(conference);
+                }
+            });
+        }
+        else {
+            res.status(403);
+            res.json({
+                "status": 404,
+                "message": "Sorry! you can not see this content."
+            });
+            return;
+        }
+    }
     var addAuthor = function (req, res) {
         var conferenceId = req.params.conferenceId;
         var newAuthor = req.body.username || '';
@@ -135,6 +160,7 @@ var conferenceController = function () {
     return {
         post: post,
         get: get,
+        getById: getById,
         addAuthor: addAuthor
     }
 }

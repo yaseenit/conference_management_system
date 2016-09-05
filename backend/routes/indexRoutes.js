@@ -77,6 +77,8 @@ module.exports = function (app) {
 
 
    app.post('/api/v1/conference/',conferenceController.post);
+   app.get('/api/v1/conference/:conferenceId',conferenceController.getById);
+
 
    
    app.post('/api/v1/:conferenceId/chair/addAuthor',conferenceController.addAuthor);
