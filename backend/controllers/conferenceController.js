@@ -1,5 +1,6 @@
 var Conference = require('../models/conferenceModel');
 var Email = require('../models/emailModel');
+var User = require('../models/userModel');
 
 
 var conferenceController = function () {
@@ -65,7 +66,7 @@ var conferenceController = function () {
                 }
                 else {
                     if (conference.authors.indexOf(newAuthor) > -1) {
-                        res.status(409).json({ message: "this author already has been added.", code: 409 });
+                        res.status(409).json({ message: "this author has been already added.", code: 409 });
                     }
                     else {
                         conference.authors.push(newAuthor);
@@ -94,8 +95,6 @@ var conferenceController = function () {
                                             if (err) {
                                                 return res.status(500).json({ "message": err, code: 500 });
                                             }
-                                            // reply 
-                                            res.json(conference);
                                             //You will receive a confirmation e-mail. Your account will be activated once you visit the link specified in the message.
                                             // If the user was created successfully 
                                             Email.to = newUser.username;
@@ -111,8 +110,6 @@ var conferenceController = function () {
                                             if (err) {
                                                 return res.status(500).json({ "message": err, code: 500 });
                                             }
-                                            // reply 
-                                            res.json(conference);
                                             //You will receive a confirmation e-mail. Your account will be activated once you visit the link specified in the message.
                                             // If the user was created successfully 
                                             Email.to = user.username;
@@ -123,6 +120,8 @@ var conferenceController = function () {
 
                                         });
                                     }
+                                    // reply 
+                                    res.json(conference);
                                 });
                             }
                         });

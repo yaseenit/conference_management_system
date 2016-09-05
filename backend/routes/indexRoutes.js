@@ -76,10 +76,10 @@ module.exports = function (app) {
 	app.delete('/api/v1/profile/', userRoutes.deleteProfile);
 
 
-   app.post('/api/v1/conference',conferenceController.post);
+   app.post('/api/v1/conference/',conferenceController.post);
 
    
-   app.post('/api/v1/chair/conference/:conferenceId/addAuthor',conferenceController.addAuthor);
+   app.post('/api/v1/:conferenceId/chair/addAuthor',conferenceController.addAuthor);
 
 
 
