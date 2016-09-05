@@ -22,7 +22,7 @@ var taskSchema = new mongoose.Schema({ //assign papers to reviewers
 	submissioneId: { type: mongoose.Schema.Types.ObjectId, ref: 'Submission' } // it takes null if tasktype is submitting
 
 	//	assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
-});
+},{ _id : false });
 
 
 
