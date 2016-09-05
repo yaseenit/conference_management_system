@@ -39,7 +39,16 @@ var conferenceController = function () {
 
     }
 
-    var get = function (req, res) {
+    var getAll = function (req, res) {
+        Conference.find({}, function (err, conferences) {
+            if (err) {
+                res.status(500).send(err);
+            }
+            else {
+                res.json(conferences);
+            }
+        });
+
     }
     var getById = function (req, res) {
         var conferenceId = req.params.conferenceId;
@@ -196,7 +205,7 @@ var conferenceController = function () {
                                     if (err)
                                         res.status(500).send(err);
                                     else if (user) { // user is existed
-                                        user.tasks.pull(taskTobeDeleted);
+                                        user.tasks.pull(taskTobeDeleted);//TODO urgent
                                         user.save(function (err) {
                                             // If an error occurs
                                             if (err) {
@@ -228,7 +237,7 @@ var conferenceController = function () {
     }
     return {
         post: post,
-        get: get,
+        getAll: getAll,
         getById: getById,
         addAuthor: addAuthor,
         removeAuthor: removeAuthor

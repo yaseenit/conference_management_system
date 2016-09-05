@@ -71,13 +71,15 @@ module.exports = function (app) {
 
 	//var Review = require('../models/reviewModel');
 	//	var reviewController = require('../controllers/reviewController')(Review)
-    app.get('/api/v1/profile/', userRoutes.getProfile);
+    app.get('/api/v1/profile/', userRoutes.getProfile);// contains all user conferences
     app.post('/api/v1/profile/', userRoutes.editProfile);
 	app.delete('/api/v1/profile/', userRoutes.deleteProfile);
 
 
    app.post('/api/v1/conference/',conferenceController.post);
    app.get('/api/v1/conference/:conferenceId',conferenceController.getById);
+   app.get('/api/v1/conference/',conferenceController.getAll);
+
 
 
    
