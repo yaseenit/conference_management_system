@@ -64,7 +64,7 @@ var submissionController = function (Submission) {
     var get = function (req, res) {
 
         var query = {
-            createdBy:user.username
+            createdBy:req.user.username
         };
         Submission.find(query, function (err, submissions) {
             if (err)
