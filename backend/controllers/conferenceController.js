@@ -121,8 +121,7 @@ var conferenceController = function () {
                                                 return res.status(500).json({ "message": err, code: 500 });
                                             }
                                             else {
-                                                //You will receive a confirmation e-mail. Your account will be activated once you visit the link specified in the message.
-                                                // If the user was created successfully 
+                                                // If the new user was assigned successfully 
                                                 Email.to = newUser.username;
                                                 var name = newUser.username.substring(0, newUser.username.lastIndexOf("@"));
                                                 Email.subject = "CMS Invitation To Submission Mail";
@@ -137,8 +136,7 @@ var conferenceController = function () {
                                             if (err) {
                                                 return res.status(500).json({ "message": err, code: 500 });
                                             } else {
-                                                //You will receive a confirmation e-mail. Your account will be activated once you visit the link specified in the message.
-                                                // If the user was created successfully 
+                                                // If the already existed user was assigned successfully 
                                                 Email.to = user.username;
                                                 var name = user.username.substring(0, user.username.lastIndexOf("@"));
                                                 Email.subject = "CMS Invitation To Submission Mail";
@@ -157,11 +155,81 @@ var conferenceController = function () {
             });
         }
     }
+    var removeAuthor = function (req, res) {
+        var conferenceId = req.params.conferenceId;
+        var newAuthor = req.body.username || '';
+        if (newAuthor == '') {
+            res.status(400);
+            res.json({
+                "status": 400,
+                "message": "author email is missing"
+            });
+            return;
+        }
+        else {
+            // I am assumeing that the user is authorized
+            Conference.findById(conferenceId, function (err, conference) {
+                if (err) {
+                    res.status(500).send(err);
+                    return;
+                }
+                else if (!conference) {
+                    res.status(404).json({ message: "conferende not found!", code: 404 });
+                    return;
+                }
+                else {
+                    if (conference.authors.indexOf(newAuthor) > -1) {
+                        conference.authors.pull(newAuthor);
+                        conference.save(function (err, user) {
+                            if (err) {
+                                res.status(500).send(err);
+                                return;
+                            }
+                            else {
+                                var taskTobeDeleted = {
+                                    confenrenceId: conference._id
+                                }
+                                var query = { username: newAuthor };
+                                User.findOne(query, function (err, user) {
+                                    if (err)
+                                        res.status(500).send(err);
+                                    else if (user) { // user is existed
+                                        user.tasks.pull(taskTobeDeleted);
+                                        user.save(function (err) {
+                                            // If an error occurs
+                                            if (err) {
+                                                return res.status(500).json({ "message": err, code: 500 });
+                                            } else {
+                                                // If the user was created successfully 
+                                                Email.to = user.username;
+                                                var name = user.username.substring(0, user.username.lastIndexOf("@"));
+                                                Email.subject = "CMS Submission Revoking Mail";
+                                                Email.html = "<p>Dear Mr/Ms " + name + ",<br>Your submission privilege has been revoked to conference titled." + conference.title + "<br>Thank you.</p>";
+                                                var emailController = require('../controllers/emailController')(Email);
+                                            }
+                                        });
+                                    }
+                                    // reply 
+                                    res.json(conference);
+                                });
+                            }
+                        });
+
+                    }
+                    else {
+                        res.status(409).json({ message: "this author dose not belong to this conference anyway.", code: 409 });
+                    }
+                }
+            });
+        }
+
+    }
     return {
         post: post,
         get: get,
         getById: getById,
-        addAuthor: addAuthor
+        addAuthor: addAuthor,
+        removeAuthor: removeAuthor
     }
 }
 

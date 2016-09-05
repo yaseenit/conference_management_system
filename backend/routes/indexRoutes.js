@@ -82,6 +82,8 @@ module.exports = function (app) {
 
    
    app.post('/api/v1/:conferenceId/chair/addAuthor',conferenceController.addAuthor);
+   app.post('/api/v1/:conferenceId/chair/removeAuthor',conferenceController.removeAuthor);
+
 
 
 
