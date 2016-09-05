@@ -1,6 +1,7 @@
 var jwt = require('jwt-simple');
 var User = require('mongoose').model('User')
 var Email = require('../models/emailModel');
+var Task = require('../models/taskModel');
 
 
 var auth = {
