@@ -52,7 +52,7 @@ var auth = {
       // Set the user provider property
       user.provider = 'local';
 
-      Task.find({ assignedTo: username } , function (err, tasks) {
+      Task.find({ assignedTo: user.username } , function (err, tasks) {
         if (!err) {
           for (var i = 0; i < tasks.length; i++) {
             user.tasks.push(tasks[i].id);
