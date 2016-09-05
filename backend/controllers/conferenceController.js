@@ -105,7 +105,7 @@ var conferenceController = function () {
                                     taskType: "submitting",
                                     taskDesc: conference.title,
                                     createdBy: req.user._id,
-                                    confenrenceId: conference._id
+                                    conferenceId: conference._id
                                 }
                                 var query = { username: newAuthor };
                                 User.findOne(query, function (err, user) {
@@ -194,15 +194,12 @@ var conferenceController = function () {
                                     if (err)
                                         res.status(500).send(err);
                                     else if (user) { // user is existed
-                                        console.log(taskTobeDeleted)
-                                        console.log(user.tasks)
                                         user.tasks.pull(taskTobeDeleted);
                                         user.save(function (err) {
                                             // If an error occurs
                                             if (err) {
                                                 return res.status(500).json({ "message": err, code: 500 });
                                             } else {
-                                                console.log(user.tasks);
                                                 // If the user was created successfully 
                                                 Email.to = user.username;
                                                 var name = user.username.substring(0, user.username.lastIndexOf("@"));
