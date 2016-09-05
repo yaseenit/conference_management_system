@@ -194,7 +194,9 @@ var conferenceController = function () {
                                     if (err)
                                         res.status(500).send(err);
                                     else if (user) { // user is existed
+                                        console.log(user.tasks)
                                         user.tasks.pull(taskTobeDeleted);
+                                        console.log(user.tasks)
                                         user.save(function (err) {
                                             // If an error occurs
                                             if (err) {
