@@ -7,7 +7,6 @@ var Task = require('../models/taskModel');
 var auth = {
 
   login: function (req, res) {
-    console.log(req.body);
     var username = req.body.username || '';
     var password = req.body.password || '';
 
@@ -42,7 +41,39 @@ var auth = {
     });
 
   },// end of login
-
+  is_register: function (req, res) {
+    var username = req.body.username || '';
+    if (username == '') {
+      res.status(400);
+      res.json({
+        "status": 401,
+        "message": "username is required."
+      });
+      return;
+    }
+    User.findOne({
+      username: username
+    }, function (err, user) {
+      if (err) {
+        res.json({
+          "status": 500,
+          "message": err
+        });
+      }
+      if (!user) {
+        res.json({
+          "existed": false,
+          "message": "username does not registered in the system."
+        });
+      }
+      else {
+        res.json({
+          "existed": true,
+          "message": "username is already registered."
+        });
+      }
+    });
+  },
   register: function (req, res) {
     if (!req.user) {
       // Create a new 'User' model instance

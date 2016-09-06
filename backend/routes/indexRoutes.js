@@ -43,6 +43,7 @@ module.exports = function (app) {
 
 	app.post('/login', auth.login);
 	app.post('/register', auth.register);
+	app.post('/isRegister', auth.is_register);
 	app.get('/confirm_registertion/:token', auth.confirm_registertion);
 
 	/****************************************************/
