@@ -383,7 +383,7 @@ var conferenceController = function () {
                                                 });
                                             }
                                             // reply 
-                                            res.json(conference);
+                                            res.json(submission);
                                         });
                                     }
                                 });
