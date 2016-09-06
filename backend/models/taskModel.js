@@ -20,7 +20,7 @@ var taskSchema = new mongoose.Schema({ //assign papers to reviewers
         required: true
     },
     conferenceId: { type: mongoose.Schema.Types.ObjectId, ref: 'Conference' }, // it takes null if tasktype is reviewing
-    submissioneId: { type: mongoose.Schema.Types.ObjectId, ref: 'Submission' }, // it takes null if tasktype is submitting
+    submissionId: { type: mongoose.Schema.Types.ObjectId, ref: 'Submission' }, // it takes null if tasktype is submitting
     assignedTo: {// assignee email addrees 
         type: String, required: true
     },
