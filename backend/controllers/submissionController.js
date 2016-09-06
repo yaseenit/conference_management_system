@@ -193,8 +193,8 @@ var submissionController = function (Submission) {
         getone: getone,
         put: put,
         removed: removed,
-        patch: patch
-
+        patch: patch,
+        getAllUserReviews:getAllUserReviews
     }
 }
 
