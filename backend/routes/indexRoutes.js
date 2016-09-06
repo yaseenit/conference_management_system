@@ -144,7 +144,7 @@ module.exports = function (app) {
 	app.put('/api/v1/chair/tasks/:taskId', userRoutes.editTask);
 
 
-	app.get('/api/v1/chair/report', reportingController.getReport);
+	app.get('/api/v1/report', reportingController.getReport);
 
 	//	app.put('/api/v1/chair/task/:taskID', userRoutes.doEditTask);
 	//   app.delete('/api/v1/chair/task/:taskID', userRoutes.deleteTask);
