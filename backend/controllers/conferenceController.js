@@ -202,7 +202,7 @@ var conferenceController = function () {
                                             if (err)
                                                 res.status(500).send(err);
                                             else if (user) { // user is existed
-                                                console.log("deletedTask.id " + deletedTask.id)
+                                                console.log("deletedTask.id " + deletedTask)
                                                 console.log(user.tasks)
                                                 user.tasks.pull(deletedTask.id);//TODO 
                                                 console.log(user.tasks)
