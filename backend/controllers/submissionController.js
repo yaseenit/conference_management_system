@@ -61,6 +61,20 @@ var submissionController = function (Submission) {
         // }
     }
 
+//edit ahmed 6.9
+    var getAllUserReviews= function (req,res){
+       var uname=req.username;
+
+  Submission.find({reviewers:uname}, function (err, submissions) {
+            if (err)
+                res.status(500).send(err);
+            else
+                res.json(submissions);
+        });
+    }
+
+    
+
     var get = function (req, res) {
 
         var query = {

@@ -105,6 +105,8 @@ module.exports = function (app) {
 	// * Routes that can be accessed only by autheticated users
 	// */
 	app.get('/api/v1/submissions/', submissionRoutes.getAll);
+	//ahmed
+	app.get('/api/v1/submissions2/',submissionRoutes.getRev);
 	app.post('/api/v1/:conferenceId/submissions/', submissionRoutes.create);
 	app.get('/api/v1/submissions/:submissionId', submissionRoutes.getOne);
 	// app.put('/api/v1/submissions/:submissionId',submissionRoutes.update);
