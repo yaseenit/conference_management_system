@@ -87,6 +87,9 @@ module.exports = function (app) {
    app.post('/api/v1/:conferenceId/chair/addAuthor',conferenceController.addAuthor);
    app.post('/api/v1/:conferenceId/chair/removeAuthor',conferenceController.removeAuthor);
 
+   app.post('/api/v1/:conferenceId/chair/addReviewer',conferenceController.addReviewer);
+   app.post('/api/v1/:conferenceId/chair/removeReviewer',conferenceController.removeReviewer);
+
 
 
 
@@ -94,6 +97,10 @@ module.exports = function (app) {
     app.get('/api/v1/review/', reviewRoutes.getAll);
 	app.delete('/api/v1/review/:reviewId', reviewRoutes.remove);
 	app.get('/api/v1/review/:reviewId', reviewRoutes.getOne);
+
+
+
+
 	// /*
 	// * Routes that can be accessed only by autheticated users
 	// */

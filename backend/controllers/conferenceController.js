@@ -2,7 +2,7 @@ var Conference = require('../models/conferenceModel');
 var Email = require('../models/emailModel');
 var User = require('../models/userModel');
 var Task = require('../models/taskModel');
-
+var Submission = require('../models/submissionModel');
 
 var conferenceController = function () {
 
@@ -235,12 +235,109 @@ var conferenceController = function () {
         }
 
     }
+    var addReviewer = function (req, res) {
+        var conferenceId = req.params.conferenceId;
+        var submissiodId = req.body.submissiodId;
+
+        var newReviewer = req.body.username || '';
+        if (newReviewer == '') {
+            res.status(400);
+            res.json({
+                "status": 400,
+                "message": "reviewer email is missing."
+            });
+            return;
+        }
+        else {
+            // I am assumeing that the user is authorized
+            Submission.findById(submissiodId, function (err, submission) {
+                if (err) {
+                    res.status(500).send(err);
+                    return;
+                }
+                else if (!submission) {
+                    res.status(404).json({ message: "submission was not found!", code: 404 });
+                    return;
+                }
+                else if (conferenceId.localeCompare(submission.conferenceId) == 0) {
+
+                    if (conference.reviewers.indexOf(newReviewer) > -1) {
+                        res.status(409).json({ message: "this reviewer has been already added.", code: 409 });
+                    }
+                    else {
+                        submission.reviewers.push(newReviewer);
+                        submission.save(function (err, user) {
+                            if (err) {
+                                res.status(500).send(err);
+                                return;
+                            }
+                            else {
+                                var newTask = new Task({
+                                    taskType: "reviewing",
+                                    taskDesc: submission.title,
+                                    createdBy: req.user._id,
+                                    submissionId: submission._id,
+                                    assignedTo: newReviewer
+                                });
+                                newTask.save(function (err) {
+                                    if (err) {
+                                        return res.status(500).json({ "message": err, code: 500 });//TODO revert
+                                    } else {
+                                        var query = { username: newReviewer };
+                                        User.findOne(query, function (err, user) {
+                                            if (err)
+                                                res.status(500).send(err);
+                                            else if (!user) {
+                                                // If it is a new user  
+                                                Email.to = newReviewer;
+                                                var name = newReviewer.substring(0, newReviewer.lastIndexOf("@"));
+                                                Email.subject = "CMS Invitation To Paper Reviewing Mail";
+                                                Email.html = "<p>Dear Mr/Ms " + name + ",<br>You have been added to paper titled " + submission.title + " for reviewing.<br>Please go to the website ang register with this email address to be able to give your feedback.<br> Best of luck with the reviewing process.  Thank you.</p>";
+                                                var emailController = require('../controllers/emailController')(Email);
+                                            } else { // user already existed
+                                                user.tasks.push(newTask.id);
+                                                user.save(function (err) {
+                                                    // If an error occurs
+                                                    if (err) {
+                                                        return res.status(500).json({ "message": err, code: 500 });
+                                                    } else {
+                                                        // If the already existed user was assigned successfully 
+                                                        Email.to = user.username;
+                                                        var name = user.username.substring(0, user.username.lastIndexOf("@"));
+                                                        Email.subject = "CMS Invitation To Paper Reviewing Mail";
+                                                        Email.html = "<p>Dear Mr/Ms " + name + ",<br>You have been added to paper titled " + submission.title + "<br> Thank you.</p>";
+                                                        var emailController = require('../controllers/emailController')(Email);
+                                                    }
+                                                });
+                                            }
+                                            // reply 
+                                            res.json(submission);
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }
+                else {
+                    res.status(403).json({ message: "you can not edit submission does not belong the this conference", code: 403 });
+                }
+            });
+        }
+
+    }
+    var removeReviewer = function (req, res) {
+
+    }
+
     return {
         post: post,
         getAll: getAll,
         getById: getById,
         addAuthor: addAuthor,
-        removeAuthor: removeAuthor
+        removeAuthor: removeAuthor,
+        addReviewer: addReviewer,
+        removeReviewer: removeReviewer
     }
 }
 
