@@ -202,10 +202,7 @@ var conferenceController = function () {
                                             if (err)
                                                 res.status(500).send(err);
                                             else if (user) { // user is existed
-                                                console.log("deletedTask.id " + deletedTask)
-                                                console.log(user.tasks)
                                                 user.tasks.pull(deletedTask.id);//TODO 
-                                                console.log(user.tasks)
                                                 user.save(function (err) {
                                                     // If an error occurs
                                                     if (err) {
@@ -360,7 +357,7 @@ var conferenceController = function () {
                                 return;
                             }
                             else {
-                                Task.remove({ assignedTo: reviewerToBeDeleted, 'submissionId': submissionId }, function (err, deletedTask) {
+                                Task.findOneAndRemove({ assignedTo: reviewerToBeDeleted, 'submissionId': submissionId }, function (err, deletedTask) {
                                     if (err) {
                                         return res.status(500).json({ "message": err, code: 500 });
                                     }
