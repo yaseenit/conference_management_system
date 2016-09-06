@@ -115,7 +115,7 @@ module.exports = function (app) {
 	// * Routes that can be accessed only by authenticated & authorized users
 	// */
 
-	app.get('/api/v1/chair/submissions', userRoutes.getAllSubmissions);
+	app.get('/api/v1/:conferenceId/chair/submissions', userRoutes.getAllSubmissions);
 
 	//	app.post('/api/v1/chair/submissions/:submissionId', userRoutes.editSubmission);//status and deadline
 

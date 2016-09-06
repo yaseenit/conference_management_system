@@ -1,3 +1,6 @@
+var Submission = require('../models/submissionModel');
+
+
 var userController = function (User) {
 
     var post = function (req, res) {
@@ -49,9 +52,12 @@ var userController = function (User) {
             });
     }
     var getAllSubmissions = function (req, res) {
-        var query = {};
-        User.find(query)
-            .populate('submissions') //,'attribure attribure ...')
+        var conferenceId = req.params.conferenceId;
+        var query = {
+            'conferenceId' : conferenceId
+        };
+        Submission.find(query)
+           // .populate('submissions') //,'attribure attribure ...')
             .exec(function (err, submissions) {
                 if (err)
                     res.status(500).send(err);
