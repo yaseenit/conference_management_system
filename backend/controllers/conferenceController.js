@@ -237,7 +237,7 @@ var conferenceController = function () {
     }
     var addReviewer = function (req, res) {
         var conferenceId = req.params.conferenceId;
-        var submissiodId = req.body.submissiodId;
+        var submissionId = req.body.submissionId;
 
         var newReviewer = req.body.username || '';
         if (newReviewer == '') {
@@ -250,7 +250,7 @@ var conferenceController = function () {
         }
         else {
             // I am assumeing that the user is authorized
-            Submission.findById(submissiodId, function (err, submission) {
+            Submission.findById(submissionId, function (err, submission) {
                 if (err) {
                     res.status(500).send(err);
                     return;
