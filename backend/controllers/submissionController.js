@@ -63,7 +63,7 @@ var submissionController = function (Submission) {
 
 //edit ahmed 6.9
     var getAllUserReviews= function (req,res){
-       var uname=req.username;
+       var uname=req.user.username;
 
   Submission.find({reviewers:uname}, function (err, submissions) {
             if (err)
