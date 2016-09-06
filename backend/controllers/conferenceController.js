@@ -173,7 +173,7 @@ var conferenceController = function () {
             return;
         }
         else {
-            // I am assumeing that the user is authorized
+            // I am assuming that the user is authorized
             Conference.findById(conferenceId, function (err, conference) {
                 if (err) {
                     res.status(500).send(err);
@@ -192,7 +192,6 @@ var conferenceController = function () {
                                 return;
                             }
                             else {
-
                                 Task.remove({ assignedTo: authorToBeDeleted, 'conferenceId': conferenceId }, function (err, deletedTask) {
                                     if (err) {
                                         return res.status(500).json({ "message": err, code: 500 });
@@ -327,8 +326,82 @@ var conferenceController = function () {
 
     }
     var removeReviewer = function (req, res) {
+        var conferenceId = req.params.conferenceId;
+        var submissionId = req.body.submissionId;
+        var reviewerToBeDeleted = req.body.username || '';
+        if (reviewerToBeDeleted == '') {
+            res.status(400);
+            res.json({
+                "status": 400,
+                "message": "reviewer email is missing."
+            });
+            return;
+        }
+        else {
+            // I am assuming that the user is authorized
+            Submission.findById(submissionId, function (err, submission) {
+                if (err) {
+                    res.status(500).send(err);
+                    return;
+                }
+                else if (!submission) {
+                    res.status(404).json({ message: "submission not found!", code: 404 });
+                    return;
+                }
+                else if (conferenceId.localeCompare(submission.conferenceId) == 0) {
+                    if (submission.reviewers.indexOf(reviewerToBeDeleted) > -1) {
+                        submission.reviewers.pull(reviewerToBeDeleted);
+                        submission.save(function (err) {
+                            if (err) {
+                                res.status(500).send(err);
+                                return;
+                            }
+                            else {
+                                Task.remove({ assignedTo: reviewerToBeDeleted, 'submissionId': submissionId }, function (err, deletedTask) {
+                                    if (err) {
+                                        return res.status(500).json({ "message": err, code: 500 });
+                                    }
+                                    else {
+                                        var query = { username: reviewerToBeDeleted };
+                                        User.findOne(query, function (err, user) {
+                                            if (err)
+                                                res.status(500).send(err);
+                                            else if (user) { // user is existed
+                                                user.tasks.pull(deletedTask.id);//TODO 
+                                                user.save(function (err) {
+                                                    // If an error occurs
+                                                    if (err) {
+                                                        return res.status(500).json({ "message": err, code: 500 });
+                                                    } else {
+                                                        // If the task was deleted successfully 
+                                                        Email.to = user.username;
+                                                        var name = user.username.substring(0, user.username.lastIndexOf("@"));
+                                                        Email.subject = "CMS Reviewing Right Revoking Mail";
+                                                        Email.html = "<p>Dear Mr/Ms " + name + ",<br>Your reviewing privilege has been revoked to submission titled." + submission.title + "<br>Thank you.</p>";
+                                                        var emailController = require('../controllers/emailController')(Email);
+                                                    }
+                                                });
+                                            }
+                                            // reply 
+                                            res.json(conference);
+                                        });
+                                    }
+                                });
+                            }//delete the task
+                        });
 
-    }
+                    }
+                    else {
+                        res.status(409).json({ message: "this reviewer dose not belong to this submission anyway.", code: 409 });
+                    }
+                }
+                else {
+                    res.status(403).json({ message: "you can not edit submission does not belong the this conference", code: 403 });
+                }
+            });
+        }//else input was accecpted
+    }//removeReviewer
+
 
     return {
         post: post,
