@@ -192,7 +192,7 @@ var conferenceController = function () {
                                 return;
                             }
                             else {
-                                Task.remove({ assignedTo: authorToBeDeleted, 'conferenceId': conferenceId }, function (err, deletedTask) {
+                                Task.findOneAndRemove({ assignedTo: authorToBeDeleted, 'conferenceId': conferenceId }, function (err, deletedTask) {
                                     if (err) {
                                         return res.status(500).json({ "message": err, code: 500 });
                                     }
