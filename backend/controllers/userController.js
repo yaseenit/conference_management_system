@@ -178,6 +178,7 @@ var userController = function (User) {
             .populate('reviews')//,'submissions') TODO
             .populate('conferences')
             .populate('submissions')
+            .populate('tasks')
             .exec(function (err, user) {
                 if (err)
                     res.status(500).send(err);
