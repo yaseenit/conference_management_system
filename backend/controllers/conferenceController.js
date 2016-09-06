@@ -261,7 +261,7 @@ var conferenceController = function () {
                 }
                 else if (conferenceId.localeCompare(submission.conferenceId) == 0) {
 
-                    if (conference.reviewers.indexOf(newReviewer) > -1) {
+                    if (submission.reviewers.indexOf(newReviewer) > -1) {
                         res.status(409).json({ message: "this reviewer has been already added.", code: 409 });
                     }
                     else {
