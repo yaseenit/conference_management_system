@@ -18,20 +18,13 @@ var reviewModel = new Schema({
         type: String, required: ' Review Summary is required'},
     strongPoints: { type: String },
         weakPoints: { type: String },
-        comment: { type: String, required: 'Detailed Comments are required' },
-        deadline: {
-            type: Date,
-            // Create a default 'created' value
-            default: +new Date() + 14 * 24 * 60 * 60 * 1000
-        },
-        //review phase i moved it to the conference model
+        detailedComments: { type: String, required: 'Detailed Comments are required' },
     createdBy: {
-        type: mongoose.Schema.Types.ObjectId, ref: 'User',
+        type: String,
         required: true
     },
-    conferenceId: { type: mongoose.Schema.Types.ObjectId, ref: 'Conference' }, // it takes null if tasktype is reviewing
-    submissionId: { type: mongoose.Schema.Types.ObjectId, ref: 'Submission' } // it takes null if tasktype is submitting
-    
+    conferenceId: { type: mongoose.Schema.Types.ObjectId, ref: 'Conference' },
+    submissionId: { type: mongoose.Schema.Types.ObjectId, ref: 'Submission' }
     });
 
 
