@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/http', 'rxjs/Rx', 'rxjs/add/operator/map', 'angular2/router', 'angular2/common', './papers/paper-list.component', './papers/paper-detail.component', './papers/paper-create.component', './review/review-list.component', './review/review-detail.component', './home/welcome.component', './login/login.component', './signup/signup.component', './reviewers/assign-review.component', './authors/invite-author.component', './service/app.service', './service/validation.service', './profile/edit-profile.component', './shared/control-message.component', './shared/result-message.component', './profile/view-profile.component', './profile/change-password.component', "./service/confirm.service", "./shared/confirm.component", "./conference/create-conference.component", "./conference/conference.component"], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/http', 'rxjs/Rx', 'rxjs/add/operator/map', 'angular2/router', 'angular2/common', './papers/paper-list.component', './papers/paper-detail.component', './papers/paper-create.component', './review/review-list.component', './review/review-detail.component', './home/welcome.component', './login/login.component', './signup/signup.component', './reviewers/assign-review.component', './authors/invite-author.component', './service/app.service', './service/validation.service', './profile/edit-profile.component', './shared/control-message.component', './shared/result-message.component', './profile/view-profile.component', './profile/change-password.component', "./service/confirm.service", "./shared/confirm.component", "./conference/create-conference.component", "./conference/conference.component", './conference/public-conference.component', './papers/author-papers-conference.component', './papers/conference-papers-list.component', './papers/reviewer-papers.component', './papers/paper-edit.component'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Rx', 'rxjs/add/operator
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, http_1, router_1, common_1, paper_list_component_1, paper_detail_component_1, paper_create_component_1, review_list_component_1, review_detail_component_1, welcome_component_1, login_component_1, signup_component_1, assign_review_component_1, invite_author_component_1, app_service_1, validation_service_1, edit_profile_component_1, control_message_component_1, result_message_component_1, view_profile_component_1, change_password_component_1, router_2, confirm_service_1, confirm_component_1, create_conference_component_1, conference_component_1;
+    var core_1, http_1, router_1, common_1, paper_list_component_1, paper_detail_component_1, paper_create_component_1, review_list_component_1, review_detail_component_1, welcome_component_1, login_component_1, signup_component_1, assign_review_component_1, invite_author_component_1, app_service_1, validation_service_1, edit_profile_component_1, control_message_component_1, result_message_component_1, view_profile_component_1, change_password_component_1, router_2, confirm_service_1, confirm_component_1, create_conference_component_1, conference_component_1, public_conference_component_1, author_papers_conference_component_1, conference_papers_list_component_1, reviewer_papers_component_1, paper_edit_component_1;
     var AppComponent;
     return {
         setters:[
@@ -91,6 +91,21 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Rx', 'rxjs/add/operator
             },
             function (conference_component_1_1) {
                 conference_component_1 = conference_component_1_1;
+            },
+            function (public_conference_component_1_1) {
+                public_conference_component_1 = public_conference_component_1_1;
+            },
+            function (author_papers_conference_component_1_1) {
+                author_papers_conference_component_1 = author_papers_conference_component_1_1;
+            },
+            function (conference_papers_list_component_1_1) {
+                conference_papers_list_component_1 = conference_papers_list_component_1_1;
+            },
+            function (reviewer_papers_component_1_1) {
+                reviewer_papers_component_1 = reviewer_papers_component_1_1;
+            },
+            function (paper_edit_component_1_1) {
+                paper_edit_component_1 = paper_edit_component_1_1;
             }],
         execute: function() {
             AppComponent = (function () {
@@ -138,7 +153,7 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Rx', 'rxjs/add/operator
                     var _this = this;
                     this.messageType = "";
                     this.resultMessage = "";
-                    //  event.preventDefault();
+                    event.preventDefault();
                     this._logInService.login(value.email, value.password).subscribe(function (loginResponse) {
                         console.log(loginResponse);
                         if (loginResponse["token"] != null) {
@@ -152,6 +167,7 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Rx', 'rxjs/add/operator
                                 localStorage.setItem('_id', loginResponse["user"]._id);
                                 _this.isLog = _this._logInService.isLog();
                                 _this.currentUser = _this._logInService.getCurrentUserEmail();
+                                window.location.reload();
                             }
                         }
                         else {
@@ -175,14 +191,12 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Rx', 'rxjs/add/operator
                     }),
                     router_1.RouteConfig([
                         { path: '/welcome', name: 'Welcome', component: welcome_component_1.WelcomeComponent, useAsDefault: true },
-                        { path: '/papers', name: 'Papers', component: paper_list_component_1.PaperListComponent },
+                        { path: '/papers/', name: 'Papers', component: paper_list_component_1.PaperListComponent },
                         { path: '/paper/:id', name: 'PaperDetail', component: paper_detail_component_1.PaperDetailComponent },
                         { path: '/login', name: 'LogIn', component: login_component_1.LogInComponent },
-                        { path: '/papercreate', name: 'PaperCreate', component: paper_create_component_1.PaperCreateComponent },
-                        //for review
+                        { path: '/papercreate/:id', name: 'PaperCreate', component: paper_create_component_1.PaperCreateComponent },
                         { path: '/review', name: 'Review', component: review_list_component_1.ReviewListComponent },
                         { path: '/review/:id', name: 'ReviewDetail', component: review_detail_component_1.ReviewDetailComponent },
-                        //
                         { path: '/signup', name: 'SignUp', component: signup_component_1.SignUpComponent },
                         { path: '/editProfile', name: 'EditProfile', component: edit_profile_component_1.EditProfileComponent },
                         { path: '/viewProfile', name: 'ViewProfile', component: view_profile_component_1.ViewProfileComponent },
@@ -190,7 +204,12 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Rx', 'rxjs/add/operator
                         { path: '/inviteAuthor/:id', name: 'InviteAuthor', component: invite_author_component_1.InviteAuthorComponent },
                         { path: '/changePassword', name: 'ChangePassword', component: change_password_component_1.ChangePasswordComponent },
                         { path: '/conference', name: 'Conference', component: conference_component_1.ConferenceComponent },
-                        { path: '/createconference', name: 'CreateConference', component: create_conference_component_1.CreateConferenceComponent }
+                        { path: '/createconference', name: 'CreateConference', component: create_conference_component_1.CreateConferenceComponent },
+                        { path: '/conferenceSubmission', name: 'ConferenceSubmission', component: public_conference_component_1.PublicConferenceComponent },
+                        { path: '/authorPapersConference/:id/:title', name: 'AuthorPapersConference', component: author_papers_conference_component_1.AuthorPapersConferenceComponent },
+                        { path: '/conferencePaper/:id/:title', name: 'ConferencePapers', component: conference_papers_list_component_1.ConferencePaperComponent },
+                        { path: '/reviewerPapers', name: 'ReviewerPapers', component: reviewer_papers_component_1.ReviewerPaperComponent },
+                        { path: '/paperEdit/:id', name: 'PaperEdit', component: paper_edit_component_1.PaperEditComponent }
                     ]), 
                     __metadata('design:paramtypes', [app_service_1.AppService, common_1.FormBuilder, router_2.Router, confirm_service_1.ConfirmService])
                 ], AppComponent);

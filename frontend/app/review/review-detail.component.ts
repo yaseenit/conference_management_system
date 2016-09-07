@@ -80,7 +80,7 @@ export class ReviewDetailComponent {
     getPaper(id: number) {
         this._reviewService.getReview(id)
             .subscribe(
-            paper => this.paper = paper,
+         //   paper => this.paper = paper,
             error => this.errorMessage = <any>error);
     }
 

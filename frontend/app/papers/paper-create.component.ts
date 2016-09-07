@@ -1,4 +1,4 @@
-import {Component, ElementRef} from 'angular2/core';
+import {Component, ElementRef,OnInit} from 'angular2/core';
 import {RouteParams, Router} from 'angular2/router';
 import {AppService} from '../service/app.service';
 import {IPaper, IPaperAuthor, PaperAuthor, Paper} from '../service/app.interface';
@@ -17,7 +17,7 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
 
 
 })
-export class PaperCreateComponent {
+export class PaperCreateComponent implements OnInit {
   paperAuthors: PaperAuthor[] = [];
   keywords: string[] = [];
   authorForm: ControlGroup;
@@ -36,8 +36,11 @@ export class PaperCreateComponent {
   resultMessage: string = "";
   messageType: string = "";
   checkKey = true;
-  
-  // author bll
+  conferenceId:string;
+   ngOnInit():void{
+              this.conferenceId= this._routeParams.get('id');
+
+   }
   addAuthor(event, value: any) {
     event.preventDefault();
     if (this.checkAuthor(value.email)) {
@@ -168,7 +171,7 @@ export class PaperCreateComponent {
     this.paper.keywords = this.keywords;
     this.paper.abstract = value.abstract;
     this.paper.title = value.title;
-
+    this.paper.conferenceId=this.conferenceId;
     let check = true;
 
     if (this.paperAuthors.length <= 0) {
@@ -214,7 +217,7 @@ export class PaperCreateComponent {
 
 
 
-  constructor(fb: FormBuilder, kf: FormBuilder, ff: FormBuilder, _Element: ElementRef, private _paperService: AppService) {
+  constructor(fb: FormBuilder, kf: FormBuilder, ff: FormBuilder, _Element: ElementRef, private _paperService: AppService,private _routeParams:RouteParams) {
     this.elementRef = _Element;
     this.selectedIdx = -1;
     this.keywordForm = kf.group({

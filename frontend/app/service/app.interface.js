@@ -1,7 +1,7 @@
 System.register([], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var ConferenceModel, Chair, Paper, PaperAuthor, Review, User;
+    var ConferenceModel, Task, Chair, Paper, PaperAuthor, Review, User;
     return {
         setters:[],
         execute: function() {
@@ -19,6 +19,17 @@ System.register([], function(exports_1, context_1) {
                 return ConferenceModel;
             }());
             exports_1("ConferenceModel", ConferenceModel);
+            Task = (function () {
+                function Task() {
+                    this.taskType = "";
+                    this.taskDesc = "";
+                    this.assignedTo = "";
+                    this.submissionId = "";
+                    this.conferenceId = "";
+                }
+                return Task;
+            }());
+            exports_1("Task", Task);
             Chair = (function () {
                 function Chair() {
                     this.username = "";
@@ -43,6 +54,8 @@ System.register([], function(exports_1, context_1) {
                     this.deadline = "";
                     this.createdOn = "";
                     this.generatedFileName = "";
+                    this.conferenceId = "";
+                    this.reviewers = [];
                     //for review
                     this.review = [];
                 }
@@ -91,6 +104,7 @@ System.register([], function(exports_1, context_1) {
                     this.zipCode = "";
                     this.country = "";
                     this.institute = "";
+                    this.tasks = [];
                 }
                 return User;
             }());

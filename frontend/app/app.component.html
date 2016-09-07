@@ -1,177 +1,127 @@
-<div id="wrapper" [ngClass]="{'toggled': isActive}">
-    <!-- Sidebar -->
-    <div id="sidebar-wrapper">
-        <ul class="sidebar-nav">
-            <li class="sidebar-brand">
-                <a [routerLink]="['Welcome']">
-Conference System</a>
-            </li>
-            <li>
-                <a href="#" *ngIf="isLog">My Conference</a>
-            </li>
-            <li>
-                <a href="#" *ngIf="isLog">List Of Author</a>
-            </li>
-             <li>
-                    <a [routerLink]="['CreateConference']" *ngIf="isLog">New Conference</a>
-                </li>
-            <li>
-                <a *ngIf="isLog" [routerLink]="['Conference']"  >My Conference</a>
-            </li>
-            <li>
-                <a href="#" *ngIf="isLog">View My Profile</a>
-            </li>
-            <li> <a [routerLink]="['Papers']" *ngIf="isLog">
-My submission </a></li>
 
-        </ul>
-    </div>
-    <!-- /#sidebar-wrapper -->
 
-    <div id="page-content-wrapper">
-        <!-- Navigation -->
 
-        <nav class="navbar navbar-default" role="navigation">
-            <div class="container">
 
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#cms-navbar-collapse-1">
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
+                                <a class="navbar-brand" [routerLink]="['Welcome']"><img src="app/assets/images/logo.png" class="headerImg" style="margin-top: -10px;" /> </a>
 
-                    <a class="navbar-brand" [routerLink]="['Welcome']"><img src="app/assets/images/logo.png" class="headerImg" /> </a>
-
-                </div>
-
-
-                <div class="collapse navbar-collapse" id="cms-navbar-collapse-1">
-                    <!--  <ul class="nav navbar-nav navbar-right">
-                 <li><a [routerLink]="['Welcome']">Home</a></li>
-                 <li><a [routerLink]="['Papers']">Papers List</a></li>
-                </ul>-->
-
-                    <ul class="nav navbar-nav navbar-right">
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                           
+                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown" *ngIf="isLog">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b> Hello : {{currentUser}} !</b> <span class="caret"></span></a>
                             <ul id="profile-dp" class="dropdown-menu">
-                                <li>
-                                    <a (click)="logOut()" href="#" *ngIf="isLog">Log out </a>
-
-                                </li>
+                                <li><a (click)="logOut()" href="#" *ngIf="isLog">Log out </a></li>
                                 <li><a [routerLink]="['EditProfile']">Edit Profile</a></li>
                                 <li><a [routerLink]="['ViewProfile']">View Profile</a></li>
-                                <li><a (click)="removeProfile($event)">Remove Profile </a>
-                                </li>
-
-
+                                <li><a [routerLink]="['ChangePassword']">Change Password</a></li>
+                                <li><a (click)="removeProfile($event)">Remove Profile </a></li>
                             </ul>
                         </li>
                     </ul>
-
-
                     <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown" *ngIf="!isLog">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Login</b> <span class="caret"></span></a>
+                        <ul id="login-dp" class="dropdown-menu">
+                            <li>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <result-messages [(message)]='resultMessage' [(messageType)]='messageType'></result-messages>
+                                        <form class="form" [ngFormModel]="form">
+                                            <div class="form-group">
+                                                <label class="sr-only" for="email">Email address</label>
+                                                <input type="email" class="form-control" id="email" placeholder="email" ngControl="email" required>
+                                                <control-messages [control]="form.controls.email"></control-messages>
 
-                        <li class="dropdown" *ngIf="!isLog">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Login</b> <span class="caret"></span></a>
-                            <ul id="login-dp" class="dropdown-menu">
-                                <li>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="sr-only" for="password">Password</label>
+                                                <input type="password" class="form-control" id="password" placeholder="Password" ngControl="password" required>
+                                                <control-messages [control]="form.controls.password"></control-messages>
 
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <result-messages [(message)]='resultMessage' [(messageType)]='messageType'></result-messages>
-                                            <form class="form" [ngFormModel]="form">
-                                                <div class="form-group">
-                                                    <label class="sr-only" for="email">Email address</label>
-                                                    <input type="email" class="form-control" id="email" placeholder="email" ngControl="email" required>
-                                                    <control-messages [control]="form.controls.email"></control-messages>
+                                                <div class="help-block text-right"><a href="">Forget the password ?</a></div>
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-primary btn-block" [disabled]="!form.valid" (click)="login($event,form.value)">Sign in</button>
 
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="sr-only" for="password">Password</label>
-                                                    <input type="password" class="form-control" id="password" placeholder="Password" ngControl="password" required>
-                                                    <control-messages [control]="form.controls.password"></control-messages>
-
-                                                    <div class="help-block text-right"><a href="">Forget the password ?</a></div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <button type="submit" class="btn btn-primary btn-block" [disabled]="!form.valid" (click)="login($event,form.value)">Sign in</button>
-
-                                                </div>
-
-                                            </form>
-                                        </div>
-                                        <div class="bottom text-center">
-                                            New here ? <a [routerLink]="['SignUp']"><b>Join Us</b></a>
-                                        </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="bottom text-center">
+                                        New here ? <a [routerLink]="['SignUp']"><b>Join Us</b></a>
+                                    </div>
                                     </div>
                                 </li>
-
                             </ul>
                         </li>
-
-
                     </ul>
-                </div>
-                <!-- /.navbar-collapse -->
             </div>
-        </nav>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
 
+    <!-- Page Content -->
+    <div class="container">
 
+        <div class="row">
 
+        <div class="col-md-3">
+                <p class="lead">Conference System</p>
+                <div class="list-group">
+                
+                             
+             <a class="list-group-item" [routerLink]="['CreateConference']" *ngIf="isLog">New Conference</a>
+            <a class="list-group-item" *ngIf="isLog" [routerLink]="['Conference']">My Conference</a>
+          <a  class="list-group-item" [routerLink]="['Papers']" *ngIf="isLog">  My submission </a>
+            <a  class="list-group-item"[routerLink]="['ConferenceSubmission']" *ngIf="isLog">Assigned Conference </a>
+            <a  class="list-group-item"[routerLink]="['ReviewerPapers']" *ngIf="isLog">Reviews </a>
 
-        <div class="container mainContainer">
-            <div class="row">
-                <div class="col-md-12">
-
-                    <a class="btn btn-default" href="#" id="menu-toggle" (click)="toggledClass($event)" [ngClass]="{'btntoggle': !isActive,'btntoggleRight':isActive}"></a>
-
-                    <h1 class="page-header">
-                        {{pageTitle}} </h1>
                 </div>
+            </div>
 
-                <div class="col-md-12">
+            <div class="col-md-9">
+
+        
+                <div class="row">
+     <div class="col-lg-12">
                     <router-outlet></router-outlet>
-                    <modal-confirm></modal-confirm>
 
+
+     </div>
+                  
                 </div>
+
             </div>
+
         </div>
 
     </div>
+    <!-- /.container -->
 
-   <footer align="bottom">
+    <div class="container">
 
-        
+        <hr>
+
+        <!-- Footer -->
+        <footer>
             <div class="row">
-
-                <div class="col-sm-3" style="text-align:center;">
-
-                    <h6>Copyright &copy; 2016 Team November</h6>
-
+                <div class="col-lg-12">
+                    <p>Copyright &copy; Team Nov</p>
                 </div>
-                <!--<div class="col-sm-9" align="right">
-						
-						<h6>Follow Us</h6>
-						<ul class="unstyled">
-							<li><a href="#">Google Plus</a></li>
-							<li><a href="#">Twitter</a></li>
-							<li><a href="#">Facebook</a></li>
-						</ul>
-						
-					</div><!-- end col-sm-3 -->
-
-
             </div>
-            <!-- end row -->
+        </footer>
 
-     
-        <!-- end container -->
-
-    </footer>
-
-
-
-</div>
+    </div>

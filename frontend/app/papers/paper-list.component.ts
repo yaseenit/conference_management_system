@@ -4,6 +4,7 @@ import { PaperFilterPipe } from  './paper-filter.pipe' ;
 import { StarComponent } from  '../shared/star.component' ;
 import  {AppService} from '../service/app.service'
 import { ROUTER_DIRECTIVES } from  'angular2/router' ;
+import { ResultMessagesComponent } from '../shared/result-message.component';
 
 @Component(
     {
@@ -11,7 +12,7 @@ import { ROUTER_DIRECTIVES } from  'angular2/router' ;
         templateUrl: 'app/papers/paper-list.component.html',
         styleUrls:['app/papers/paper-list.component.css'],
         pipes:[PaperFilterPipe],
-        directives:[StarComponent,ROUTER_DIRECTIVES]
+        directives:[StarComponent,ROUTER_DIRECTIVES,ResultMessagesComponent]
     }
 )
 export class PaperListComponent implements OnInit
@@ -24,6 +25,8 @@ export class PaperListComponent implements OnInit
     listFilter:string='';
     papers : IPaper[];
     lstPaper:any[];
+     resultMessage: string = "";
+    messageType: string = "";
     toggleFile() :void{
         this.showFile=!this.showFile;
     }
@@ -33,8 +36,17 @@ export class PaperListComponent implements OnInit
         console.log('init page');
        // this._paperService.getFile();
         this._paperService.getPapers().subscribe(
-            papers => this.papers=papers,
-            error => this.errorMessage=<any>error
+            papers => {this.papers=papers
+                    if(this.papers.length==0)
+            {
+                this.messageType="alert";
+                this.resultMessage="there are no available submission";
+                
+            }  },
+            error =>{
+                 this.messageType="error";
+                this.resultMessage=error["message"];
+             }
         );
     /* this._paperService.getCountry().subscribe(
             country => this.country=country,

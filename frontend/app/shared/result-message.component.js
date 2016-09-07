@@ -24,9 +24,11 @@ System.register(['angular2/core'], function(exports_1, context_1) {
                 Object.defineProperty(ResultMessagesComponent.prototype, "messageClass", {
                     get: function () {
                         if (this.messageType == "success")
-                            return "successMessage";
+                            return "alert alert-success fade i";
+                        else if (this.messageType == "error")
+                            return "alert alert-danger fade in";
                         else
-                            return "alerMessage";
+                            return "alert alert-info fade in";
                     },
                     enumerable: true,
                     configurable: true
@@ -37,6 +39,18 @@ System.register(['angular2/core'], function(exports_1, context_1) {
                             return this.message;
                         else
                             return null;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(ResultMessagesComponent.prototype, "essageType", {
+                    get: function () {
+                        if (this.messageType == "success")
+                            return "success";
+                        else if (this.messageType == "error")
+                            return "error";
+                        else
+                            return "alert";
                     },
                     enumerable: true,
                     configurable: true
@@ -52,7 +66,7 @@ System.register(['angular2/core'], function(exports_1, context_1) {
                 ResultMessagesComponent = __decorate([
                     core_1.Component({
                         selector: 'result-messages',
-                        template: "<div [ngClass]=\"messageClass\" *ngIf=\"result !== null\">{{result}}</div>"
+                        template: " <div [ngClass]=\"messageClass\" *ngIf=\"result !== null\" class=\"alert alert-info fade in\" style=\"margin-top : 10px;\">\n        <a href=\"#\" class=\"close\" data-dismiss=\"alert\">&times;</a>\n        <strong>{{messageType}}!</strong> {{result}}.\n    </div><div ></div>"
                     }), 
                     __metadata('design:paramtypes', [])
                 ], ResultMessagesComponent);

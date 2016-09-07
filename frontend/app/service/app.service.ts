@@ -2,28 +2,32 @@ import {Injectable} from 'angular2/core';
 import {Http, Response, URLSearchParams, Jsonp, ConnectionBackend} from 'angular2/http';
 import {Observable} from 'rxjs/Observable';
 import {Router} from 'angular2/router';
-import { ContentHeaders, ContentHeaderOnlyToken } from './headers';
-import {IPaper, ICountry, IUser, Paper, User, IReview,Chair} from "./app.interface";
+import { ContentHeaders, ContentHeaderOnlyToken ,ContentHeadersWithoutToken} from './headers';
+import {IPaper, ICountry, IUser, Paper, User, IReview, Chair,ITask} from "./app.interface";
 import {FileService} from './file.service';
 import {ConferenceModel} from './app.interface';
 @Injectable()
 export class AppService {
 
-  private _apiUrl = "http://myremoteserverwg117.ddns.net:3000/api/v1/";
+  private _rootUrl="http://myremoteserverwg117.ddns.net:3000/";
+  private _apiUrl = this._rootUrl+"api/v1/";
   private _taskUrl = this._apiUrl + "chair/tasks/";
- // private _inviteUrl = this._apiUrl + "conference/addAuthor/";
+  // private _inviteUrl = this._apiUrl + "/addAuthor/";
   //private _paperUrl=this._apiUrl+'submissions/';
   //for reviewer
-private _paperUrl=this._apiUrl+'submissions/';
+  private _paperUrl = this._apiUrl + 'submissions/';
   private _reviewUrl = 'api/papers/paperwithreview.json';
   //
+
+  private _reviewerPaperUrl=this._apiUrl+"submissions2/";
   private _profileUrl = this._apiUrl + 'profile/';
   private _uploadUrl = this._apiUrl + 'submissions/';
-  private _conferenceUrl=this._apiUrl+"conference/";
-  private _chairConferenceUrl=this._apiUrl+"chair/conference/";
-  private _userLogInUrl = "http://myremoteserverwg117.ddns.net:3000/login";
-  private _getFileUrl = "http://myremoteserverwg117.ddns.net:3000/api/v1/download/";
-  private _signupUrl = "http://myremoteserverwg117.ddns.net:3000/register";
+  private _conferenceUrl = this._apiUrl + "conference/";
+  private _chairConferenceUrl = this._apiUrl + "chair/conference/";
+  private _userLogInUrl = this._rootUrl+"login";
+  private _getFileUrl =this._rootUrl+ "api/v1/download/";
+  private _signupUrl =this._rootUrl+ "register";
+  private _isRegisterUrl=this._rootUrl+"isRegister";
   private _responseCode: any;
   private static _base64_data: string = "";
   constructor(private _http: Http, private _router: Router, private jsonp: Jsonp) {
@@ -36,41 +40,51 @@ private _paperUrl=this._apiUrl+'submissions/';
       .catch(this.handleError);
 
   }
- getPaper(id: string): Observable<IPaper> {
-        console.log(id);
-    return  this._http.get(this._paperUrl+id, { headers: ContentHeaders })
-       .map((response :Response)=> <any>response.json())
-       .do(data => console.log("All:" +JSON.stringify(data)))       
-       .catch(this.handleError);   
-    }
-  getUserConference(): Observable<IUser>
-  {
-       return this._http.get(this._profileUrl, { headers: ContentHeaders })
-      .map((response: Response) => <IUser>response.json())
+  getPaper(id: string): Observable<IPaper> {
+    console.log(id);
+    return this._http.get(this._paperUrl + id, { headers: ContentHeaders })
+      .map((response: Response) => <any>response.json())
       .do(data => console.log("All:" + JSON.stringify(data)))
       .catch(this.handleError);
   }
-  getFiles(generatedFileName:string,fileName:string){ 
-         //  console.log('mmmm');
 
-      //   console.log('mmmm');
-
-  let req = new XMLHttpRequest();
-  req.open('get',this._getFileUrl+generatedFileName);
-req.setRequestHeader('x-access-token',localStorage.getItem("token"));
-  req.responseType = "arraybuffer";
-  req.onreadystatechange = function() {
-    if (req.readyState == 4 && req.status == 200) {
-     // observer.next(req.response);
-    //  observer.complete();
-       var blob = new Blob([this.response], {type: "application/octet-stream"});
+  
+  getUserConference(): Observable<ITask[]> {
+    return this._http.get(this._profileUrl, { headers: ContentHeaders })
+      .map((response: Response) => <ITask[]>response.json())
+      .do(data => console.log("All:" + JSON.stringify(data)))
+      .catch(this.handleError);
+  }
+  getAllConference(): Observable<ConferenceModel[]> {
+    return this._http.get(this._conferenceUrl, { headers: ContentHeaders })
+      .map((response: Response) => <ConferenceModel[]>response.json())
+      .do(data => console.log("All:" + JSON.stringify(data)))
+      .catch(this.handleError);
+  }
+  getConferenceSubmission(conferenceId:string):Observable<IPaper[]>
+  {
+     return this._http.get(this._apiUrl+conferenceId+"/chair/submissions", { headers: ContentHeaders })
+      .map((response: Response) => <IPaper[]>response.json())
+      .do(data => console.log("All:" + JSON.stringify(data)))
+      .catch(this.handleError);
+  }
+  getFiles(generatedFileName: string, fileName: string) {
+    let req = new XMLHttpRequest();
+    req.open('get', this._getFileUrl + generatedFileName);
+    req.setRequestHeader('x-access-token', localStorage.getItem("token"));
+    req.responseType = "arraybuffer";
+    req.onreadystatechange = function () {
+      if (req.readyState == 4 && req.status == 200) {
+        // observer.next(req.response);
+        //  observer.complete();
+        var blob = new Blob([this.response], { type: "application/octet-stream" });
         saveAs(blob, fileName);
-    }
-  };
-  req.send();
+      }
+    };
+    req.send();
 
-}
- 
+  }
+
 
   private handleError(error: Response) {
     console.error(error);
@@ -81,23 +95,46 @@ req.setRequestHeader('x-access-token',localStorage.getItem("token"));
   //    .map((products: IPaper[]) => products.find(p => p.id === id));
   //  }
 
-  assignReviewers(reviewer, submissionId): Observable<any[]> {
-    let body = JSON.stringify({ reviewer, submissionId });
-
-    return this._http.post(this._taskUrl, body, { headers: ContentHeaders })
+  assignReviewers(username:string, submissionId:string,conferenceId:string): Observable<IPaper> {
+    let body = JSON.stringify({ username, submissionId });
+   console.log(body);
+    return this._http.post(this._apiUrl+conferenceId+"/chair/addReviewer", body, { headers: ContentHeaders })
+          .map((response: Response) => <IPaper>response.json())
       .do(data => console.log("All:" + JSON.stringify(data)))
       .catch(this.handleError);
   }
-
-  inviteAuthor(username, conferencId): Observable<any[]> {
+removeReviewers(username:string, submissionId:string,conferenceId:string): Observable<IPaper> {
+    let body = JSON.stringify({ username, submissionId });
+   console.log(body);
+    return this._http.post(this._apiUrl+conferenceId+"/chair/removeReviewer", body, { headers: ContentHeaders })
+          .map((response: Response) => <IPaper>response.json())
+      .do(data => console.log("All:" + JSON.stringify(data)))
+      .catch(this.handleError);
+  }
+  inviteAuthor(username, conferencId): Observable<any> {
     let body = JSON.stringify({ username });
     console.log(body);
-    return this._http.post(this._chairConferenceUrl+conferencId+"/addAuthor", body, { headers: ContentHeaders })
+    return this._http.post(this._apiUrl + conferencId + "/chair/addAuthor", body, { headers: ContentHeaders })
+      .map((response: Response) => <ConferenceModel>response.json())
+      .do(data => console.log("All:" + JSON.stringify(data)))
+      .catch(this.handleError);
+  }
+  removeAuthor(username, conferencId): Observable<any> {
+    let body = JSON.stringify({ username });
+    console.log(body);
+    return this._http.post(this._apiUrl + conferencId + "/chair/removeAuthor", body, { headers: ContentHeaders })
+      .map((response: Response) => <ConferenceModel>response.json())
+      .do(data => console.log("All:" + JSON.stringify(data)))
+      .catch(this.handleError);
+  }
+  getConferenceDetails(conferencId): Observable<ConferenceModel> {
+    return this._http.get(this._conferenceUrl + conferencId, { headers: ContentHeaders })
+      .map((response: Response) => <any>response.json())
       .do(data => console.log("All:" + JSON.stringify(data)))
       .catch(this.handleError);
   }
   paperSubmission(_paper: Paper, attFile) {
-    let result =0;
+    let result = 0;
     let uploadedFile = attFile;
     console.log(uploadedFile[0]);
     let size = uploadedFile[0].size;
@@ -111,18 +148,19 @@ req.setRequestHeader('x-access-token',localStorage.getItem("token"));
       let authorList = _paper.authorList;
       let abstract = _paper.abstract;
       let keywords = _paper.keywords;
-      let body = JSON.stringify({ title, abstract, authorList, keywords, based64_data, size, fileName });
-      console.log(body);
-       xx._http.post(xx._uploadUrl, body, { headers: ContentHeaders })
+      let conferenceId = _paper.conferenceId;
+      let body = JSON.stringify({ title, abstract, authorList, keywords, based64_data, size, fileName, conferenceId });
+      // console.log(body);
+      xx._http.post(xx._apiUrl+conferenceId + '/submissions/', body, { headers: ContentHeaders })
         .do(data => console.log("All:" + JSON.stringify(data)))
         .subscribe(
         response => {
-          result =1;
+          result = 1;
         },
 
         error => {
           console.log(error.json().status);
-                    result =0;
+          result = 0;
 
         }
         );
@@ -131,9 +169,27 @@ req.setRequestHeader('x-access-token',localStorage.getItem("token"));
     return result;
   }
 
-//for reviewergetReview(id: number): Observable<IReview> {
+  //Edit Paper submission
+    paperSubmissionEdit(_paper: Paper):Observable<any> {
 
- getReview(id: number): Observable<IReview> {
+      let title = _paper.title;
+      let authorList = _paper.authorList;
+      let abstract = _paper.abstract;
+      let keywords = _paper.keywords;
+      let conferenceId = _paper.conferenceId;
+      let body = JSON.stringify({ title, abstract, authorList, keywords });
+      // console.log(body);
+    return  this._http.post(this._apiUrl+conferenceId + '/submissions/', body, { headers: ContentHeaders })
+        .map((response: Response) => <any>response.json())
+      .do(data => console.log("All:" + JSON.stringify(data)))
+      .catch(this.handleError);
+
+   
+  }
+
+  //for reviewergetReview(id: number): Observable<IReview> {
+
+  getReview(id: number): Observable<IReview> {
 
     return this.getPapers()
       .map((reviews: IReview[]) => reviews.find(p => p.id === id))//.do(data => console.log("All:" + JSON.stringify(data)));
@@ -155,28 +211,27 @@ req.setRequestHeader('x-access-token',localStorage.getItem("token"));
       res => res.json()
         .catch(this.handleError));
   }
-createConference(_conf:ConferenceModel):Observable<ConferenceModel>
-   {
-     let result;
-    
-     let title=_conf.title;
-    // var chair:any=new Chair();
-     //chair.username=this.getCurrentUserEmail();
-     //chair._id=localStorage.getItem("_id");
-     let chair=localStorage.getItem("_id");
-     let conferenceLocation=_conf.conferenceLocation;
-     let startdate=_conf.startdate;
-     let enddate=_conf.enddate;
+  createConference(_conf: ConferenceModel): Observable<ConferenceModel> {
+    let result;
 
-    var body:string = JSON.stringify({ title, chair ,conferenceLocation,enddate,startdate}); 
+    let title = _conf.title;
+    // var chair:any=new Chair();
+    //chair.username=this.getCurrentUserEmail();
+    //chair._id=localStorage.getItem("_id");
+    let chair = localStorage.getItem("_id");
+    let conferenceLocation = _conf.conferenceLocation;
+    let startdate = _conf.startdate;
+    let enddate = _conf.enddate;
+
+    var body: string = JSON.stringify({ title, chair, conferenceLocation, enddate, startdate });
     console.log(body);
-     return this._http.post(this._conferenceUrl,body, { headers: ContentHeaders })
-      .map((response :Response)=> <ConferenceModel>response.json())
-      .do(data => console.log("All:" +data ))
-     .catch(this.handleError);
-    
-      
-       }
+    return this._http.post(this._conferenceUrl, body, { headers: ContentHeaders })
+      .map((response: Response) => <ConferenceModel>response.json())
+      .do(data => console.log("All:" + data))
+      .catch(this.handleError);
+
+
+  }
 
   getReviewList() {
     let username = this.getCurrentUserEmail();
@@ -209,7 +264,7 @@ createConference(_conf:ConferenceModel):Observable<ConferenceModel>
 
   getUserProfile(): Observable<IUser> {
     let _token = this.getToken();
-    let token = JSON.stringify({_token});
+    let token = JSON.stringify({ _token });
     return this._http.get(this._profileUrl, { headers: ContentHeaders })
       .map((response: Response) => <IUser>response.json())
       .catch(this.handleError).do(data => console.log("All:" + JSON.stringify(data)));
@@ -231,7 +286,7 @@ createConference(_conf:ConferenceModel):Observable<ConferenceModel>
       .catch(this.handleError);
 
   }
-  signup(_user: User): Observable<any[]> {
+  signup(_user: User): Observable<any> {
     let result;
 
     let username = _user.username;
@@ -245,19 +300,27 @@ createConference(_conf:ConferenceModel):Observable<ConferenceModel>
     let state = _user.state;
     let address = _user.address;
     let body = JSON.stringify({ username, password, familyName, givenName, institute, country, state, city, zipCode, address });
-    return this._http.post(this._signupUrl, body, { headers: ContentHeaders })
-      .map((response: Response) => <any[]>response.json())
-      // .do(data => console.log("All:" +JSON.stringify(data)))
+    return this._http.post(this._signupUrl, body, { headers: ContentHeadersWithoutToken })
+      .map((response: Response) => <any>response.json())
+      .do(data => console.log("All:" +JSON.stringify(data)))
       .catch(this.handleError);
 
 
+  }
+  isRegister(username:string)
+  {
+    let body=JSON.stringify({username});
+      return this._http.post(this._isRegisterUrl, body, { headers: ContentHeadersWithoutToken })
+      .map((response: Response) => <any>response.json())
+      .do(data => console.log("All:" +JSON.stringify(data)))
+      .catch(this.handleError);
   }
 
   login(email, password): Observable<any[]> {
     let _logInCode = '';
     let username = email;
     let body = JSON.stringify({ username, password });
-    return this._http.post(this._userLogInUrl, body, { headers: ContentHeaders })
+    return this._http.post(this._userLogInUrl, body, { headers: ContentHeadersWithoutToken })
       .map((response: Response) => <any[]>response.json()).catch(this.handleError);
 
   }
@@ -299,6 +362,7 @@ createConference(_conf:ConferenceModel):Observable<ConferenceModel>
   logout() {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
+    localStorage.removeItem("_id");
     this._router.navigate(['Welcome']);
   }
 }

@@ -38,6 +38,7 @@ System.register(['angular2/core', '../service/app.service', 'angular2/common', '
                     this._service = _service;
                     this.resultMessage = "";
                     this.messageType = "";
+                    this._conference = new app_interface_1.ConferenceModel();
                     this.form = _fb.group({
                         title: ['', common_1.Validators.required],
                         startdate: ['', common_1.Validators.required],
@@ -45,6 +46,20 @@ System.register(['angular2/core', '../service/app.service', 'angular2/common', '
                         conferenceLocation: ['', common_1.Validators.required],
                     });
                 }
+                CreateConferenceComponent.prototype.ngOnInit = function () {
+                    this._conference.enddate = new Date();
+                };
+                CreateConferenceComponent.prototype.checkConferenceDate = function (startdate, enddate) {
+                    var current = new Date();
+                    console.log(startdate >= current);
+                    console.log(new Date(startdate).getTime());
+                    if (new Date(startdate).getTime() >= current.getTime() && new Date(enddate).getTime() > new Date(startdate).getTime()) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                };
                 CreateConferenceComponent.prototype.submit = function (event, value) {
                     var _this = this;
                     this._conference = new app_interface_1.ConferenceModel();
@@ -54,14 +69,20 @@ System.register(['angular2/core', '../service/app.service', 'angular2/common', '
                     this._conference.startdate = value.startdate;
                     this._conference.status = true;
                     this._conference.title = value.title;
-                    this._service.createConference(this._conference).subscribe(function (response) {
-                        console.log(response);
-                        _this.resultMessage = "New conference has been created you can invite autho from ";
-                        _this.messageType = "success";
-                    }, function (error) {
-                        _this.resultMessage = "Error , please try again later";
-                        _this.messageType = "error";
-                    });
+                    if (this.checkConferenceDate(value.startdate, value.enddate)) {
+                        this._service.createConference(this._conference).subscribe(function (response) {
+                            console.log(response);
+                            _this.resultMessage = "New conference has been created you can invite autho from ";
+                            _this.messageType = "success";
+                        }, function (error) {
+                            _this.resultMessage = "Error , please try again later";
+                            _this.messageType = "error";
+                        });
+                    }
+                    else {
+                        this.resultMessage = " conference start date should be less than end date and equal or more than current date  ";
+                        this.messageType = "error";
+                    }
                 };
                 CreateConferenceComponent = __decorate([
                     core_1.Component({

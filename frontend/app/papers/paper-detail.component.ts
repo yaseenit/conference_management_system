@@ -16,6 +16,8 @@ import {IPaper} from '../service/app.interface';
         pageTitle: string='Paper Detail';
         paper: IPaper;
          errorMessage: string;
+          imageWidth:number=50;
+    imageHeight:number=40;
         constructor(private _paperService: AppService,
             private _routeParams:RouteParams ,private _router :Router)
         {
@@ -29,7 +31,11 @@ import {IPaper} from '../service/app.interface';
             this.getPaper(id);
         }
     }
-
+getFile(event,generatedFileName,fileName)
+ {
+         event.preventDefault();
+         this._paperService.getFiles(generatedFileName,fileName);
+ }
     getPaper(id: string) {
         this._paperService.getPaper(id)
             .subscribe(

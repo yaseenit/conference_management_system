@@ -1,7 +1,10 @@
 import { Component, Input } from 'angular2/core';
 @Component({
   selector: 'result-messages',
-  template: `<div [ngClass]="messageClass" *ngIf="result !== null">{{result}}</div>`
+  template: ` <div [ngClass]="messageClass" *ngIf="result !== null" class="alert alert-info fade in" style="margin-top : 10px;">
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        <strong>{{messageType}}!</strong> {{result}}.
+    </div><div ></div>`
 })
 export class ResultMessagesComponent {
   @Input() message: string ;
@@ -10,9 +13,11 @@ export class ResultMessagesComponent {
   get messageClass()
   {
     if(this.messageType=="success")
-    return "successMessage";
-    else 
-    return "alerMessage";
+    return "alert alert-success fade i";
+    else if(this.messageType=="error")
+    return "alert alert-danger fade in";
+    else
+    return "alert alert-info fade in"
   }
   get result()
   {
@@ -20,6 +25,15 @@ export class ResultMessagesComponent {
       return this.message;
       else
       return null;
+  }
+  get essageType()
+  {
+     if(this.messageType=="success")
+    return "success";
+    else if(this.messageType=="error")
+    return "error";
+    else
+    return "alert";
   }
 
 }

@@ -86,7 +86,9 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                 ReviewDetailComponent.prototype.getPaper = function (id) {
                     var _this = this;
                     this._reviewService.getReview(id)
-                        .subscribe(function (paper) { return _this.paper = paper; }, function (error) { return _this.errorMessage = error; });
+                        .subscribe(
+                    //   paper => this.paper = paper,
+                    function (error) { return _this.errorMessage = error; });
                 };
                 /* getReviews(id: number) {
                      this._reviewService.getReview(id)

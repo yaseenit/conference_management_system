@@ -1,4 +1,4 @@
-System.register(['angular2/core', '../service/app.service', '../service/app.interface', 'angular2/common', '../shared/control-message.component', '../service/validation.service', '../shared/result-message.component'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/router', '../service/app.service', '../service/app.interface', 'angular2/common', '../shared/control-message.component', '../service/validation.service', '../shared/result-message.component'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,12 +10,15 @@ System.register(['angular2/core', '../service/app.service', '../service/app.inte
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, app_service_1, app_interface_1, common_1, control_message_component_1, validation_service_1, result_message_component_1;
+    var core_1, router_1, app_service_1, app_interface_1, common_1, control_message_component_1, validation_service_1, result_message_component_1;
     var PaperCreateComponent;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
+            },
+            function (router_1_1) {
+                router_1 = router_1_1;
             },
             function (app_service_1_1) {
                 app_service_1 = app_service_1_1;
@@ -37,8 +40,9 @@ System.register(['angular2/core', '../service/app.service', '../service/app.inte
             }],
         execute: function() {
             PaperCreateComponent = (function () {
-                function PaperCreateComponent(fb, kf, ff, _Element, _paperService) {
+                function PaperCreateComponent(fb, kf, ff, _Element, _paperService, _routeParams) {
                     this._paperService = _paperService;
+                    this._routeParams = _routeParams;
                     this.paperAuthors = [];
                     this.keywords = [];
                     this.arrayIndex = 0;
@@ -64,7 +68,9 @@ System.register(['angular2/core', '../service/app.service', '../service/app.inte
                         familyName: ['', common_1.Validators.required]
                     });
                 }
-                // author bll
+                PaperCreateComponent.prototype.ngOnInit = function () {
+                    this.conferenceId = this._routeParams.get('id');
+                };
                 PaperCreateComponent.prototype.addAuthor = function (event, value) {
                     event.preventDefault();
                     if (this.checkAuthor(value.email)) {
@@ -174,6 +180,7 @@ System.register(['angular2/core', '../service/app.service', '../service/app.inte
                     this.paper.keywords = this.keywords;
                     this.paper.abstract = value.abstract;
                     this.paper.title = value.title;
+                    this.paper.conferenceId = this.conferenceId;
                     var check = true;
                     if (this.paperAuthors.length <= 0) {
                         this.resultMessage = "Please add the Authors";
@@ -211,7 +218,7 @@ System.register(['angular2/core', '../service/app.service', '../service/app.inte
                         templateUrl: 'app/papers/paper-create.component.html',
                         directives: [result_message_component_1.ResultMessagesComponent, control_message_component_1.ControlMessagesComponent]
                     }), 
-                    __metadata('design:paramtypes', [common_1.FormBuilder, common_1.FormBuilder, common_1.FormBuilder, core_1.ElementRef, app_service_1.AppService])
+                    __metadata('design:paramtypes', [common_1.FormBuilder, common_1.FormBuilder, common_1.FormBuilder, core_1.ElementRef, app_service_1.AppService, router_1.RouteParams])
                 ], PaperCreateComponent);
                 return PaperCreateComponent;
             }());

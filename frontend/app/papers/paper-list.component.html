@@ -2,10 +2,13 @@
     <div class='panel-heading'>
         {{pageTitle}}
     </div>
+               <result-messages [(message)]='resultMessage' [(messageType)]='messageType'></result-messages>
 
     <!-- Filter the papers   -->
-    <div class='panel-body'>
+    <div class='panel-body' *ngIf='papers && papers.length'>
+
         <div class='row'>
+
             <div class='col-md-2'>Filter by:</div>
             <div class='col-md-4'>
                 <input type='text' [(ngModel)]='listFilter' />
@@ -17,13 +20,10 @@
             </div>
         </div>
 
-        <div class='has-error' *ngIf='errorMessage'>{{errorMessage}}</div>
- <select *ngIf='country && country.length'>
-                <option *ngFor="#o of country" [value]="o" >{{o.woeid}}</option>
-            </select>
+ 
         <div class='table-responsive'>
             <table class='table' 
-            *ngIf='papers && papers.length' >
+             >
                 <thead>
                     <tr>
                      

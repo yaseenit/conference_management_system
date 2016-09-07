@@ -1,0 +1,37 @@
+<div class='panel panel-primary'>
+    <div class='panel-heading'>
+        {{pageTitle}}
+    </div>
+
+    <!-- Filter the papers   -->
+    <div class='panel-body'>
+           <result-messages [(message)]='resultMessage' [(messageType)]='messageType'></result-messages>
+
+
+        <div class='table-responsive'>
+            <table class='table' 
+            *ngIf='conferences && conferences.length' >
+                <thead>
+                    <tr>
+                     
+                        <th>Title</th>
+                        <th>Location </th>
+                     <th>Start date</th>
+                        <th>End Date </th>
+                        <th>Submissions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  <tr  *ngFor='#con of conferences | conferenceFilter : username'>
+  <td>{{con.title}}</td>
+   <td>{{con.conferenceLocation}}</td>
+  <td>{{con.startdate}}</td>
+  <td>{{con.enddate}}</td>
+<td> <a [routerLink]="['AuthorPapersConference',{id:con._id,title:con.title}]" >Submission</a></td>
+        
+                      </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

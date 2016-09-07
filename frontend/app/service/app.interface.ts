@@ -11,6 +11,8 @@ export interface IPaper{
     deadline:string;
     createdOn:string;
     generatedFileName:string;
+    conferenceId:string;
+    reviewers:string[];
 }
 export class ConferenceModel {
     title: string="";
@@ -25,6 +27,21 @@ export class ConferenceModel {
     {
         
     }
+}
+
+export interface ITask{
+    taskType:string;
+    taskDesc:string;
+    assignedTo:string;
+     submissionId:string;
+    conferenceId:string;
+}
+export class Task implements ITask{
+    taskType:string="";
+    taskDesc:string="";
+    assignedTo:string="";
+    submissionId:string="";
+    conferenceId:string="";
 }
 export class Chair{
     username:string="";
@@ -50,6 +67,9 @@ export class Paper implements IPaper
     deadline:string="";
     createdOn:string="";
     generatedFileName:string="";
+    conferenceId:string="";
+     reviewers:string[]=[];
+
 
     //for review
     review:Review[]=[];
@@ -125,6 +145,7 @@ export interface IUser
     zipCode:string;
     country:string;
    institute:string; 
+   tasks:Task[];
 }
 export class User implements IUser
 { 
@@ -139,6 +160,8 @@ export class User implements IUser
     zipCode:string="";
     country:string="";
    institute:string=""; 
+      tasks:Task[]=[];
+
      constructor()
     {
         

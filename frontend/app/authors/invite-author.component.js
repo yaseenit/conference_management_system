@@ -41,55 +41,72 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
             }],
         execute: function() {
             InviteAuthorComponent = (function () {
-                function InviteAuthorComponent(_fb, _service, _routeParams) {
+                function InviteAuthorComponent(_fb, _service, _router, _routeParams) {
                     this._service = _service;
+                    this._router = _router;
                     this._routeParams = _routeParams;
                     this.arrayIndex = 0;
                     this.authorList = [];
                     this.ConferenceId = 10;
                     this.resultMessage = "";
-                    this.meeageType = "";
+                    this.messageType = "";
+                    this.chkDate = false;
                     this.form = _fb.group({
                         userName: ['', common_1.Validators.compose([validation_service_1.ValidationService.emailValidator, common_1.Validators.required])]
                     });
                 }
                 InviteAuthorComponent.prototype.ngOnInit = function () {
-                    if (this.authorList) {
-                        this.ConferenceId = this._routeParams.get('id');
-                        this.getAuthor(this.ConferenceId);
+                    this.ConferenceId = this._routeParams.get('id');
+                    this.getConferenceDetails(this.ConferenceId);
+                };
+                InviteAuthorComponent.prototype.getConferenceDetails = function (id) {
+                    var _this = this;
+                    this._service.getConferenceDetails(id).subscribe(function (response) {
+                        _this.authorList = response.authors;
+                        _this.checkConferenceDate(response.startdate, response.enddate);
+                    }, function (error) {
+                        _this.messageType = "error";
+                        _this.resultMessage = error["message"];
+                    });
+                };
+                InviteAuthorComponent.prototype.checkConferenceDate = function (startdate, enddate) {
+                    var current = new Date();
+                    if (new Date(enddate).getTime() >= current.getTime()) {
+                        this.chkDate = true;
+                    }
+                    else {
+                        this.chkDate = false;
                     }
                 };
-                InviteAuthorComponent.prototype.getAuthor = function (id) {
-                };
-                InviteAuthorComponent.prototype.Invit = function (event, value) {
+                InviteAuthorComponent.prototype.Invite = function (event, value) {
                     var _this = this;
-                    this.meeageType = "";
-                    this.resultMessage = "";
                     event.preventDefault();
+                    this.messageType = "";
+                    this.resultMessage = "";
                     if (this.checkAuthor(value.userName)) {
                         this.authorList[this.arrayIndex] = value.userName;
                         this.arrayIndex++;
                         //   console.log(value.email);
                         // this.clearForm();
                         this._service.inviteAuthor(value.userName, this.ConferenceId).subscribe(function (response) {
-                            _this.authorList = response["authors"];
+                            _this.authorList = response.authors;
                             _this.resultMessage = "author" + value.userName + " has been invited";
-                            _this.meeageType = "success";
+                            _this.messageType = "success";
                             console.log(response);
+                            _this.clearForm();
                         }, function (error) {
-                            _this.resultMessage = "Error , please try again later";
-                            _this.meeageType = "error";
+                            _this.resultMessage = "Error " + error["message"];
+                            _this.messageType = "error";
                         });
                     }
-                    else
-                        this.errorMessage = 'Author email already assigned';
+                    else {
+                        this.resultMessage = 'Author email already exists';
+                        this.messageType = "error";
+                    }
                 };
                 InviteAuthorComponent.prototype.clearForm = function () {
                     for (var name in this.form.controls) {
-                        this.form.controls[name].updateValue("");
-                        this.form.controls[name].touched = false;
-                        //(<Control>this.form.controls[name]).valid=false;
-                        this.form.controls[name].setErrors(null);
+                        this.form.controls[name].updateValue('');
                     }
                 };
                 InviteAuthorComponent.prototype.checkAuthor = function (_userName) {
@@ -101,20 +118,24 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                     return true;
                 };
                 InviteAuthorComponent.prototype.removeAuthor = function (_userName) {
-                    for (var i = 0; i < this.authorList.length; i++) {
-                        if (this.authorList[i] == _userName) {
-                            this.authorList.splice(i, 1);
-                            this.arrayIndex--;
-                            console.log('delete item');
-                        }
-                    }
+                    var _this = this;
+                    event.preventDefault();
+                    this._service.removeAuthor(_userName, this.ConferenceId).subscribe(function (response) {
+                        _this.authorList = response.authors;
+                        _this.resultMessage = "author" + _userName + " has been removed";
+                        _this.messageType = "success";
+                        console.log(response);
+                    }, function (error) {
+                        _this.resultMessage = "Error " + error["message"];
+                        _this.messageType = "error";
+                    });
                 };
                 InviteAuthorComponent = __decorate([
                     core_1.Component({
                         templateUrl: 'app/authors/invite-author.component.html',
                         directives: [router_2.ROUTER_DIRECTIVES, googleplace_directive_1.GoogleplaceDirective, control_message_component_1.ControlMessagesComponent, result_message_component_1.ResultMessagesComponent],
                     }), 
-                    __metadata('design:paramtypes', [common_1.FormBuilder, app_service_1.AppService, router_1.RouteParams])
+                    __metadata('design:paramtypes', [common_1.FormBuilder, app_service_1.AppService, router_1.Router, router_1.RouteParams])
                 ], InviteAuthorComponent);
                 return InviteAuthorComponent;
             }());

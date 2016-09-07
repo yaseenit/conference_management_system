@@ -1,4 +1,4 @@
-System.register(['angular2/core', '../service/app.service', 'angular2/router'], function(exports_1, context_1) {
+System.register(['angular2/core', '../service/app.service', 'angular2/router', '../shared/result-message.component'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', '../service/app.service', 'angular2/router'], 
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, app_service_1, router_1;
+    var core_1, app_service_1, router_1, result_message_component_1;
     var ConferenceComponent;
     return {
         setters:[
@@ -22,26 +22,38 @@ System.register(['angular2/core', '../service/app.service', 'angular2/router'], 
             },
             function (router_1_1) {
                 router_1 = router_1_1;
+            },
+            function (result_message_component_1_1) {
+                result_message_component_1 = result_message_component_1_1;
             }],
         execute: function() {
             ConferenceComponent = (function () {
                 function ConferenceComponent(_service) {
                     this._service = _service;
                     this.conferences = [];
+                    this.resultMessage = "";
+                    this.messageType = "";
                 }
                 ConferenceComponent.prototype.ngOnInit = function () {
                     var _this = this;
                     console.log("dddd");
                     this.pageTitle = "My conference";
                     this._service.getUserConference().subscribe(function (response) {
-                        console.log(response);
                         _this.conferences = response["conferences"];
-                    }, function (error) { return _this.errorMessage = error; });
+                        if (_this.conferences.length == 0) {
+                            _this.messageType = "alert";
+                            _this.resultMessage = "you didn't create  any conference";
+                        }
+                        console.log(_this.conferences.length != 0);
+                    }, function (error) {
+                        _this.messageType = "erro";
+                        _this.resultMessage = error["message"];
+                    });
                 };
                 ConferenceComponent = __decorate([
                     core_1.Component({
                         templateUrl: 'app/conference/conference.component.html',
-                        directives: [router_1.ROUTER_DIRECTIVES]
+                        directives: [router_1.ROUTER_DIRECTIVES, result_message_component_1.ResultMessagesComponent]
                     }), 
                     __metadata('design:paramtypes', [app_service_1.AppService])
                 ], ConferenceComponent);

@@ -25,26 +25,46 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
         authorList:string[]=[];
         ConferenceId:any=10;
         resultMessage:string="";
-        meeageType:string="";
-        constructor(_fb: FormBuilder, private _service: AppService,  private _routeParams:RouteParams ) {
+        messageType:string="";
+        chkDate:boolean=false;
+        constructor(_fb: FormBuilder, private _service: AppService, private _router: Router,  private _routeParams:RouteParams ) {
         this.form = _fb.group({
             userName: ['', Validators.compose([ValidationService.emailValidator,Validators.required])]
         });
     }
         ngOnInit() {
-        if (this.authorList) {
             this.ConferenceId = this._routeParams.get('id');
-            this.getAuthor(this.ConferenceId);
-        }
+            this.getConferenceDetails(this.ConferenceId);       
     }
-    getAuthor(id)
+    getConferenceDetails(id)
     {
-        
+        this._service.getConferenceDetails(id).subscribe(
+            response=>{
+                this.authorList=response.authors;
+                this.checkConferenceDate(response.startdate,response.enddate);
+            }
+            ,error =>
+            {
+                this.messageType="error";
+                this.resultMessage=error["message"];
+            }
+        );
     }
-    Invit(event:any,value: any ) {
-        this.meeageType="";
-        this.resultMessage="";
+    checkConferenceDate(startdate:any,enddate:any)
+    {
+        var current = new Date();
+     
+
+        if( new Date(enddate).getTime()>=current.getTime())
+     {   
+        this.chkDate= true;  }
+    else
+        {  this.chkDate= false; }
+    }
+    Invite(event:any,value: any ) {
         event.preventDefault();
+        this.messageType="";
+        this.resultMessage="";
         if(this.checkAuthor(value.userName))
         {
          this.authorList[this.arrayIndex]=value.userName;
@@ -53,15 +73,16 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
         // this.clearForm();
          this._service.inviteAuthor(value.userName,this.ConferenceId).subscribe(
             response => {
-         this.authorList=response["authors"];
+          this.authorList=response.authors;
          this.resultMessage="author"+value.userName +" has been invited";
-         this.meeageType="success";
+         this.messageType="success";
          console.log(response);
+          this.clearForm();
         },
              error => {
      
-         this.resultMessage="Error , please try again later";
-         this.meeageType="error";
+         this.resultMessage="Error " + error["message"];
+         this.messageType="error";
       
       
                  
@@ -69,16 +90,18 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
        );  
   
         }
-        else
-         this.errorMessage='Author email already assigned';
+        else{
+         this.resultMessage='Author email already exists';
+                  this.messageType="error";
+
+        }
       }
       clearForm():void
       {
          for(var name in this.form.controls) {
-       (<Control>this.form.controls[name]).updateValue("");
-        (<Control>this.form.controls[name]).touched=false;
+       (<Control>this.form.controls[name]).updateValue('');
+
         //(<Control>this.form.controls[name]).valid=false;
-        (<Control>this.form.controls[name]).setErrors(null);
         }
       }
       checkAuthor(_userName:string):boolean
@@ -94,16 +117,24 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
 
    removeAuthor(_userName:string):void
   {
-    for(var i=0;i<this.authorList.length;i++)
-        {
-        if(this.authorList[i]==_userName)
-            {
-                this.authorList.splice(i,1);
-                this.arrayIndex--;
-                console.log('delete item');
-            }
+              event.preventDefault();
+      this._service.removeAuthor(_userName,this.ConferenceId).subscribe(
+            response => {
+          this.authorList=response.authors;
+         this.resultMessage="author"+_userName+" has been removed";
+         this.messageType="success";
+         console.log(response);
+        },
+             error => {
+     
+         this.resultMessage="Error " + error["message"];
+         this.messageType="error";
+      
+      
+                 
         }
-    }
+       );  
+   }
 
 
     }

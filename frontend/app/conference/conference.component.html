@@ -5,9 +5,9 @@
 
     <!-- Filter the papers   -->
     <div class='panel-body'>
-        
+                   <result-messages [(message)]='resultMessage' [(messageType)]='messageType'></result-messages>
 
-        <div class='has-error' *ngIf='errorMessage'>{{errorMessage}}</div>
+
         <div class='table-responsive'>
             <table class='table' 
             *ngIf='conferences && conferences.length' >
@@ -19,16 +19,19 @@
                      <th>Start date</th>
                         <th>End Date </th>
                         <th>Author</th>
+                        <th>submissions</th>
                     </tr>
                 </thead>
                 <tbody>
                   <tr  *ngFor='#con of conferences'>
-  <td>{{con.title}}</td>
-   <td>{{con.conferenceLocation}}</td>
+                  <td>{{con.title}}</td>
+                  <td>{{con.conferenceLocation}}</td>
   <td>{{con.startdate}}</td>
   <td>{{con.enddate}}</td>
+   <td> <a [routerLink]="['ConferencePapers',{id:con._id,title:con.title}]" >Submissions</a></td>
+
 <td> <a [routerLink]="['InviteAuthor',{id:con._id}]" >Author</a></td>
-        
+
                       </tr>
                 </tbody>
             </table>

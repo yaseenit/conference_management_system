@@ -1,9 +1,11 @@
-<div class="row">
-<div class="col-md-8">
-    <result-messages [(message)]='resultMessage' [(messageType)]='messageType'></result-messages>
-    <div class='has-error' *ngIf='errorMessage'>{{errorMessage}}</div>
+<div class="col-sm-12 col-lg-12 col-md-12">
+
 <fieldset>
     <legend>Reviewer(s)</legend>
+    <result-messages [(message)]='resultMessage' [(messageType)]='messageType'></result-messages>
+<div class="row">
+    <div class="col-sm-6 col-lg-6 col-md-6">
+
  <form [ngFormModel]="form" >
   
   <div class="form-group">
@@ -13,7 +15,18 @@
   </div>
    <button type="submit" class="btn btn-primary btn-block" [disabled]="!form.valid" (click)="assign($event,form.value)">Assign</button>
   </form>
- <div class='table-responsive'>
+
+
+   <div class='panel-footer'>
+        <a class='btn btn-default' (click)='onBack()' style='width:80px'>
+            <i class='glyphicon glyphicon-chevron-left'></i> Back
+        </a>
+
+        </div>
+</div>
+<div class="col-sm-6 col-lg-6 col-md-6">
+
+     <div class='table-responsive'>
             <table class='table' 
             *ngIf='PaperReviewers && PaperReviewers.length' >
                 <thead>
@@ -30,11 +43,11 @@
                 </tbody>
             </table>
         </div>
-</fieldset>
-
-   <div class='panel-footer'>
-        <a class='btn btn-default' (click)='onBack()' style='width:80px'>
-            <i class='glyphicon glyphicon-chevron-left'></i> Back
-        </a>
-    </div></div>
 </div>
+
+    
+</div>
+        
+</fieldset>
+</div>
+  

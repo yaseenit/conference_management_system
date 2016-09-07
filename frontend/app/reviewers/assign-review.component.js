@@ -46,20 +46,28 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                     this._routeParams = _routeParams;
                     this.arrayIndex = 0;
                     this.PaperReviewers = [];
-                    this.submissionId = 10;
                     this.resultMessage = "";
                     this.messageType = "";
+                    this.conferenceId = "";
                     this.form = _fb.group({
                         userName: ['', common_1.Validators.compose([validation_service_1.ValidationService.emailValidator, common_1.Validators.required])]
                     });
                 }
                 AssigReviewComponent.prototype.ngOnInit = function () {
                     if (this.PaperReviewers) {
-                        this.submissionId = +this._routeParams.get('id');
+                        this.submissionId = this._routeParams.get('id');
                         this.getReviewer(this.submissionId);
                     }
                 };
                 AssigReviewComponent.prototype.getReviewer = function (id) {
+                    var _this = this;
+                    this._reviewerService.getPaper(id).subscribe(function (respone) {
+                        _this.PaperReviewers = respone.reviewers;
+                        _this.conferenceId = respone.conferenceId;
+                    }, function (error) {
+                        _this.resultMessage = "Error , please try again later";
+                        _this.messageType = "error";
+                    });
                 };
                 AssigReviewComponent.prototype.assign = function (event, value) {
                     var _this = this;
@@ -67,20 +75,20 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                     this.resultMessage = "";
                     event.preventDefault();
                     if (this.checkReviewer(value.userName)) {
-                        this.PaperReviewers[this.arrayIndex] = value.userName;
-                        this.arrayIndex++;
-                        console.log(value.email);
-                        // this.clearForm();
-                        this._reviewerService.assignReviewers(value.userName, this.submissionId).subscribe(function (response) {
-                            _this.resultMessage = "author Has been invited";
+                        this._reviewerService.assignReviewers(value.userName, this.submissionId, this.conferenceId).subscribe(function (response) {
+                            _this.PaperReviewers = response.reviewers;
+                            _this.resultMessage = "Reviewer Has been assigned";
                             _this.messageType = "success";
-                            console.log(response);
+                            _this.clearForm();
                         }, function (error) {
-                            if (error["status"] == null) {
-                                _this.resultMessage = "Error , please try again later";
+                            if (error["message"] == null) {
+                                _this.resultMessage = " please try again later";
                                 _this.messageType = "error";
                             }
-                            (function (error) { });
+                            else {
+                                _this.resultMessage = error["message"];
+                                _this.messageType = "error";
+                            }
                         });
                     }
                     else
@@ -88,26 +96,38 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                 };
                 AssigReviewComponent.prototype.clearForm = function () {
                     for (var name in this.form.controls) {
-                        this.form.controls[name].updateValue("");
-                        this.form.controls[name].touched = false;
+                        this.form.controls[name].updateValue('');
                     }
                 };
                 AssigReviewComponent.prototype.checkReviewer = function (_userName) {
-                    console.log(this.PaperReviewers.length);
-                    for (var i = 0; i < this.PaperReviewers.length; i++) {
-                        if (this.PaperReviewers[i] == _userName)
-                            return false;
+                    if (this.PaperReviewers) {
+                        for (var i = 0; i < this.PaperReviewers.length; i++) {
+                            if (this.PaperReviewers[i] == _userName)
+                                return false;
+                        }
+                        return true;
                     }
-                    return true;
+                    else
+                        return true;
                 };
                 AssigReviewComponent.prototype.removeReviewer = function (_userName) {
-                    for (var i = 0; i < this.PaperReviewers.length; i++) {
-                        if (this.PaperReviewers[i] == _userName) {
-                            this.PaperReviewers.splice(i, 1);
-                            this.arrayIndex--;
-                            console.log('delete item');
+                    var _this = this;
+                    this._reviewerService.removeReviewers(_userName, this.submissionId, this.conferenceId).subscribe(function (response) {
+                        console.log(response);
+                        _this.PaperReviewers = response.reviewers;
+                        _this.resultMessage = "Reviewer Has been Removed";
+                        _this.messageType = "success";
+                        // this.clearForm()
+                    }, function (error) {
+                        if (error["message"] == null) {
+                            _this.resultMessage = " please try again later";
+                            _this.messageType = "error";
                         }
-                    }
+                        else {
+                            _this.resultMessage = error["message"];
+                            _this.messageType = "error";
+                        }
+                    });
                 };
                 AssigReviewComponent = __decorate([
                     core_1.Component({
