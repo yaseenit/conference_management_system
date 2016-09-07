@@ -167,7 +167,7 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                         var conferenceId = _paper.conferenceId;
                         var body = JSON.stringify({ title: title, abstract: abstract, authorList: authorList, keywords: keywords, based64_data: based64_data, size: size, fileName: fileName, conferenceId: conferenceId });
                         // console.log(body);
-                        xx._http.post(xx._apiUrl + conferenceId + '/submissions/', body, { headers: headers_1.ContentHeaders })
+                        xx._http.post(xx._apiUrl + conferenceId + '/submissions/create', body, { headers: headers_1.ContentHeaders })
                             .do(function (data) { return console.log("All:" + JSON.stringify(data)); })
                             .subscribe(function (response) {
                             result = 1;
@@ -185,14 +185,23 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                     var abstract = _paper.abstract;
                     var keywords = _paper.keywords;
                     var conferenceId = _paper.conferenceId;
-                    var body = JSON.stringify({ title: title, abstract: abstract, authorList: authorList, keywords: keywords });
+                    var _id = _paper.id;
+                    var body = JSON.stringify({ title: title, abstract: abstract, authorList: authorList, keywords: keywords, _id: _id });
                     // console.log(body);
-                    return this._http.post(this._apiUrl + conferenceId + '/submissions/', body, { headers: headers_1.ContentHeaders })
+                    return this._http.post(this._apiUrl + conferenceId + '/submissions/edit', body, { headers: headers_1.ContentHeaders })
                         .map(function (response) { return response.json(); })
                         .do(function (data) { return console.log("All:" + JSON.stringify(data)); })
                         .catch(this.handleError);
                 };
-                //for reviewergetReview(id: number): Observable<IReview> {
+                //
+                AppService.prototype.submissionUpdateStatus = function (status, _id, conferenceId) {
+                    var body = JSON.stringify({ status: status, _id: _id });
+                    // console.log(body);
+                    return this._http.post(this._apiUrl + conferenceId + '/submissions/editStatus', body, { headers: headers_1.ContentHeaders })
+                        .map(function (response) { return response.json(); })
+                        .do(function (data) { return console.log("All:" + JSON.stringify(data)); })
+                        .catch(this.handleError);
+                };
                 AppService.prototype.getReview = function (id) {
                     // return this.getPapers()
                     // .map((reviews: IReview[]) => reviews.find(p => p.id === id))//.do(data => console.log("All:" + JSON.stringify(data)));

@@ -55,6 +55,8 @@
  
          <td><a [routerLink]="['PaperEdit',{id:paper._id}]"  *ngIf="checkSubmissionStatus(paper.status,paper.deadline)">Edit</a>
          <a [routerLink]="['PaperDetail',{id:paper._id}]">Details</a>
+           <a href="#" (click)="updateStatus($event,'completed',paper._id)"  *ngIf="checkSubmissionStatus(paper.status,paper.deadline)"> Finish editing</a>
+
          </td>
         
                       </tr>

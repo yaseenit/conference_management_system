@@ -1,6 +1,6 @@
 export interface IPaper{
     title:string;
-    id:number;
+    id:string;
     status:string;
     fileId:string;
     authorList:PaperAuthor[];
@@ -55,7 +55,7 @@ export class Chair{
 export class Paper implements IPaper
 {
     title:string="";
-    id:number=0;
+    id:string="";
     status:string="";
     author:string="";
     fileId:string="";

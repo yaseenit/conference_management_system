@@ -48,10 +48,13 @@ System.register(['angular2/core', './paper-filter.pipe', '../service/app.service
                     this.showFile = !this.showFile;
                 };
                 AuthorPapersConferenceComponent.prototype.ngOnInit = function () {
-                    var _this = this;
                     console.log('init page');
                     this.conferenceId = this._routeParams.get('id');
                     this.pageTitle = 'Conference: ' + this._routeParams.get('title');
+                    this.fillPaperList();
+                };
+                AuthorPapersConferenceComponent.prototype.fillPaperList = function () {
+                    var _this = this;
                     this._paperService.getPapers().subscribe(function (papers) {
                         _this.papers = papers.filter(function (pap) {
                             return pap.conferenceId.indexOf(_this.conferenceId) != -1;
@@ -82,11 +85,24 @@ System.register(['angular2/core', './paper-filter.pipe', '../service/app.service
                     else
                         this.checkConferenceEndDate = true;
                 };
+                AuthorPapersConferenceComponent.prototype.updateStatus = function (event, status, submissionId) {
+                    var _this = this;
+                    event.preventDefault();
+                    this._paperService.submissionUpdateStatus(status, submissionId, this.conferenceId).subscribe(function (response) {
+                        console.log(response);
+                        _this.messageType = "success";
+                        _this.resultMessage = "Submission " + status + " successfully";
+                        _this.fillPaperList();
+                    }, function (error) {
+                        _this.messageType = "error";
+                        _this.resultMessage = error["message"];
+                    });
+                };
                 AuthorPapersConferenceComponent.prototype.stringAsDate = function (dateStr) {
                     return new Date(dateStr);
                 };
                 AuthorPapersConferenceComponent.prototype.checkSubmissionStatus = function (status, deadline) {
-                    if (status == "rejected") {
+                    if (status != "incompleted") {
                         // this.resultMessage="Cann't assigned reviewer to rejected paper";
                         //   this.messageType="error";
                         return false;

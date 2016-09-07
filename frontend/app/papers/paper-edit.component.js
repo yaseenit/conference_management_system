@@ -71,9 +71,9 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                     //    this.conferenceId= this._routeParams.get('id');
                     if (!this.paper) {
                         this.paper = new app_interface_1.Paper();
-                        var id = this._routeParams.get('id');
+                        this.id = this._routeParams.get('id');
                         // this.pageTitle += `: ${id}`;
-                        this.getPaper(id);
+                        this.getPaper(this.id);
                     }
                 };
                 // get submission details from api
@@ -216,9 +216,11 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                     }
                     if (check) {
                         try {
+                            this.paper.id = this.id;
+                            console.log(this.paper.id);
                             this._paperService.paperSubmissionEdit(this.paper).subscribe(function (response) {
-                                _this.messageType = "alert";
-                                _this.resultMessage = "there are no available any assigned submission for review";
+                                _this.messageType = "success";
+                                _this.resultMessage = "submission updated successfully";
                             }, function (error) {
                                 _this.messageType = "error";
                                 _this.resultMessage = error["message"];

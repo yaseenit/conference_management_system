@@ -42,7 +42,7 @@ System.register([], function(exports_1, context_1) {
                 //
                 function Paper() {
                     this.title = "";
-                    this.id = 0;
+                    this.id = "";
                     this.status = "";
                     this.author = "";
                     this.fileId = "";
