@@ -2,8 +2,13 @@ var Email = require('../models/emailModel');
 
 var reviewController = function (Review) {
 
+
+
+
+
     var post = function (req, res) {
         var review = new Review(req.body);
+       review.createdBy = req.user.username;
 
         review.save(function (err) {
             if (err) {
@@ -24,16 +29,12 @@ var reviewController = function (Review) {
                         res.send(review);
                         Email.to = user.username;
                         Email.subject = "CMS Review Delivery Confirmation mail";
-                        Email.text = "Dear Reviewer,you've successfully reviewed a submission ";//+req.body.title;
-                        Email.html = "<p>Dear Reviewer,<br>You have successfully reviewed a new paper. <br> Thanks a lot </p>"; //with title " +req.body.title+"<br>Best of luck with the Review Process</p>";
-                        // res.send(review._id);
+                        Email.html = "<p>Dear Reviewer,<br>You have successfully reviewed a paper. <br> Thanks a lot.</p>";
                         var emailController = require('../controllers/emailController')(Email);
                     }
                 });
             }
-
         });
-
     }
 
     var get = function (req, res) {
