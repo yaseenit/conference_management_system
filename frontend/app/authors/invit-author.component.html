@@ -1,0 +1,40 @@
+<div class="row">
+<div class="col-md-8">
+    <result-messages [(message)]='resultMessage' [(messageType)]='messageType'></result-messages>
+    <div class='has-error' *ngIf='errorMessage'>{{errorMessage}}</div>
+<fieldset>
+    <legend>Author(s)</legend>
+ <form [ngFormModel]="form" >
+  
+  <div class="form-group">
+    <label for="userName">Author Email Address </label>
+    <input type="text"  class="form-control" id="userName" placeholder="Email"   ngControl="userName" required >
+      <control-messages [control]="form.controls.userName"></control-messages>
+  </div>
+   <button type="submit" class="btn btn-primary btn-block" [disabled]="!form.valid" (click)="Invit($event,form.value)">Invit</button>
+  </form>
+ <div class='table-responsive'>
+            <table class='table' 
+            *ngIf='PaperReviewers && PaperReviewers.length' >
+                <thead>
+                    <tr>               
+                        <th>Author Email Address </th>              
+                    </tr>
+                </thead>
+                <tbody>
+                  <tr  *ngFor='#username of PaperReviewers'>
+                         <td>{{username}}</td>
+                         <td>    
+                       <button type="button" class="btn btn-default btn-danger"  (click)='removeAuthor(username)'> remove</button></td>
+                      </tr>
+                </tbody>
+            </table>
+        </div>
+</fieldset>
+
+   <div class='panel-footer'>
+        <a class='btn btn-default' (click)='onBack()' style='width:80px'>
+            <i class='glyphicon glyphicon-chevron-left'></i> Back
+        </a>
+    </div></div>
+</div>

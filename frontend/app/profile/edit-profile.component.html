@@ -1,0 +1,69 @@
+<div class="row">
+  <div class="col-md-8">
+    <result-messages [(message)]='resultMessage' [(messageType)]='messageType'></result-messages>
+
+    <fieldset *ngIf="messageType!='success'">
+      <legend>Edit Profile</legend>
+
+      <form [ngFormModel]="form">
+
+        <div class="form-group">
+          <label for="givenName">Given Name</label>
+          <input type="text" class="form-control" id="givenName" placeholder="Given Name" [(ngModel)]='_user.givenName' ngControl="givenName"
+            required>
+          <control-messages [control]="form.controls.givenName"></control-messages>
+
+        </div>
+        <div class="form-group">
+          <label for="familyName">Family Name</label>
+          <input type="text" class="form-control" id="familyName" placeholder="Family Name" ngControl="familyName" required [(ngModel)]='_user.familyName'>
+          <control-messages [control]="form.controls.familyName"></control-messages>
+
+        </div>
+        <div class="form-group">
+          <label for="institute">Institute</label>
+          <input type="text" class="form-control" id="institute" placeholder="Institute Name" ngControl="institute" required [(ngModel)]='_user.institute'>
+          <control-messages [control]="form.controls.institute"></control-messages>
+
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" class="form-control" id="email" placeholder="Email" ngControl="email" required [(ngModel)]='_user.username'>
+          <control-messages [control]="form.controls.email"></control-messages>
+
+        </div>
+
+
+
+        <div class="form-group">
+          <label for="address">address</label>
+          <input type="text" class="form-control" id="address" placeholder="address" ngControl="address" [(ngModel)]='_user.address'
+            (setAddress)="getAddress($event)" googleplace required>
+          <control-messages [control]="form.controls.address"></control-messages>
+
+        </div>
+
+        <div class="form-group">
+          <label for="city">city</label>
+          <input type="text" class="form-control" id="city" placeholder="city" ngControl="city" [(ngModel)]='_user.city'>
+        </div>
+
+        <div class="form-group">
+          <label for="state">state</label>
+          <input type="text" class="form-control" id="state" placeholder="state" ngControl="state" [(ngModel)]='_user.state'>
+        </div>
+        <div class="form-group">
+          <label for="zipCode">zipCode</label>
+          <input type="text" class="form-control" id="zipCode" placeholder="zipCode" ngControl="zipCode" [(ngModel)]='_user.zipCode'>
+        </div>
+        <div class="form-group">
+          <label for="country">country</label>
+          <input type="text" class="form-control" id="country" placeholder="country" ngControl="country" [(ngModel)]='_user.country'>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" [disabled]="!form.valid" (click)="update($event,form.value)">Update</button>
+      </form>
+    </fieldset>
+
+  </div>
+</div>
