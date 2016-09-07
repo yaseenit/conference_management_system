@@ -163,7 +163,7 @@ var job = new CronJob('00 30 01 * * 1-5', function() {
 
 
 	app.get('/api/v1/report', reportingController.getReport);
-
+	app.get('/api/v1/reportconf', reportingControllerAuthors.getReport);
 	//	app.put('/api/v1/chair/task/:taskID', userRoutes.doEditTask);
 	//   app.delete('/api/v1/chair/task/:taskID', userRoutes.deleteTask);
 
