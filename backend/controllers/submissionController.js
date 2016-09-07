@@ -122,10 +122,12 @@ var submissionController = function (Submission) {
         var data;
         if (req.body.status)
             data.status = req.body.status;
-        if (req.body.dateline)
+        if (req.body.deadline)
             data.deadline = new Date(req.body.deadline)
         var id = req.body._id || '';
         if (id && data) {
+                        console.log("data");
+            console.log(data);
             Submission.findOneAndUpdate({ _id: id }, data, function (err, submission) {
                 if (err)
                     res.status(500).send(err);
