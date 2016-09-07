@@ -42,6 +42,9 @@ System.register(['angular2/core', '../service/app.service', 'angular2/router'], 
                         this.getPaper(id);
                     }
                 };
+                PaperDetailComponent.prototype.stringAsDate = function (dateStr) {
+                    return new Date(dateStr);
+                };
                 PaperDetailComponent.prototype.getFile = function (event, generatedFileName, fileName) {
                     event.preventDefault();
                     this._paperService.getFiles(generatedFileName, fileName);

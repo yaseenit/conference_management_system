@@ -31,6 +31,10 @@ import {IPaper} from '../service/app.interface';
             this.getPaper(id);
         }
     }
+
+       stringAsDate(dateStr) {
+        return new Date(dateStr);
+    }
 getFile(event,generatedFileName,fileName)
  {
          event.preventDefault();

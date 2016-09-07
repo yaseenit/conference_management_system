@@ -189,10 +189,10 @@ removeReviewers(username:string, submissionId:string,conferenceId:string): Obser
 
   //for reviewergetReview(id: number): Observable<IReview> {
 
-  getReview(id: number): Observable<IReview> {
+  getReview(id: number) {
 
-    return this.getPapers()
-      .map((reviews: IReview[]) => reviews.find(p => p.id === id))//.do(data => console.log("All:" + JSON.stringify(data)));
+   // return this.getPapers()
+     // .map((reviews: IReview[]) => reviews.find(p => p.id === id))//.do(data => console.log("All:" + JSON.stringify(data)));
   }
 
   getReviews(): Observable<IReview[]> {

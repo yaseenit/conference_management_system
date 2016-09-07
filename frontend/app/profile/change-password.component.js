@@ -54,7 +54,7 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                     var _this = this;
                     event.preventDefault();
                     this._service.changePassword(value.password, value.oldPassword).subscribe(function (response) {
-                        _this.resultMessage = "Thanks for registration please check your email for activation";
+                        _this.resultMessage = "Your password has been changed";
                         _this.messageType = "success";
                     }, function (error) {
                         _this.resultMessage = error["_body"].message;

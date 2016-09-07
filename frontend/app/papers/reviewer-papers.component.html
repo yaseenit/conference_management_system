@@ -24,8 +24,8 @@
                                  <td><a [routerLink]="['PaperDetail',{id:task.submissionId}]">{{task.taskDesc}}</a></td>
 
                         <td>{{task.taskDesc}}</td>
-                        <td>{{task.createdOn}}</td>
-                                                                    <td>Details</td>
+                        <td>{{ stringAsDate(task.createdO) | date}}</td>
+                              <td>Details</td>
    
 
                         <td>

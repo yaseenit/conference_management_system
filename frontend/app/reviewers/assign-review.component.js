@@ -49,6 +49,7 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                     this.resultMessage = "";
                     this.messageType = "";
                     this.conferenceId = "";
+                    this.chkSubmissionStatus = false;
                     this.form = _fb.group({
                         userName: ['', common_1.Validators.compose([validation_service_1.ValidationService.emailValidator, common_1.Validators.required])]
                     });
@@ -64,10 +65,29 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                     this._reviewerService.getPaper(id).subscribe(function (respone) {
                         _this.PaperReviewers = respone.reviewers;
                         _this.conferenceId = respone.conferenceId;
+                        _this.checkSubmissionStatus(respone.status, respone.deadline);
                     }, function (error) {
                         _this.resultMessage = "Error , please try again later";
                         _this.messageType = "error";
                     });
+                };
+                AssigReviewComponent.prototype.checkSubmissionStatus = function (status, deadline) {
+                    if (status == "rejected") {
+                        this.chkSubmissionStatus = false;
+                        this.resultMessage = "Cann't assigned reviewer to rejected paper";
+                        this.messageType = "error";
+                    }
+                    else {
+                        var current = new Date();
+                        if (new Date(deadline).getTime() < current.getTime()) {
+                            this.resultMessage = "Cann't assigned reviewer, paper reach deadline" + deadline;
+                            this.messageType = "error";
+                            this.chkSubmissionStatus = false;
+                        }
+                        else {
+                            this.chkSubmissionStatus = true;
+                        }
+                    }
                 };
                 AssigReviewComponent.prototype.assign = function (event, value) {
                     var _this = this;

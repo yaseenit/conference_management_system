@@ -42,6 +42,7 @@ System.register(['angular2/core', './paper-filter.pipe', '../service/app.service
                     this.listFilter = '';
                     this.resultMessage = "";
                     this.messageType = "";
+                    this.checkConferenceEndDate = false;
                 }
                 AuthorPapersConferenceComponent.prototype.toggleFile = function () {
                     this.showFile = !this.showFile;
@@ -52,8 +53,8 @@ System.register(['angular2/core', './paper-filter.pipe', '../service/app.service
                     this.conferenceId = this._routeParams.get('id');
                     this.pageTitle = 'Conference: ' + this._routeParams.get('title');
                     this._paperService.getPapers().subscribe(function (papers) {
-                        _this.papers = papers.filter(function (con) {
-                            return con.conferenceId.indexOf(_this.conferenceId) != -1;
+                        _this.papers = papers.filter(function (pap) {
+                            return pap.conferenceId.indexOf(_this.conferenceId) != -1;
                         });
                         if (_this.papers.length == 0) {
                             _this.messageType = "alert";
@@ -64,6 +65,43 @@ System.register(['angular2/core', './paper-filter.pipe', '../service/app.service
                         _this.messageType = "erro";
                         _this.resultMessage = error["message"];
                     });
+                    this._paperService.getConferenceDetails(this.conferenceId).subscribe(function (response) {
+                        _this.checkConferenceDate(response.enddate);
+                    }, function (error) {
+                        _this.messageType = "erro";
+                        _this.resultMessage = error["message"];
+                    });
+                };
+                AuthorPapersConferenceComponent.prototype.checkConferenceDate = function (endate) {
+                    var current = new Date();
+                    if (new Date(endate).getTime() < current.getTime()) {
+                        this.resultMessage = "you  cann't make new submission after conference end date";
+                        this.messageType = "alert ";
+                        this.checkConferenceEndDate = false;
+                    }
+                    else
+                        this.checkConferenceEndDate = true;
+                };
+                AuthorPapersConferenceComponent.prototype.stringAsDate = function (dateStr) {
+                    return new Date(dateStr);
+                };
+                AuthorPapersConferenceComponent.prototype.checkSubmissionStatus = function (status, deadline) {
+                    if (status == "rejected") {
+                        // this.resultMessage="Cann't assigned reviewer to rejected paper";
+                        //   this.messageType="error";
+                        return false;
+                    }
+                    else {
+                        var current = new Date();
+                        if (new Date(deadline).getTime() < current.getTime()) {
+                            //    this.resultMessage="Cann't assigned reviewer, paper reach deadline" + deadline ;
+                            //     this.messageType="error";
+                            return false;
+                        }
+                        else {
+                            return true;
+                        }
+                    }
                 };
                 AuthorPapersConferenceComponent.prototype.getFile = function (event, generatedFileName, fileName) {
                     event.preventDefault();

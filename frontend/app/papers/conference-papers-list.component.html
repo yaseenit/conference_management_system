@@ -19,7 +19,8 @@
                     <tr>
                         <th>Title</th>
                         <th>Status</th>
-                        <th>Submission Date </th>
+                         <th>Submission Date </th>
+                        <th>DeadLine</th>
                         <th> Attached File </th>
                    
                         <th>Reviewers</th>
@@ -31,8 +32,9 @@
                     <tr *ngFor='#paper of papers'>
                         <td><a [routerLink]="['PaperDetail',{id:paper._id}]">{{paper.title}}</a></td>
                         <td>{{paper.status | lowercase}}</td>
-                        <td>{{paper.createdOn}}</td>
-                        <td>
+  <td> {{ stringAsDate(paper.createdOn) | date}}</td>
+    <td> {{ stringAsDate(paper.deadline) | date}}</td>            
+                <td>
                             <a href="#" (click)='getFile($event,paper.generatedFileName,paper.fileName)' target="_blank"><img src='./app/assets/images/pdf-icon.png' [style.width.px]='imageWidth' [style.height.px]='imageHeight'></a>
                         </td>
                         <td>
