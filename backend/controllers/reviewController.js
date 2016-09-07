@@ -101,11 +101,25 @@ var reviewController = function (Review) {
             }
         });
     }
+    var getReiewBySubmissionId = function(req,res){
+       var submissionId = req.params.submissionId;
+            Review.findOne({ conferenceId:req.params.conferenceId,submissionId: submissionId,createdBy: req.user.username }, function (err, review) {
+                if (err)
+                    res.status(500).send(err);
+                else if (!review) {
+                    res.status(400).send({ message: "You have not submitted any review to this submission in this conference. ", code: 400 });
+                }
+                else {
+                    res.json(review);
+                }
+            });
+    }
     return {
         post: post,
         get: get,
         getone: getone,
-        remove: remove
+        remove: remove,
+        getReiewBySubmissionId: getReiewBySubmissionId
 
     }
 }
