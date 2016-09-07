@@ -3,27 +3,38 @@
 
 // Load the module dependencies
 var config = require('./config'),
-	http = require('http'),
+	https = require('https'),
 	//socketio = require('socket.io'),
 	express = require('express'),
 	morgan = require('morgan'),
 	compress = require('compression'),
 	bodyParser = require('body-parser'),
 	methodOverride = require('method-override'),
-	//session = require('express-session'),
-	//MongoStore = require('connect-mongo')(session),
-	//flash = require('connect-flash'),
-	//passport = require('passport'),
+//session = require('express-session'),
+//MongoStore = require('connect-mongo')(session),
+//flash = require('connect-flash'),
+//passport = require('passport'),
+    fs = require('fs'),
     multer = require('multer');
 
 
 // Define the Express configuration method
 module.exports = function (db) {
+
+
+
+	var hskey = fs.readFileSync( './config/hacksparrow-key.pem');
+	var hscert = fs.readFileSync('./config/hacksparrow-cert.pem');
+
+	var options = {
+		key: hskey,
+		cert: hscert
+	};
 	// Create a new Express application instance
 	var app = express();
 
 	// Create a new HTTP server
-    var server = http.createServer(app);
+    var server = https.createServer(options,app);
 
     // Create a new Socket.io server
     //var io = socketio.listen(server);
