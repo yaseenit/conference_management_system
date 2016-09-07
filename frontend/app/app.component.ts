@@ -15,7 +15,6 @@ import {PaperCreateComponent} from './papers/paper-create.component';
 
 //for review
 import {ReviewListComponent} from './review/review-list.component';
-import {ReviewDetailComponent} from './review/review-detail.component';
 //
 import {WelcomeComponent} from './home/welcome.component';
 import {LogInComponent} from './login/login.component';
@@ -47,6 +46,10 @@ import {ReviewerPaperComponent} from './papers/reviewer-papers.component';
 import {PaperEditComponent} from './papers/paper-edit.component';
 
 import {ReviewCreateComponent} from './review/review-create.component';
+import {ReviewDetailComponent} from './review/review-detail.component';
+
+import {EditDeadLineComponent} from './papers/paper-edit-deadline.component';
+
 
 @Component({
   selector: 'pm-app',
@@ -66,7 +69,6 @@ import {ReviewCreateComponent} from './review/review-create.component';
     { path: '/papercreate/:id', name: 'PaperCreate', component: PaperCreateComponent },
 
     { path: '/review', name: 'Review', component: ReviewListComponent },
-    { path: '/review/:id', name: 'ReviewDetail', component: ReviewDetailComponent },
 
     { path: '/signup', name: 'SignUp', component: SignUpComponent },
     { path: '/editProfile', name: 'EditProfile', component: EditProfileComponent },
@@ -81,7 +83,11 @@ import {ReviewCreateComponent} from './review/review-create.component';
     { path: '/conferencePaper/:id/:title', name: 'ConferencePapers', component: ConferencePaperComponent },
     { path: '/reviewerPapers', name: 'ReviewerPapers', component: ReviewerPaperComponent },
     { path: '/paperEdit/:id', name: 'PaperEdit', component: PaperEditComponent },
-    { path: '/reviewCreate/:id', name: 'ReviewCreate', component: ReviewCreateComponent }
+    { path: '/reviewCreate/:id', name: 'ReviewCreate', component: ReviewCreateComponent },
+    { path: '/reviewDetail/:id', name: 'ReviewDetail', component: ReviewDetailComponent },
+     { path: '/editDeadline/:id/:conferenceId', name: 'EditDeadline', component: EditDeadLineComponent }
+
+
 
   ]
 )
@@ -111,14 +117,13 @@ export class AppComponent implements OnInit {
     });
   }
   ngOnInit(): any {
+    this._logInService.checkCredentials();
     this.messageType = "";
     this.resultMessage = "";
     this.isLog = this._logInService.isLog();
     if (this.isLog)
       this.currentUser = this._logInService.getCurrentUserEmail();
     console.log(this.currentUser);
-    //   componentHandler.upgradeDom();
-
 
   }
   removeProfile(event) {
@@ -128,7 +133,7 @@ export class AppComponent implements OnInit {
         if (res)
           console.log(`Confirmed: ${res}`);
         else
-          console.log("NOOOOOOOOOOOOOOOOOOOOOOOO")
+          console.log("NO")
       });
   }
   logOut() {
@@ -150,8 +155,6 @@ export class AppComponent implements OnInit {
           if (loginResponse["user"].is_confirmed == false) {
             this.resultMessage = "please check your email for activation link";
             this.messageType = "error";
-
-
           }
           else {
             localStorage.setItem('token', loginResponse["token"]);

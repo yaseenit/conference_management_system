@@ -43,11 +43,7 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                     this._taskUrl = this._apiUrl + "chair/tasks/";
                     // private _inviteUrl = this._apiUrl + "/addAuthor/";
                     //private _paperUrl=this._apiUrl+'submissions/';
-                    //for reviewer
                     this._paperUrl = this._apiUrl + 'submissions/';
-                    this._reviewUrl = 'api/papers/paperwithreview.json';
-                    //
-                    this._reviewerPaperUrl = this._apiUrl + "submissions2/";
                     this._profileUrl = this._apiUrl + 'profile/';
                     this._uploadUrl = this._apiUrl + 'submissions/';
                     this._conferenceUrl = this._apiUrl + "conference/";
@@ -103,14 +99,32 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                     };
                     req.send();
                 };
+                AppService.prototype.getReview = function (conferenceId, submissionId) {
+                    return this._http.get(this._apiUrl + conferenceId + "/review/" + submissionId, { headers: headers_1.ContentHeaders })
+                        .map(function (response) { return response.json(); })
+                        .do(function (data) { return console.log("All:" + JSON.stringify(data)); })
+                        .catch(this.handleError);
+                };
+                AppService.prototype.submitReview = function (review) {
+                    var expertise = review.expertise;
+                    var overallEvaluation = review.overallEvaluation;
+                    var summary = review.summary;
+                    var strongPoints = review.strongPoints;
+                    var weakPoints = review.weakPoints;
+                    var detailedComments = review.detailedComments;
+                    var conferenceId = review.conferenceId;
+                    var submissionId = review.submissionId;
+                    var body = JSON.stringify({ expertise: expertise, overallEvaluation: overallEvaluation, summary: summary, strongPoints: strongPoints, weakPoints: weakPoints, detailedComments: detailedComments, conferenceId: conferenceId, submissionId: submissionId });
+                    console.log(body);
+                    return this._http.post(this._apiUrl + review.conferenceId + "/review", body, { headers: headers_1.ContentHeaders })
+                        .map(function (response) { return response.json(); })
+                        .do(function (data) { return console.log("All:" + JSON.stringify(data)); })
+                        .catch(this.handleError);
+                };
                 AppService.prototype.handleError = function (error) {
                     console.error(error);
                     return Observable_1.Observable.throw(error.json().error || error);
                 };
-                //  getPaper(id: number): Observable<IPaper> {
-                //  return this.getPapers()
-                //    .map((products: IPaper[]) => products.find(p => p.id === id));
-                //  }
                 AppService.prototype.assignReviewers = function (username, submissionId, conferenceId) {
                     var body = JSON.stringify({ username: username, submissionId: submissionId });
                     console.log(body);
@@ -144,10 +158,8 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                         .catch(this.handleError);
                 };
                 AppService.prototype.getConferenceDetails = function (conferencId) {
-                    return this._http.get(this._conferenceUrl + conferencId, { headers: headers_1.ContentHeaders })
-                        .map(function (response) { return response.json(); })
-                        .do(function (data) { return console.log("All:" + JSON.stringify(data)); })
-                        .catch(this.handleError);
+                    return this.getAllConference()
+                        .map(function (conf) { return conf.find(function (p) { return p._id == conferencId; }); });
                 };
                 AppService.prototype.paperSubmission = function (_paper, attFile) {
                     var result = 0;
@@ -202,31 +214,17 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                         .do(function (data) { return console.log("All:" + JSON.stringify(data)); })
                         .catch(this.handleError);
                 };
-                AppService.prototype.getReview = function (id) {
-                    // return this.getPapers()
-                    // .map((reviews: IReview[]) => reviews.find(p => p.id === id))//.do(data => console.log("All:" + JSON.stringify(data)));
-                };
-                AppService.prototype.getReviews = function () {
-                    return this._http.get(this._reviewUrl)
+                AppService.prototype.editDeadline = function (deadline, _id, conferenceId) {
+                    var body = JSON.stringify({ deadline: deadline, _id: _id });
+                    // console.log(body);
+                    return this._http.post(this._apiUrl + conferenceId + '/submissions/editStatus', body, { headers: headers_1.ContentHeaders })
                         .map(function (response) { return response.json(); })
                         .do(function (data) { return console.log("All:" + JSON.stringify(data)); })
                         .catch(this.handleError);
                 };
-                AppService.prototype.addReview = function (id, expertise, evaluation, summary, strongPoints, weakPoints, comments) {
-                    var _this = this;
-                    // addReview(_review: any) {
-                    var body = JSON.stringify({ id: id, expertise: expertise, evaluation: evaluation, summary: summary, strongPoints: strongPoints, weakPoints: weakPoints, comments: comments });
-                    console.log(body);
-                    this._http.post(this._reviewUrl, body, { headers: headers_1.ContentHeaders })
-                        .subscribe(function (res) { return res.json()
-                        .catch(_this.handleError); });
-                };
                 AppService.prototype.createConference = function (_conf) {
                     var result;
                     var title = _conf.title;
-                    // var chair:any=new Chair();
-                    //chair.username=this.getCurrentUserEmail();
-                    //chair._id=localStorage.getItem("_id");
                     var chair = localStorage.getItem("_id");
                     var conferenceLocation = _conf.conferenceLocation;
                     var startdate = _conf.startdate;
@@ -238,16 +236,6 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                         .do(function (data) { return console.log("All:" + data); })
                         .catch(this.handleError);
                 };
-                AppService.prototype.getReviewList = function () {
-                    var username = this.getCurrentUserEmail();
-                    var token = this.getToken();
-                    var body = JSON.stringify({ token: token, username: username });
-                    return this._http.post(this._reviewUrl, body, { headers: headers_1.ContentHeaders })
-                        .map(function (response) { return response.json(); })
-                        .do(function (data) { return console.log("All:" + JSON.stringify(data)); })
-                        .catch(this.handleError);
-                };
-                //
                 AppService.prototype.changePassword = function (newPassword, oldPassword) {
                     var body = JSON.stringify({ oldPassword: oldPassword, newPassword: newPassword });
                     console.log(body);
@@ -319,7 +307,7 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                 };
                 AppService.prototype.checkCredentials = function () {
                     if (localStorage.getItem("token") == null) {
-                        this._router.navigate(['LogIn']);
+                        this._router.navigate(['Welcome']);
                     }
                 };
                 AppService.prototype.isLog = function () {

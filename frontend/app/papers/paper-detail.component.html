@@ -4,90 +4,86 @@
     </div>
 
     <div class='panel-body'>
-        <div class='row'>
-                <div class="panel-body" style="margin:20px">
+          <div class='row'>
+            <div class="panel-body" style="margin:20px">
 
-        <div class="row">
-            <div class="row-md-12">
-                <label class="col-md-3" style="text-align:left">Title:</label>
-                <div class="col-md-31">
-                    <p>{{paper.title}}</p>
-                </div>
-            </div>
-            <div class="row-md-12">
-                <label class="col-md-3" style="text-align:left">Created On:</label>
-                <div class="col-md-31">
-                    <p>{{ stringAsDate(paper.createdOn) | date}}</p>
-                </div>
-            </div>
-             <div class="row-md-12">
-                <label class="col-md-3" style="text-align:left">DeadLine:</label>
-                <div class="col-md-31">
-                    <p>{{ stringAsDate(paper.deadline) | date}}</p>
-                </div>
-            </div>
-             <div class="row-md-12">
-                <label class="col-md-3" style="text-align:left">Status:</label>
-                <div class="col-md-31">
-                    <p>{{paper.status}}</p>
-                </div>
-            </div>
-            <br>
-                <div class="row-md-12">
-                <label class="col-md-2" style="text-align:left">Abstract:</label>
-                <div class="col-md-32" style="text-align:left">
-                    <p>{{paper.abstract}}</p>
-                </div>
-            </div>
-            <br>
+                <div class="row">
+                    <div class="row">
+                        <label class="col-md-3" style="text-align:left">Title:</label>
+                        <div class="col-md-9">
+                            <p>{{paper.title}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-md-3" style="text-align:left">Created On:</label>
+                        <div class="col-md-9">
+                            <p>{{ stringAsDate(paper.createdOn) | date}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-md-3" style="text-align:left">DeadLine:</label>
+                        <div class="col-md-9">
+                            <p>{{ stringAsDate(paper.deadline) | date}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-md-3" style="text-align:left">Status:</label>
+                        <div class="col-md-9">
+                            <p>{{paper.status}}</p>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <label class="col-md-3" style="text-align:left">Abstract:</label>
+                        <div class="col-md-9" style="text-align:left">
+                            <p>{{paper.abstract}}</p>
+                        </div>
+                    </div>
+                    <br>
 
-            <div class="row-md-12">
-                <label class="col-md-2 control-label" style="text-align:left">Author(s):</label>
-                <table class="table table-striped table-hover table-bordered ">
-                    <thead>
-                        <tr>
-                            <th>Given Name</th>
-                            <th>Family Name</th>
-                            <th>Email</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="#paper of paper.authorList">
-                            <td>{{paper.givenName}}</td>
-                            <td>{{paper.familyName}}</td>
-                            <td>{{paper.email}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <br>
-            <div class="row-md-12">
-                <label class="col-md-2 " style="text-align:left;">Keywords:</label>
-                <div class="col-md-32" style="text-align:left">
-                    <p>{{paper.keywords}}</p>
+                    <div class="row">
+                        <label class="col-md-3 control-label" style="text-align:left">Author(s):</label>
+                        <div class="col-md-9" style="text-align:left">
+
+                            <table class="table table-striped table-hover table-bordered ">
+                                <thead>
+                                    <tr>
+                                        <th>Given Name</th>
+                                        <th>Family Name</th>
+                                        <th>Email</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="#paper of paper.authorList">
+                                        <td>{{paper.givenName}}</td>
+                                        <td>{{paper.familyName}}</td>
+                                        <td>{{paper.email}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    <br>
+                    <div class="row">
+                        <label class="col-md-3" style="text-align:left;">Keywords:</label>
+                        <div class="col-md-9" style="text-align:left">
+                            <p>{{paper.keywords}}</p>
+                        </div>
+                    </div>
+                    <br>
+
+                    <div class="row">
+                        <label class="col-md-3" style="text-align:left">Uploaded Paper</label>
+                        <div class="col-md-9" style="text-align:left">
+                            <a href="#" (click)='getFile($event,paper.generatedFileName,paper.fileName)' target="_blank">
+                                <img src='./app/assets/images/paper.ico' [style.width.px]='imageWidth' [style.height.px]='imageHeight'></a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <br>
-  
-            <div class="row-md-12">
-                <label class="col-md-2 " style="text-align:left">Uploaded Paper</label>
-                <div class="col-md-32" style="text-align:left">
-
-
-                    <a  href="#" (click)='getFile($event,paper.generatedFileName,paper.fileName)' target="_blank">
-                        <img src='./app/assets/images/paper.ico' [style.width.px]='imageWidth' [style.height.px]='imageHeight'></a>
-
-   
-                </div>
+                <hr>
             </div>
         </div>
-        <hr>
-           
-
-
-         
-        </div>
-    </div>
 
     <div class='panel-footer'>
     

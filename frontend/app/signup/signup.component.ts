@@ -95,6 +95,8 @@ export class SignUpComponent {
 
     public address: Object;
     getAddress(place: Object) {
+        if(this.address)
+        {
         this.address = place['formatted_address'];
         var location = place['geometry']['location'];
         var lat = location.lat();
@@ -116,6 +118,7 @@ export class SignUpComponent {
             if (addressType == "locality") {
                 (<Control>this.form.controls["city"]).updateValue(place['address_components'][i].long_name);
             }
+        }
         }
 
     }
