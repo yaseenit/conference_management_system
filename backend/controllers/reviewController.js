@@ -141,7 +141,7 @@ var reviewController = function (Review) {
         var id = req.body._id;
         delete data._id;
 
-        Submission.findOneAndUpdate({ _id: id }, data, function (err, review) {
+        Review.findOneAndUpdate({ _id: id }, data, function (err, review) {
             if (err)
                 res.status(500).send(err);
             else if (!review) {
