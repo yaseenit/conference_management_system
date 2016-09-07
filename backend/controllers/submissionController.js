@@ -4,7 +4,7 @@ var uploadedFilesPath = require('../config/configurations').uploadedFilesPath;
 var randomstring = require("randomstring");
 
 var submissionController = function (Submission) {
-    
+
     var post = function (req, res) {
         var conferenceId = req.params.conferenceId;
         var submission = new Submission(req.body);
@@ -61,24 +61,10 @@ var submissionController = function (Submission) {
         // }
     }
 
-//edit ahmed 6.9
-    var getAllUserReviews= function (req,res){
-      //  var uname=req.user.username;
-
-  Submission.find({reviewers:""}, function (err, submissions) {
-            if (err)
-                res.status(500).send(err);
-            else
-                res.json(submissions);
-        });
-    }
-
-    
-
     var get = function (req, res) {
 
         var query = {
-            createdBy:req.user.username
+            createdBy: req.user.username
         };
         Submission.find(query, function (err, submissions) {
             if (err)
@@ -109,22 +95,54 @@ var submissionController = function (Submission) {
     }
 
     var put = function (req, res) {
-        req.submission.title = req.body.title;
-        req.submission.authorGivenName = req.body.authorGivenName;
-        req.submission.authorFamilyName = req.body.authorFamilyName;
-        req.submission.authorEmail = req.body.authorEmail;
-        //  req.submission.submissionId=req.body.submissionId;
-        req.submission.keywords = req.body.keywords;
-        req.submission.status = req.body.status;
-        req.submission.save(function (err) {
+        var data = req.body;
+        delete data.status;
+        delete data.fileName;
+        delete data.generatedFileName;
+        delete data.deadline;
+        delete data.createdOn;
+        delete data.conferenceId;
+        delete data.reviewers;
+        delete data.createdBy;
+
+        var id = req.body._id;
+        delete data._id;
+
+        Submission.findOneAndUpdate({ _id: id }, data, function (err, submission) {
             if (err)
                 res.status(500).send(err);
+            else if (!submission) {
+                res.status(400).send({ message: "given submission id does not existed ", code: 400 });
+            }
             else {
-                res.json(req.submission);
+                res.json(submission);
             }
         });
     }
-
+    var editStatus = function (req, res) {
+        var data = {};
+        if (req.body.status)
+            data.status = req.body.status;
+        if (req.body.deadline)
+            data.deadline = new Date(req.body.deadline)
+        var id = req.body._id || '';
+        if (id && data) {
+            console.log("data");
+            console.log(data);
+            Submission.findOneAndUpdate({ _id: id }, data, function (err, submission) {
+                if (err)
+                    res.status(500).send(err);
+                else if (!submission) {
+                    res.status(400).send({ message: "given submission id does not existed ", code: 400 });
+                }
+                else {
+                    res.json(submission);
+                }
+            });
+        } else {
+            res.status(400).send({ message: "submission id and data should be provided.", code: 400 });
+        }
+    }
     var patch = function (req, res) {
         if (req.body._id)
             delete req.body._id;
@@ -147,39 +165,43 @@ var submissionController = function (Submission) {
             if (err)
                 res.status(500).send(err);
             else if (submission) {
-                req.submission = submission;
-                req.submission.remove(function (err) {
-                    if (err)
-                        res.status(500).send(err);
-                    else {
-                        var user = req.user;
-                        user.submissions.pull(submission._id);
-                        //TODO remove reviews and paper
+                if (req.isChair || (submission.createdBy.toUpperCase() === req.uesr.username.toUpperCase())) // chair or user own this
+                {
+                    submission.remove(function (err) {
+                        if (err)
+                            res.status(500).send(err);
+                        else {
+                            var user = req.user;
+                            user.submissions.pull(submission._id);
+                            fs.unlink(uploadedFilesPath + submission.generatedFileName);//remove the related paper file
+                            //TODO remove reviews 
 
-                        user.save(function (err, user) {
-                            if (err) {
-                                req.submission.save();
-                                res.status(500).send(err);
-                                return;
-                            }
-                            else {
-                                res.status(204).json({ message: "Submission has be deleted.", code: 204 });
-                            }
-                        });
-                    }
-                });
-            }
+                            user.save(function (err, user) {
+                                if (err) {
+                                    res.status(500).send(err);
+                                    return;
+                                }
+                                else {
+                                    res.status(204).json({ message: "Submission has be deleted.", code: 204 });
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    res.status(403);
+                    res.json({
+                        "status": 403,
+                        "message": "Not Authorized"
+                    });
+                }
+            }// Not found
             else {
                 var user = req.user;
                 user.submissions.pull(submission._id);
                 user.save(function (err, user) {
                     if (err) {
-                        req.submission.save();
                         res.status(500).send(err);
                         return;
-                    }
-                    else {
-                        res.status(204).json({ message: "Submission has be deleted.", code: 204 });
                     }
                 });
                 res.status(404).send('no submission for the requested submissionId is found to be deleted');
@@ -194,7 +216,7 @@ var submissionController = function (Submission) {
         put: put,
         removed: removed,
         patch: patch,
-        getAllUserReviews:getAllUserReviews
+        editStatus: editStatus
     }
 }
 

@@ -11,7 +11,7 @@ var downloadController = function (app) {
 
         fs.stat(uploadedFilesPath + filename, function (err, stat) {
             if (err == null) {//TODO urgent
-                if (req.user.role.toLowerCase() == 'chair') //|| req.user.submissions.contains.contains(filename) || reviwes.contains(filename) ) // TODO check if the user have access to this file
+                if (true)//(req.user.role.toLowerCase() == 'chair') //|| req.user.submissions.contains.contains(filename) || reviwes.contains(filename) ) // TODO check if the user have access to this file
                 {
 
                     res.download(uploadedFilesPath + filename, filename, function (err) {
@@ -24,9 +24,9 @@ var downloadController = function (app) {
                         }
                     });
                 }
-                else {
-                    res.status(403).json({ message: "Sorry! you can't see that.", code: 403 });
-                }
+                // else {
+                //     res.status(403).json({ message: "Sorry! you can't see that.", code: 403 });
+                // }
             } else if (err.code == 'ENOENT') {
                 res.status(404).json({ message: "requested file does not exsited.", code: 404 });
             } else {

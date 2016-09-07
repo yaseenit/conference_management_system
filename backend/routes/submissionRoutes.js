@@ -15,7 +15,8 @@ var create=submissionController.post;
 var update=submissionController.put;
 var remove=submissionController.removed;
 var patch=submissionController.patch;
-var getRev=submissionController.getAllUserReviews;
+var editStatus=submissionController.editStatus;
+
     return {
         getOne: getOne,
         getAll: getAll,
@@ -23,7 +24,7 @@ var getRev=submissionController.getAllUserReviews;
         update: update,
         remove: remove,
         patch: patch,
-        getRev:getRev
+        editStatus:editStatus
     }
 }
 
