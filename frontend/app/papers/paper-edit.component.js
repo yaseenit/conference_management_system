@@ -76,6 +76,7 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                         this.getPaper(id);
                     }
                 };
+                // get submission details from api
                 PaperEditComponent.prototype.getPaper = function (id) {
                     var _this = this;
                     this._paperService.getPaper(id)
@@ -87,6 +88,7 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                         _this.arrayIndexKeyword = _this.keywords.length;
                     }, function (error) { return _this.errorMessage = error; });
                 };
+                // add author to paperAuthor Array
                 PaperEditComponent.prototype.addAuthor = function (event, value) {
                     event.preventDefault();
                     if (this.checkAuthor(value.email)) {
@@ -99,6 +101,7 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                         this.errorMessage = 'Email Address already exists';
                     this.checkKey = false;
                 };
+                // clear author form after adding author to array 
                 PaperEditComponent.prototype.clearAuthorForm = function () {
                     for (var name in this.authorForm.controls) {
                         this.authorForm.controls[name].updateValue("");

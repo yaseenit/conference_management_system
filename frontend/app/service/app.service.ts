@@ -245,21 +245,15 @@ removeReviewers(username:string, submissionId:string,conferenceId:string): Obser
   //
 
 
-  changePassword(password, oldPassword) {
+  changePassword(newPassword, oldPassword):Observable<any> {
 
-    let body = JSON.stringify({ oldPassword, password });
-    this._http.post("", body, { headers: ContentHeaders })
-      .do(data => console.log("All:" + JSON.stringify(data)))
-      .subscribe(
-      response => {
-        //   this._router.navigate(['Welcome']);
-      },
-      error => {
-        // alert(error.text());
-        console.log(error.json().status);
-
-      }
-      );
+    let body = JSON.stringify({ oldPassword, newPassword });
+    console.log(body);
+   return this._http.post(this._profileUrl+"changePassword", body, { headers: ContentHeaders })
+          .map((response: Response) => <any>response.json())
+.catch(this.handleError)
+      .do(data => console.log("All:" + JSON.stringify(data)));
+     
   }
 
   getUserProfile(): Observable<IUser> {

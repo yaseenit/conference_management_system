@@ -21,7 +21,10 @@
                         <th>Status</th>
                         <th>Submission Date </th>
                         <th> Attached File </th>
+                   
                         <th>Reviewers</th>
+                       <th> Accept </th>
+                        <th>Reject</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -32,11 +35,11 @@
                         <td>
                             <a href="#" (click)='getFile($event,paper.generatedFileName,paper.fileName)' target="_blank"><img src='./app/assets/images/pdf-icon.png' [style.width.px]='imageWidth' [style.height.px]='imageHeight'></a>
                         </td>
-
                         <td>
-                            <a [routerLink]="['AssigReview',{id:paper._id}]" style='width:80px'>
-Reviewers        </a>
+                            <a [routerLink]="['AssigReview',{id:paper._id}]" style='width:80px'>Reviewers</a>
                         </td>
+                         <td>Accept</td>
+                        <td>Reject</td>
 
                     </tr>
                 </tbody>

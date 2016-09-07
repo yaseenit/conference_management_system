@@ -82,8 +82,6 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                         console.log(response);
                         if (!response["existed"]) {
                             _this._signupService.signup(_this._user).subscribe(function (response) {
-                                console.log(response);
-                                // this.signupResult=response;
                                 _this.resultMessage = "Thanks for registration please check your email for activation";
                                 _this.messageType = "success";
                             }, function (error) {
