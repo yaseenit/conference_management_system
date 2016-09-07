@@ -14,8 +14,7 @@ module.exports = function (app) {
 	var downloadController = require('../controllers/downloadFileController')(app);
     var reportingController = require('../controllers/reportingController')();
     var conferenceController = require('../controllers/conferenceController')();
-
-
+var reportingControllerAuthors = require('../controllers/reportingControllerAuthors')();
 
 	//var user = require('./users.js');
 
@@ -163,7 +162,7 @@ var job = new CronJob('00 30 01 * * 1-5', function() {
 
 
 	app.get('/api/v1/report', reportingController.getReport);
-
+	app.get('/api/v1/reportconf', reportingControllerAuthors.getReport);
 	//	app.put('/api/v1/chair/task/:taskID', userRoutes.doEditTask);
 	//   app.delete('/api/v1/chair/task/:taskID', userRoutes.deleteTask);
 
