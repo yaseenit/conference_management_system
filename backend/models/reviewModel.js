@@ -18,7 +18,7 @@ var reviewModel = new Schema({
         type: String, required: ' Review Summary is required'},
     strongPoints: { type: String },
         weakPoints: { type: String },
-        detailedComments: { type: String, required: 'Detailed Comments are required' },
+        comment: { type: String, required: 'Detailed Comments are required' },
         deadline: {
             type: Date,
             // Create a default 'created' value
