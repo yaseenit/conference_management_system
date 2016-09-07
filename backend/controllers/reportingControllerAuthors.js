@@ -7,7 +7,7 @@ var reportingControllerAuthors = function () {
    { $project: { authors: 1 } } 
   , { $unwind: '$authors' } /* this converts arrays into unique documents for counting */
   , { $group: { /* execute 'grouping' */
-          _id: { authors: '$authors',conftitle:'$title' } /* using the 'token' value as the _id */
+          _id: { conftitle:'$title',authors: '$authors'} /* using the 'token' value as the _id */
         , count: { $sum: 1 } /* create a sum value */
       }
     }
