@@ -238,9 +238,9 @@ var userController = function (User) {
 
     var changeProfilePassword = function (req, res) {
         var oldPassword = req.body.oldPassword || '';
-        var newPasword = req.body.newPasword || '';
+        var newPassword = req.body.newPassword || '';
 
-        if (newPasword == '' || oldPassword == '') {
+        if (newPassword == '' || oldPassword == '') {
             res.status(400);
             res.json({
                 "status": 400,
@@ -249,7 +249,7 @@ var userController = function (User) {
             return;
         }
     if (req.user.authenticate(oldPassword)) {
-        req.user.password = newPasword;
+        req.user.password = newPassword;
         req.user.save(function (err) {
             if (err)
                 res.status(500).send(err);
