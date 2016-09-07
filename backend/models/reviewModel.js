@@ -23,8 +23,8 @@ var reviewModel = new Schema({
         type: String,
         required: true
     },
-    conferenceId: { type: mongoose.Schema.Types.ObjectId, ref: 'Conference' },
-    submissionId: { type: mongoose.Schema.Types.ObjectId, ref: 'Submission' }
+    conferenceId: { type: mongoose.Schema.Types.ObjectId, ref: 'Conference',required: 'conferece id is required.' },
+    submissionId: { type: mongoose.Schema.Types.ObjectId, ref: 'Submission',required: 'submission id is required.' }
     });
 
 
