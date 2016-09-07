@@ -239,16 +239,13 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                         .catch(this.handleError);
                 };
                 //
-                AppService.prototype.changePassword = function (password, oldPassword) {
-                    var body = JSON.stringify({ oldPassword: oldPassword, password: password });
-                    this._http.post("", body, { headers: headers_1.ContentHeaders })
-                        .do(function (data) { return console.log("All:" + JSON.stringify(data)); })
-                        .subscribe(function (response) {
-                        //   this._router.navigate(['Welcome']);
-                    }, function (error) {
-                        // alert(error.text());
-                        console.log(error.json().status);
-                    });
+                AppService.prototype.changePassword = function (newPassword, oldPassword) {
+                    var body = JSON.stringify({ oldPassword: oldPassword, newPassword: newPassword });
+                    console.log(body);
+                    return this._http.post(this._profileUrl + "changePassword", body, { headers: headers_1.ContentHeaders })
+                        .map(function (response) { return response.json(); })
+                        .catch(this.handleError)
+                        .do(function (data) { return console.log("All:" + JSON.stringify(data)); });
                 };
                 AppService.prototype.getUserProfile = function () {
                     var _token = this.getToken();

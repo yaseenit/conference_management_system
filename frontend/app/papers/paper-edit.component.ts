@@ -49,6 +49,7 @@ export class PaperEditComponent implements OnInit {
        
 
    }
+   // get submission details from api
     getPaper(id: string) {
         this._paperService.getPaper(id)
             .subscribe(
@@ -62,6 +63,7 @@ export class PaperEditComponent implements OnInit {
             error => this.errorMessage = <any>error);
             
     }
+// add author to paperAuthor Array
   addAuthor(event, value: any) {
     event.preventDefault();
     if (this.checkAuthor(value.email)) {
@@ -75,6 +77,7 @@ export class PaperEditComponent implements OnInit {
        this.checkKey = false;
   }
 
+// clear author form after adding author to array 
   clearAuthorForm(): void {
     for (var name in this.authorForm.controls) {
       (<Control>this.authorForm.controls[name]).updateValue("");
