@@ -248,7 +248,7 @@ var userController = function (User) {
             });
             return;
         }
-    if (User.authenticate(oldPassword)) {
+    if (req.user.authenticate(oldPassword)) {
         req.user.password = newPasword;
         req.user.save(function (err) {
             if (err)
