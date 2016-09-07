@@ -108,7 +108,7 @@ var job = new CronJob('00 30 01 * * 1-5', function() {
 
 
 
-	app.post('/api/v1/review/', reviewRoutes.create);
+	app.post('/api/v1/:conferenceId/review/', reviewRoutes.create);
     app.get('/api/v1/review/', reviewRoutes.getAll); // as an author
 	app.delete('/api/v1/review/:reviewId', reviewRoutes.remove);
 	app.get('/api/v1/review/:reviewId', reviewRoutes.getOne);
