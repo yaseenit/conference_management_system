@@ -2,7 +2,9 @@
 'use strict';
 // Load the module dependencies
 var mongoose = require('mongoose'),
-	crypto = require('crypto'),
+	//	crypto = require('crypto'),
+    bcrypt = require('bcrypt'),
+    SALT_WORK_FACTOR = 10,
 	Schema = mongoose.Schema;
 
 
@@ -13,11 +15,12 @@ var UserSchema = new Schema({
 		// Validate the email format
 		match: [/.+\@.+\..+/, "Please fill a valid email address"],
 		// Set a unique 'username' index
-		unique: true,
+		//unique: true,
 		// Validate 'username' value existance
 		required: 'Username is required',
 		// Trim the 'username' field
 		trim: true,
+		index: { unique: true },
 		lowercase: true
 	},
 	password: {
@@ -84,30 +87,58 @@ var UserSchema = new Schema({
 //      return this.institution_street + ' ' + this.institution_postal_code + ' ' + this.institution_city+ ' ' + this.institution_state + ' ' + this.institution_country;
 // });
 // Use a pre-save middleware to hash the password
-UserSchema.pre('save', function (next) {
-	if (this.password) {
-		//this.salt = //new Buffer(crypto.randomBytes(16)).toString('base64');
-		this.password = this.hashPassword(this.password);
-	}
+// UserSchema.pre('save', function (next) {
+// 	if (this.password) {
+// 		//this.salt = //new Buffer(crypto.randomBytes(16)).toString('base64');
+// 		this.password = this.hashPassword(this.password);
+// 	}
 
-	next();
+// 	next();
+// });
+
+
+UserSchema.pre('save', function (next) {
+    var user = this;
+
+    // only hash the password if it has been modified (or is new)
+    if (!user.isModified('password')) return next();
+
+    // generate a salt
+    bcrypt.genSalt(SALT_WORK_FACTOR, function (err, salt) {
+        if (err) return next(err);
+
+        // hash the password using our new salt
+        bcrypt.hash(user.password, salt, function (err, hash) {
+            if (err) return next(err);
+
+            // override the cleartext password with the hashed one
+            user.password = hash;
+            next();
+        });
+    });
 });
 
-// Create an instance method for hashing a password
-UserSchema.methods.hashPassword = function (password) {
-	//console.log("salt " + this.salt);
-	return crypto.pbkdf2Sync(password, require('../config/jwt_secret.js')(), 500, 64,'sha512').toString('base64');
+UserSchema.methods.authenticate = function (candidatePassword) {
+	return bcrypt.compareSync(candidatePassword, this.password);
 };
+
+
+
+// // Create an instance method for hashing a password
+// UserSchema.methods.hashPassword = function (password) {
+// 	//console.log("salt " + this.salt);
+// 	return crypto.pbkdf2Sync(password, require('../config/jwt_secret.js')(), 500, 64, 'sha512').toString('base64');
+// };
 //instance method
 // Create an instance method for authenticating user
-UserSchema.methods.authenticate = function (password) {
-	console.log("input password " + password)
-	console.log("saverd password " + this.password)
-	console.log("hashed password " + this.hashPassword(password))
+// UserSchema.methods.authenticate = function (password) {
+// 	console.log("input password " + password)
+// 	console.log("saverd password " + this.password)
+// 	console.log("hashed password " + this.hashPassword(password))
 
 
-	return this.password === this.hashPassword(password);
-};
+// 	return this.password === this.hashPassword(password);
+// };
 
 
 // // Find possible not used username
