@@ -1,3 +1,6 @@
+var Submission = require('../models/submissionModel');
+
+
 var userController = function (User) {
 
     var post = function (req, res) {
@@ -14,20 +17,7 @@ var userController = function (User) {
         }
     }
 
-    var get = function (req, res) {
 
-        var query = {};
-
-        if (req.query.genre) {
-            query.genre = req.query.genre;
-        }
-        User.find(query, function (err, users) {
-            if (err)
-                res.status(500).send(err);
-            else
-                res.json(users);
-        });
-    }
     var getAllAuthors = function (req, res) {
         var query = {};
         query.role = "AUTHOR";
@@ -62,9 +52,12 @@ var userController = function (User) {
             });
     }
     var getAllSubmissions = function (req, res) {
-        var query = {};
-        User.find(query)
-            .populate('submissions') //,'attribure attribure ...')
+        var conferenceId = req.params.conferenceId;
+        var query = {
+            'conferenceId' : conferenceId
+        };
+        Submission.find(query)
+           // .populate('submissions') //,'attribure attribure ...')
             .exec(function (err, submissions) {
                 if (err)
                     res.status(500).send(err);
@@ -166,9 +159,32 @@ var userController = function (User) {
     }
 
     var getProfile = function (req, res) {
+    // var get = function (req, res) {
 
+    //     var query = {};
+
+    //     if (req.query.genre) {
+    //         query.genre = req.query.genre;
+    //     }
+    //     User.find(query, function (err, users) {
+    //         if (err)
+    //             res.status(500).send(err);
+    //         else
+    //             res.json(users);
+    //     });
+    // }
         if (req.user) {
-            res.json(req.user);
+        User.findById(req.user._id)
+            .populate('reviews')//,'submissions') TODO
+            .populate('conferences')
+            .populate('submissions')
+            .populate('tasks')
+            .exec(function (err, user) {
+                if (err)
+                    res.status(500).send(err);
+                else
+                    res.json(user);
+            });
         } else {//should not reach here
             res.status(500).json({ message: "request for unlogged in user", code: 500 })
         }
@@ -220,7 +236,6 @@ var userController = function (User) {
 
     return {
         post: post,
-        get: get,
         getAllAuthors: getAllAuthors,
         getAllReviewers: getAllReviewers,
         getAllReviews: getAllReviews,

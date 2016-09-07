@@ -3,15 +3,15 @@ var fs = require("fs");
 var uploadedFilesPath = require('../config/configurations').uploadedFilesPath;
 var randomstring = require("randomstring");
 
-
-var patg
 var submissionController = function (Submission) {
-
+    
     var post = function (req, res) {
+        var conferenceId = req.params.conferenceId;
         var submission = new Submission(req.body);
+        submission.conferenceId = conferenceId;// we need to add this submission to conference
+        submission.createdBy = req.user.username;
         var generatedFileName = randomstring.generate();
         submission.generatedFileName = generatedFileName;
-        console.log(submission);
 
         fs.writeFile(uploadedFilesPath + generatedFileName, new Buffer(req.body.based64_data, 'base64'), function (err) {
             if (err) {
@@ -61,13 +61,25 @@ var submissionController = function (Submission) {
         // }
     }
 
+//edit ahmed 6.9
+    var getAllUserReviews= function (req,res){
+      //  var uname=req.user.username;
+
+  Submission.find({reviewers:""}, function (err, submissions) {
+            if (err)
+                res.status(500).send(err);
+            else
+                res.json(submissions);
+        });
+    }
+
+    
+
     var get = function (req, res) {
 
-        var query = {};
-
-        if (req.query._Id) {
-            query._Id = req.query._Id;
-        }
+        var query = {
+            createdBy:req.user.username
+        };
         Submission.find(query, function (err, submissions) {
             if (err)
                 res.status(500).send(err);
@@ -91,7 +103,7 @@ var submissionController = function (Submission) {
                 // next();
             }
             else {
-                res.status(404).send('no submission for the requested submissionId is found');
+                res.status(404).json({ message: 'no submission for the requested submissionId is found', code: 404 });
             }
         });
     }
@@ -142,6 +154,8 @@ var submissionController = function (Submission) {
                     else {
                         var user = req.user;
                         user.submissions.pull(submission._id);
+                        //TODO remove reviews and paper
+
                         user.save(function (err, user) {
                             if (err) {
                                 req.submission.save();
@@ -179,8 +193,8 @@ var submissionController = function (Submission) {
         getone: getone,
         put: put,
         removed: removed,
-        patch: patch
-
+        patch: patch,
+        getAllUserReviews:getAllUserReviews
     }
 }
 

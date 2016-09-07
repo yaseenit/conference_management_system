@@ -31,11 +31,12 @@ module.exports = function () {
 	});
 
 	// Load the application models 
+	require('../models/submissionModel');
+	require('../models/conferenceModel');
+	require('../models/reviewModel')
 	require('../models/userModel');
 	require('../models/articleModel');
-	require('../models/submissionModel');
-	//require('../models/conferenceModel');
-	require('../models/reviewModel');
+;
 	// Return the Mongoose connection instance
 	return db;
 };

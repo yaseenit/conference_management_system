@@ -15,15 +15,15 @@ var create=submissionController.post;
 var update=submissionController.put;
 var remove=submissionController.removed;
 var patch=submissionController.patch;
-
+var getRev=submissionController.getAllUserReviews;
     return {
         getOne: getOne,
         getAll: getAll,
         create: create,
         update: update,
         remove: remove,
-        patch: patch
-
+        patch: patch,
+        getRev:getRev
     }
 }
 

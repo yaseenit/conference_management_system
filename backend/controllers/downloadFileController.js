@@ -10,7 +10,7 @@ var downloadController = function (app) {
         var filename = req.params.fileID;
 
         fs.stat(uploadedFilesPath + filename, function (err, stat) {
-            if (err == null) {
+            if (err == null) {//TODO urgent
                 if (req.user.role.toLowerCase() == 'chair') //|| req.user.submissions.contains.contains(filename) || reviwes.contains(filename) ) // TODO check if the user have access to this file
                 {
 

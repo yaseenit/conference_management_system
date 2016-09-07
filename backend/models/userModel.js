@@ -6,7 +6,6 @@ var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
 
 
-
 // Define a new 'UserSchema'
 var UserSchema = new Schema({
 	username: {
@@ -63,7 +62,9 @@ var UserSchema = new Schema({
 	// registration by clicking on a registration 
 	// link sent via email
 	reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],//review id 
-	submissions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Submission' }]// a submission id here that this user is author for this submission
+	submissions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Submission' }],// a submission id here that this user is author for this submission
+    conferences: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Conference' }],
+	tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Task' }]
 
 });
 
@@ -94,7 +95,7 @@ UserSchema.pre('save', function (next) {
 // Create an instance method for hashing a password
 UserSchema.methods.hashPassword = function (password) {
 	console.log("salt " + this.salt);
-	return crypto.pbkdf2Sync(password, this.salt, 10000, 64).toString('base64');
+	return crypto.pbkdf2Sync(password, this.salt, 10000, 64,'sha512').toString('base64');
 };
 //instance method
 // Create an instance method for authenticating user

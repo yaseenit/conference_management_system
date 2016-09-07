@@ -43,6 +43,7 @@ module.exports = function (app) {
 
 	app.post('/login', auth.login);
 	app.post('/register', auth.register);
+	app.post('/isRegister', auth.is_register);
 	app.get('/confirm_registertion/:token', auth.confirm_registertion);
 
 	/****************************************************/
@@ -71,23 +72,42 @@ module.exports = function (app) {
 
 	//var Review = require('../models/reviewModel');
 	//	var reviewController = require('../controllers/reviewController')(Review)
-    app.get('/api/v1/profile/', userRoutes.getProfile);
+    app.get('/api/v1/profile/', userRoutes.getProfile);// contains all user conferences
     app.post('/api/v1/profile/', userRoutes.editProfile);
 	app.delete('/api/v1/profile/', userRoutes.deleteProfile);
 
 
-   app.post('/api/v1/conference',conferenceController.post);
+   app.post('/api/v1/conference/',conferenceController.post);
+   app.get('/api/v1/conference/:conferenceId',conferenceController.getById);
+   app.get('/api/v1/conference/',conferenceController.getAll);
+
+
+
+   
+   app.post('/api/v1/:conferenceId/chair/addAuthor',conferenceController.addAuthor);
+   app.post('/api/v1/:conferenceId/chair/removeAuthor',conferenceController.removeAuthor);
+
+   app.post('/api/v1/:conferenceId/chair/addReviewer',conferenceController.addReviewer);
+   app.post('/api/v1/:conferenceId/chair/removeReviewer',conferenceController.removeReviewer);
+
+
 
 
 	app.post('/api/v1/review/', reviewRoutes.create);
     app.get('/api/v1/review/', reviewRoutes.getAll);
 	app.delete('/api/v1/review/:reviewId', reviewRoutes.remove);
 	app.get('/api/v1/review/:reviewId', reviewRoutes.getOne);
+
+
+
+
 	// /*
 	// * Routes that can be accessed only by autheticated users
 	// */
 	app.get('/api/v1/submissions/', submissionRoutes.getAll);
-	app.post('/api/v1/submissions/', submissionRoutes.create);
+	//ahmed
+	app.get('/api/v1/submissionsrev/',submissionRoutes.getRev);
+	app.post('/api/v1/:conferenceId/submissions/', submissionRoutes.create);
 	app.get('/api/v1/submissions/:submissionId', submissionRoutes.getOne);
 	// app.put('/api/v1/submissions/:submissionId',submissionRoutes.update);
     app.delete('/api/v1/submissions/:submissionId', submissionRoutes.remove);
@@ -105,7 +125,7 @@ module.exports = function (app) {
 	// * Routes that can be accessed only by authenticated & authorized users
 	// */
 
-	app.get('/api/v1/chair/submissions', userRoutes.getAllSubmissions);
+	app.get('/api/v1/:conferenceId/chair/submissions', userRoutes.getAllSubmissions);
 
 	//	app.post('/api/v1/chair/submissions/:submissionId', userRoutes.editSubmission);//status and deadline
 
@@ -124,7 +144,7 @@ module.exports = function (app) {
 	app.put('/api/v1/chair/tasks/:taskId', userRoutes.editTask);
 
 
-	app.get('/api/v1/chair/report', reportingController.getReport);
+	app.get('/api/v1/report', reportingController.getReport);
 
 	//	app.put('/api/v1/chair/task/:taskID', userRoutes.doEditTask);
 	//   app.delete('/api/v1/chair/task/:taskID', userRoutes.deleteTask);
