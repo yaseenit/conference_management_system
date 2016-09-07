@@ -120,7 +120,7 @@ var submissionController = function (Submission) {
         });
     }
     var editStatus = function (req, res) {
-        var data;
+        var data={};
         if (req.body.status)
             data.status = req.body.status;
         if (req.body.deadline)
