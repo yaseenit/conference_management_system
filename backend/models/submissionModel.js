@@ -22,7 +22,6 @@ var submissionSchema = new Schema({
         trim: true,
         lowercase: true
     },
-    // {type: Boolean, default:false},
     fileName: { type: String },
     generatedFileName: { type: String },
     deadline: {

@@ -4,7 +4,7 @@ var uploadedFilesPath = require('../config/configurations').uploadedFilesPath;
 var randomstring = require("randomstring");
 
 var submissionController = function (Submission) {
-    
+
     var post = function (req, res) {
         var conferenceId = req.params.conferenceId;
         var submission = new Submission(req.body);
@@ -61,24 +61,10 @@ var submissionController = function (Submission) {
         // }
     }
 
-//edit ahmed 6.9
-    var getAllUserReviews= function (req,res){
-      //  var uname=req.user.username;
-
-  Submission.find({reviewers:""}, function (err, submissions) {
-            if (err)
-                res.status(500).send(err);
-            else
-                res.json(submissions);
-        });
-    }
-
-    
-
     var get = function (req, res) {
 
         var query = {
-            createdBy:req.user.username
+            createdBy: req.user.username
         };
         Submission.find(query, function (err, submissions) {
             if (err)
@@ -109,14 +95,20 @@ var submissionController = function (Submission) {
     }
 
     var put = function (req, res) {
-        req.submission.title = req.body.title;
-        req.submission.authorGivenName = req.body.authorGivenName;
-        req.submission.authorFamilyName = req.body.authorFamilyName;
-        req.submission.authorEmail = req.body.authorEmail;
-        //  req.submission.submissionId=req.body.submissionId;
-        req.submission.keywords = req.body.keywords;
-        req.submission.status = req.body.status;
-        req.submission.save(function (err) {
+        var data = req.body;
+        delete data.status;
+        delete data.fileName;
+        delete data.generatedFileName;
+        delete data.deadline;
+        delete data.createdOn;
+        delete data.conferenceId;
+        delete data.reviewers;
+        delete data.createdBy;
+
+        var id = req.body._id;
+        delete data._id;
+
+        Submission.update({ _id: id }, data, function (err, numAffected) {
             if (err)
                 res.status(500).send(err);
             else {
@@ -125,6 +117,9 @@ var submissionController = function (Submission) {
         });
     }
 
+var editStatus = function (req, res) {
+    
+}
     var patch = function (req, res) {
         if (req.body._id)
             delete req.body._id;
@@ -194,7 +189,7 @@ var submissionController = function (Submission) {
         put: put,
         removed: removed,
         patch: patch,
-        getAllUserReviews:getAllUserReviews
+        editStatus:editStatus
     }
 }
 

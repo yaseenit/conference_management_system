@@ -20,7 +20,22 @@ module.exports = function (app) {
 	//var user = require('./users.js');
 
 
+var CronJob = require('cron').CronJob;
+var job = new CronJob('00 30 01 * * 1-5', function() {
+  /*
+   * Runs every weekday (Monday through Friday)
+   * at 01:30:00 AM. It does not run on Saturday
+   * or Sunday.
+   */
 
+  //TODO update conferences and submissions status // open -> closed 
+
+
+  }, function () {
+    /* This function is executed when the job stops */
+  },
+  true /* Start the job right now */
+);
 
 	/*
 	* Routes that can be accessed by any one
@@ -106,9 +121,11 @@ module.exports = function (app) {
 	// * Routes that can be accessed only by autheticated users
 	// */
 	app.get('/api/v1/submissions/', submissionRoutes.getAll);
-	//ahmed
-	app.get('/api/v1/submissionsrev/',submissionRoutes.getRev);
-	app.post('/api/v1/:conferenceId/submissions/', submissionRoutes.create);
+	app.post('/api/v1/:conferenceId/submissions/create', submissionRoutes.create);
+	app.post('/api/v1/:conferenceId/submissions/edit', submissionRoutes.update);
+	app.post('/api/v1/:conferenceId/submissions/editStatus', submissionRoutes.editStatus);
+
+
 	app.get('/api/v1/submissions/:submissionId', submissionRoutes.getOne);
 	// app.put('/api/v1/submissions/:submissionId',submissionRoutes.update);
     app.delete('/api/v1/submissions/:submissionId', submissionRoutes.remove);
