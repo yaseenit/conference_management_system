@@ -3,20 +3,16 @@ var reportingController = function () {
 
     var get = function (req, res) {
       var agg= [
-          {$group:{ _id:{country:'$country'},count:{ $sum:1}
-
-          }}
-
-
-
-
-
-
-
-
-
-
-
+          {
+              $group:{
+                   _id:{
+                       country:'$country'
+                    },
+                    count:{
+                         $sum:1
+                        }
+                } 
+     }
 
       ];
         User.aggregate(agg,function(err,aggregated){

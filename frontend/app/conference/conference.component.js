@@ -50,6 +50,9 @@ System.register(['angular2/core', '../service/app.service', 'angular2/router', '
                         _this.resultMessage = error["message"];
                     });
                 };
+                ConferenceComponent.prototype.stringAsDate = function (dateStr) {
+                    return new Date(dateStr);
+                };
                 ConferenceComponent = __decorate([
                     core_1.Component({
                         templateUrl: 'app/conference/conference.component.html',

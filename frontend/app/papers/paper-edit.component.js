@@ -71,11 +71,12 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                     //    this.conferenceId= this._routeParams.get('id');
                     if (!this.paper) {
                         this.paper = new app_interface_1.Paper();
-                        var id = this._routeParams.get('id');
+                        this.id = this._routeParams.get('id');
                         // this.pageTitle += `: ${id}`;
-                        this.getPaper(id);
+                        this.getPaper(this.id);
                     }
                 };
+                // get submission details from api
                 PaperEditComponent.prototype.getPaper = function (id) {
                     var _this = this;
                     this._paperService.getPaper(id)
@@ -87,6 +88,7 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                         _this.arrayIndexKeyword = _this.keywords.length;
                     }, function (error) { return _this.errorMessage = error; });
                 };
+                // add author to paperAuthor Array
                 PaperEditComponent.prototype.addAuthor = function (event, value) {
                     event.preventDefault();
                     if (this.checkAuthor(value.email)) {
@@ -99,6 +101,7 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                         this.errorMessage = 'Email Address already exists';
                     this.checkKey = false;
                 };
+                // clear author form after adding author to array 
                 PaperEditComponent.prototype.clearAuthorForm = function () {
                     for (var name in this.authorForm.controls) {
                         this.authorForm.controls[name].updateValue("");
@@ -213,9 +216,11 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                     }
                     if (check) {
                         try {
+                            this.paper.id = this.id;
+                            console.log(this.paper.id);
                             this._paperService.paperSubmissionEdit(this.paper).subscribe(function (response) {
-                                _this.messageType = "alert";
-                                _this.resultMessage = "there are no available any assigned submission for review";
+                                _this.messageType = "success";
+                                _this.resultMessage = "submission updated successfully";
                             }, function (error) {
                                 _this.messageType = "error";
                                 _this.resultMessage = error["message"];

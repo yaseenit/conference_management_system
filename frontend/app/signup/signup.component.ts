@@ -48,21 +48,13 @@ export class SignUpComponent {
                 {
               this._signupService.signup(this._user).subscribe(
                 response => {
-                 console.log(response);
-                // this.signupResult=response;
-
                 this.resultMessage = "Thanks for registration please check your email for activation";
                 this.messageType = "success";
-
-
-
             },
             error => {
                 
                     this.resultMessage = "Error , please try again later";
-                    this.messageType = "error";
-
-               
+                    this.messageType = "error";           
                 error => this.signupError = <any>error
 
             }

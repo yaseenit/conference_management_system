@@ -44,9 +44,12 @@ System.register(['angular2/core', '../service/app.service', 'angular2/router', '
                     this.showFile = !this.showFile;
                 };
                 ConferencePaperComponent.prototype.ngOnInit = function () {
-                    var _this = this;
                     console.log('init page');
                     this.conferenceId = this._routeParams.get('id');
+                    this.fillPaperList();
+                };
+                ConferencePaperComponent.prototype.fillPaperList = function () {
+                    var _this = this;
                     this.pageTitle = 'Submission in Conference: ' + this._routeParams.get('title');
                     this._paperService.getConferenceSubmission(this.conferenceId).subscribe(function (papers) {
                         _this.papers = papers;
@@ -59,9 +62,38 @@ System.register(['angular2/core', '../service/app.service', 'angular2/router', '
                         _this.resultMessage = error["message"];
                     });
                 };
+                ConferencePaperComponent.prototype.stringAsDate = function (dateStr) {
+                    return new Date(dateStr);
+                };
+                ConferencePaperComponent.prototype.getSubmissionStatus = function (status) {
+                    if (status == "completed") {
+                        return true;
+                    }
+                    else
+                        return false;
+                };
+                ConferencePaperComponent.prototype.getSubmissionIncompletedStatus = function (status) {
+                    if (status == "incompleted")
+                        return false;
+                    else
+                        return true;
+                };
                 ConferencePaperComponent.prototype.getFile = function (event, generatedFileName, fileName) {
                     event.preventDefault();
                     this._paperService.getFiles(generatedFileName, fileName);
+                };
+                ConferencePaperComponent.prototype.updateStatus = function (event, status, submissionId) {
+                    var _this = this;
+                    event.preventDefault();
+                    this._paperService.submissionUpdateStatus(status, submissionId, this.conferenceId).subscribe(function (response) {
+                        console.log(response);
+                        _this.messageType = "success";
+                        _this.resultMessage = "Submission " + status + " successfully";
+                        _this.fillPaperList();
+                    }, function (error) {
+                        _this.messageType = "error";
+                        _this.resultMessage = error["message"];
+                    });
                 };
                 ConferencePaperComponent = __decorate([
                     core_1.Component({

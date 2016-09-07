@@ -48,7 +48,9 @@ export class PublicConferenceComponent implements OnInit
         );
         
     }
- 
+    stringAsDate(dateStr:any) {
+        return new Date(dateStr);
+    }
     constructor(private _service :AppService)
     {
 

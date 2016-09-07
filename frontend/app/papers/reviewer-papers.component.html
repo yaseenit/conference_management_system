@@ -14,23 +14,19 @@
                     <tr>
                         <th>Title</th>
                         <th>Asssigned Date</th>
-                                                <th>Details</th>
-
-                        <th>Review</th>
+                         <th>Details</th>
+                         <th>Review</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor='#task of tasks'>
-                                 <td><a [routerLink]="['PaperDetail',{id:task.submissionId}]">{{task.taskDesc}}</a></td>
+                                 <td>{{task.taskDesc}}</td>
 
-                        <td>{{task.taskDesc}}</td>
-                        <td>{{task.createdOn}}</td>
-                                                                    <td>Details</td>
+                        <td>{{ stringAsDate(task.createdOn) | date}}</td>
+                              <td> <a [routerLink]="['PaperDetail',{id:task.submissionId}]">Details</a></td>
    
 
-                        <td>
-                           
-Reviewe     
+                        <td>  <a [routerLink]="['ReviewCreate',{id:task.submissionId}]">New/Edit Review </a>     
                         </td>
 
                     </tr>

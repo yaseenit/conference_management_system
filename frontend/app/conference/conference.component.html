@@ -26,8 +26,8 @@
                   <tr  *ngFor='#con of conferences'>
                   <td>{{con.title}}</td>
                   <td>{{con.conferenceLocation}}</td>
-  <td>{{con.startdate}}</td>
-  <td>{{con.enddate}}</td>
+  <td>{{ stringAsDate(con.startdate) | date}}</td>
+  <td>{{ stringAsDate(con.enddate) | date}}</td>
    <td> <a [routerLink]="['ConferencePapers',{id:con._id,title:con.title}]" >Submissions</a></td>
 
 <td> <a [routerLink]="['InviteAuthor',{id:con._id}]" >Author</a></td>

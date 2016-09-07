@@ -36,15 +36,17 @@ import {Router} from 'angular2/router';
 import {ConfirmService} from "./service/confirm.service";
 import {ConfirmComponent} from "./shared/confirm.component";
 
-import  {CreateConferenceComponent} from "./conference/create-conference.component";
+import {CreateConferenceComponent} from "./conference/create-conference.component";
 import {ConferenceComponent} from "./conference/conference.component";
 
 import {PublicConferenceComponent} from './conference/public-conference.component';
-import  {AuthorPapersConferenceComponent} from './papers/author-papers-conference.component';
+import {AuthorPapersConferenceComponent} from './papers/author-papers-conference.component';
 import {ConferencePaperComponent} from './papers/conference-papers-list.component';
-import  {ReviewerPaperComponent} from './papers/reviewer-papers.component';
+import {ReviewerPaperComponent} from './papers/reviewer-papers.component';
 
 import {PaperEditComponent} from './papers/paper-edit.component';
+
+import {ReviewCreateComponent} from './review/review-create.component';
 
 @Component({
   selector: 'pm-app',
@@ -63,22 +65,23 @@ import {PaperEditComponent} from './papers/paper-edit.component';
     { path: '/login', name: 'LogIn', component: LogInComponent },
     { path: '/papercreate/:id', name: 'PaperCreate', component: PaperCreateComponent },
 
-    { path :'/review',name: 'Review',component:ReviewListComponent},
-    { path :'/review/:id',name: 'ReviewDetail',component:ReviewDetailComponent},
+    { path: '/review', name: 'Review', component: ReviewListComponent },
+    { path: '/review/:id', name: 'ReviewDetail', component: ReviewDetailComponent },
 
     { path: '/signup', name: 'SignUp', component: SignUpComponent },
     { path: '/editProfile', name: 'EditProfile', component: EditProfileComponent },
-    { path: '/viewProfile', name: 'ViewProfile', component: ViewProfileComponent }, 
+    { path: '/viewProfile', name: 'ViewProfile', component: ViewProfileComponent },
     { path: '/assignReview/:id', name: 'AssigReview', component: AssigReviewComponent },
     { path: '/inviteAuthor/:id', name: 'InviteAuthor', component: InviteAuthorComponent },
     { path: '/changePassword', name: 'ChangePassword', component: ChangePasswordComponent },
     { path: '/conference', name: 'Conference', component: ConferenceComponent },
-    {path :'/createconference',name: 'CreateConference',component:CreateConferenceComponent},
-    {path:'/conferenceSubmission', name:'ConferenceSubmission',component:PublicConferenceComponent},
-    {path:'/authorPapersConference/:id/:title',name:'AuthorPapersConference',component:AuthorPapersConferenceComponent},
-    {path:'/conferencePaper/:id/:title',name:'ConferencePapers',component:ConferencePaperComponent},
-     {path:'/reviewerPapers',name:'ReviewerPapers',component:ReviewerPaperComponent},
-          {path:'/paperEdit/:id',name:'PaperEdit',component:PaperEditComponent}
+    { path: '/createconference', name: 'CreateConference', component: CreateConferenceComponent },
+    { path: '/conferenceSubmission', name: 'ConferenceSubmission', component: PublicConferenceComponent },
+    { path: '/authorPapersConference/:id/:title', name: 'AuthorPapersConference', component: AuthorPapersConferenceComponent },
+    { path: '/conferencePaper/:id/:title', name: 'ConferencePapers', component: ConferencePaperComponent },
+    { path: '/reviewerPapers', name: 'ReviewerPapers', component: ReviewerPaperComponent },
+    { path: '/paperEdit/:id', name: 'PaperEdit', component: PaperEditComponent },
+    { path: '/reviewCreate/:id', name: 'ReviewCreate', component: ReviewCreateComponent }
 
   ]
 )
@@ -97,9 +100,9 @@ export class AppComponent implements OnInit {
   isActive = false;
 
   //for review
-    getReviewList:string;
-    token:string;
-    email:string;
+  getReviewList: string;
+  token: string;
+  email: string;
   //
   constructor(private _logInService: AppService, fb: FormBuilder, private _router: Router, private _confirmService: ConfirmService) {
     this.form = fb.group({
@@ -139,7 +142,7 @@ export class AppComponent implements OnInit {
   login(event, value: any) {
     this.messageType = "";
     this.resultMessage = "";
-     event.preventDefault();
+    event.preventDefault();
     this._logInService.login(value.email, value.password).subscribe(
       loginResponse => {
         console.log(loginResponse);
@@ -160,7 +163,7 @@ export class AppComponent implements OnInit {
           }
         }
         else {
-        this.resultMessage = loginResponse["message"];
+          this.resultMessage = loginResponse["message"];
           this.messageType = "error";
         }
 

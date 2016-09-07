@@ -151,7 +151,7 @@ removeReviewers(username:string, submissionId:string,conferenceId:string): Obser
       let conferenceId = _paper.conferenceId;
       let body = JSON.stringify({ title, abstract, authorList, keywords, based64_data, size, fileName, conferenceId });
       // console.log(body);
-      xx._http.post(xx._apiUrl+conferenceId + '/submissions/', body, { headers: ContentHeaders })
+      xx._http.post(xx._apiUrl+conferenceId + '/submissions/create', body, { headers: ContentHeaders })
         .do(data => console.log("All:" + JSON.stringify(data)))
         .subscribe(
         response => {
@@ -176,10 +176,12 @@ removeReviewers(username:string, submissionId:string,conferenceId:string): Obser
       let authorList = _paper.authorList;
       let abstract = _paper.abstract;
       let keywords = _paper.keywords;
-      let conferenceId = _paper.conferenceId;
-      let body = JSON.stringify({ title, abstract, authorList, keywords });
+    let conferenceId = _paper.conferenceId;
+          let _id=_paper.id;
+
+      let body = JSON.stringify({ title, abstract, authorList, keywords,_id });
       // console.log(body);
-    return  this._http.post(this._apiUrl+conferenceId + '/submissions/', body, { headers: ContentHeaders })
+    return  this._http.post(this._apiUrl+conferenceId + '/submissions/edit', body, { headers: ContentHeaders })
         .map((response: Response) => <any>response.json())
       .do(data => console.log("All:" + JSON.stringify(data)))
       .catch(this.handleError);
@@ -187,12 +189,25 @@ removeReviewers(username:string, submissionId:string,conferenceId:string): Obser
    
   }
 
-  //for reviewergetReview(id: number): Observable<IReview> {
 
-  getReview(id: number): Observable<IReview> {
+//
 
-    return this.getPapers()
-      .map((reviews: IReview[]) => reviews.find(p => p.id === id))//.do(data => console.log("All:" + JSON.stringify(data)));
+    submissionUpdateStatus(status:string,_id:string,conferenceId:string):Observable<any> {
+
+     
+      let body = JSON.stringify({ status,_id });
+      // console.log(body);
+    return  this._http.post(this._apiUrl+conferenceId + '/submissions/editStatus', body, { headers: ContentHeaders })
+        .map((response: Response) => <any>response.json())
+      .do(data => console.log("All:" + JSON.stringify(data)))
+      .catch(this.handleError);
+
+   
+  }
+  getReview(id: number) {
+
+   // return this.getPapers()
+     // .map((reviews: IReview[]) => reviews.find(p => p.id === id))//.do(data => console.log("All:" + JSON.stringify(data)));
   }
 
   getReviews(): Observable<IReview[]> {
@@ -245,21 +260,15 @@ removeReviewers(username:string, submissionId:string,conferenceId:string): Obser
   //
 
 
-  changePassword(password, oldPassword) {
+  changePassword(newPassword, oldPassword):Observable<any> {
 
-    let body = JSON.stringify({ oldPassword, password });
-    this._http.post("", body, { headers: ContentHeaders })
-      .do(data => console.log("All:" + JSON.stringify(data)))
-      .subscribe(
-      response => {
-        //   this._router.navigate(['Welcome']);
-      },
-      error => {
-        // alert(error.text());
-        console.log(error.json().status);
-
-      }
-      );
+    let body = JSON.stringify({ oldPassword, newPassword });
+    console.log(body);
+   return this._http.post(this._profileUrl+"changePassword", body, { headers: ContentHeaders })
+          .map((response: Response) => <any>response.json())
+.catch(this.handleError)
+      .do(data => console.log("All:" + JSON.stringify(data)));
+     
   }
 
   getUserProfile(): Observable<IUser> {
