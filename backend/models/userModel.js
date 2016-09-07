@@ -43,9 +43,10 @@ var UserSchema = new Schema({
     country: { type: String },
 	zipCode: { type: String },
 	address: { type: String },
-	salt: {
-		type: String
-	},
+	// salt: {
+	// 	type: String
+	// }
+	//,
 	// provider: {
 	// 	type: String,
 	// 	// Validate 'provider' value existance
@@ -85,7 +86,7 @@ var UserSchema = new Schema({
 // Use a pre-save middleware to hash the password
 UserSchema.pre('save', function (next) {
 	if (this.password) {
-		this.salt = new Buffer(crypto.randomBytes(16)).toString('base64');
+		//this.salt = //new Buffer(crypto.randomBytes(16)).toString('base64');
 		this.password = this.hashPassword(this.password);
 	}
 
@@ -94,8 +95,8 @@ UserSchema.pre('save', function (next) {
 
 // Create an instance method for hashing a password
 UserSchema.methods.hashPassword = function (password) {
-	console.log("salt " + this.salt);
-	return crypto.pbkdf2Sync(password, this.salt, 10000, 64,'sha512').toString('base64');
+	//console.log("salt " + this.salt);
+	return crypto.pbkdf2Sync(password, require('../config/jwt_secret.js')(), 500, 64,'sha512').toString('base64');
 };
 //instance method
 // Create an instance method for authenticating user
@@ -140,7 +141,7 @@ UserSchema.set('toJSON', {
 	virtuals: true,
     transform: function (doc, ret, options) {
         delete ret.password;
-		delete ret.salt;
+		//delete ret.salt;
         delete ret.__v;
         return ret;
     }
