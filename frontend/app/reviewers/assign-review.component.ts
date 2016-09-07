@@ -23,9 +23,10 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
         errorMessage:string;
         arrayIndex:number=0;
         PaperReviewers:string[]=[];
-        submissionId:any=10;
+        submissionId:string;
         resultMessage:string="";
         messageType:string="";
+        conferenceId:string="";
         constructor(_fb: FormBuilder, private _reviewerService: AppService,  private _routeParams:RouteParams ) {
         this.form = _fb.group({
             userName: ['', Validators.compose([ValidationService.emailValidator,Validators.required])]
@@ -33,13 +34,25 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
     }
         ngOnInit() {
         if (this.PaperReviewers) {
-            this.submissionId = +this._routeParams.get('id');
+            this.submissionId = this._routeParams.get('id');
             this.getReviewer(this.submissionId);
         }
     }
     getReviewer(id)
     {
+        this._reviewerService.getPaper(id).subscribe(
+            respone => {
+                this.PaperReviewers=respone.reviewers;
+                this.conferenceId=respone.conferenceId;
 
+
+            },
+            error =>
+            {
+             this.resultMessage="Error , please try again later";
+             this.messageType="error";
+            }
+        );
     }
     assign(event,value: any ) {
         this.messageType="";
@@ -47,27 +60,26 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
         event.preventDefault();
         if(this.checkReviewer(value.userName))
         {
-         this.PaperReviewers[this.arrayIndex]=value.userName;
-         this.arrayIndex++;
-         console.log(value.email);
-        // this.clearForm();
-        this._reviewerService.assignReviewers(value.userName,this.submissionId).subscribe(
+        this._reviewerService.assignReviewers(value.userName,this.submissionId,this.conferenceId).subscribe(
             response => {
-        
-         this.resultMessage="author Has been invited";
+          this.PaperReviewers=response.reviewers;
+         this.resultMessage="Reviewer Has been assigned";
          this.messageType="success";
-         console.log(response);
+         this.clearForm()
         },
              error => {
-       if(error["status"]==null)
+       if(error["message"]==null)
       {
-         this.resultMessage="Error , please try again later";
+         this.resultMessage=" please try again later";
          this.messageType="error";
       
+      }else
+      { 
+          this.resultMessage=error["message"];
+         this.messageType="error";
+
       }
-            error => {}
-                 
-        }
+  }
        );  
         }
         else
@@ -76,35 +88,49 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
       clearForm():void
       {
          for(var name in this.form.controls) {
-       (<Control>this.form.controls[name]).updateValue("");
-        (<Control>this.form.controls[name]).touched=false;
-            //(<Control>this.form.controls[name]).valid=false;
-
-       // (<Control>this.form.controls[name]).setErrors(null);
+       (<Control>this.form.controls[name]).updateValue('');
+           
         }
       }
       checkReviewer(_userName:string):boolean
       {
-          console.log(this.PaperReviewers.length);
+        if(this.PaperReviewers)
+        {
         for(var i=0;i<this.PaperReviewers.length;i++)
          {
              if(this.PaperReviewers[i]==_userName)
                  return false;
           }
              return true;
+        }
+        else
+    return true;
       }
 
    removeReviewer(_userName:string):void
   {
-    for(var i=0;i<this.PaperReviewers.length;i++)
-        {
-        if(this.PaperReviewers[i]==_userName)
-            {
-                this.PaperReviewers.splice(i,1);
-                this.arrayIndex--;
-                console.log('delete item');
-            }
-        }
+      this._reviewerService.removeReviewers(_userName,this.submissionId,this.conferenceId).subscribe(
+            response => {
+                console.log(response);
+          this.PaperReviewers=response.reviewers;
+         this.resultMessage="Reviewer Has been Removed";
+         this.messageType="success";
+        // this.clearForm()
+        },
+             error => {
+       if(error["message"]==null)
+      {
+         this.resultMessage=" please try again later";
+         this.messageType="error";
+      
+      }else
+      { 
+          this.resultMessage=error["message"];
+         this.messageType="error";
+
+      }
+  }
+       );  
     }
 
 

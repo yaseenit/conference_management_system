@@ -30,15 +30,21 @@ System.register(['angular2/core', '../service/app.service', 'angular2/router'], 
                     this._routeParams = _routeParams;
                     this._router = _router;
                     this.pageTitle = 'Paper Detail';
+                    this.imageWidth = 50;
+                    this.imageHeight = 40;
                     //  let id=+this._routeParams.get('id');
                     //  this.pageTitle += `: ${id}`;
                 }
                 PaperDetailComponent.prototype.ngOnInit = function () {
                     if (!this.paper) {
-                        var id = +this._routeParams.get('id');
+                        var id = this._routeParams.get('id');
                         // this.pageTitle += `: ${id}`;
                         this.getPaper(id);
                     }
+                };
+                PaperDetailComponent.prototype.getFile = function (event, generatedFileName, fileName) {
+                    event.preventDefault();
+                    this._paperService.getFiles(generatedFileName, fileName);
                 };
                 PaperDetailComponent.prototype.getPaper = function (id) {
                     var _this = this;

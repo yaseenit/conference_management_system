@@ -1,4 +1,4 @@
-System.register(['angular2/core', './paper-filter.pipe', '../shared/star.component', '../service/app.service', 'angular2/router'], function(exports_1, context_1) {
+System.register(['angular2/core', './paper-filter.pipe', '../shared/star.component', '../service/app.service', 'angular2/router', '../shared/result-message.component'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', './paper-filter.pipe', '../shared/star.compone
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, paper_filter_pipe_1, star_component_1, app_service_1, router_1;
+    var core_1, paper_filter_pipe_1, star_component_1, app_service_1, router_1, result_message_component_1;
     var PaperListComponent;
     return {
         setters:[
@@ -28,6 +28,9 @@ System.register(['angular2/core', './paper-filter.pipe', '../shared/star.compone
             },
             function (router_1_1) {
                 router_1 = router_1_1;
+            },
+            function (result_message_component_1_1) {
+                result_message_component_1 = result_message_component_1_1;
             }],
         execute: function() {
             PaperListComponent = (function () {
@@ -38,6 +41,8 @@ System.register(['angular2/core', './paper-filter.pipe', '../shared/star.compone
                     this.imageHeight = 40;
                     this.showFile = false;
                     this.listFilter = '';
+                    this.resultMessage = "";
+                    this.messageType = "";
                 }
                 PaperListComponent.prototype.toggleFile = function () {
                     this.showFile = !this.showFile;
@@ -46,15 +51,24 @@ System.register(['angular2/core', './paper-filter.pipe', '../shared/star.compone
                     var _this = this;
                     console.log('init page');
                     // this._paperService.getFile();
-                    this._paperService.getPapers().subscribe(function (papers) { return _this.papers = papers; }, function (error) { return _this.errorMessage = error; });
+                    this._paperService.getPapers().subscribe(function (papers) {
+                        _this.papers = papers;
+                        if (_this.papers.length == 0) {
+                            _this.messageType = "alert";
+                            _this.resultMessage = "there are no available submission";
+                        }
+                    }, function (error) {
+                        _this.messageType = "error";
+                        _this.resultMessage = error["message"];
+                    });
                     /* this._paperService.getCountry().subscribe(
                             country => this.country=country,
                             error => this.errorMessage=<any>error
                         );*/
                 };
-                PaperListComponent.prototype.getFile = function (event, fileName) {
+                PaperListComponent.prototype.getFile = function (event, generatedFileName, fileName) {
                     event.preventDefault();
-                    this._paperService.getFile(fileName);
+                    this._paperService.getFiles(generatedFileName, fileName);
                 };
                 PaperListComponent = __decorate([
                     core_1.Component({
@@ -62,7 +76,7 @@ System.register(['angular2/core', './paper-filter.pipe', '../shared/star.compone
                         templateUrl: 'app/papers/paper-list.component.html',
                         styleUrls: ['app/papers/paper-list.component.css'],
                         pipes: [paper_filter_pipe_1.PaperFilterPipe],
-                        directives: [star_component_1.StarComponent, router_1.ROUTER_DIRECTIVES]
+                        directives: [star_component_1.StarComponent, router_1.ROUTER_DIRECTIVES, result_message_component_1.ResultMessagesComponent]
                     }), 
                     __metadata('design:paramtypes', [app_service_1.AppService])
                 ], PaperListComponent);

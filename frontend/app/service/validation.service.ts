@@ -25,7 +25,7 @@ export class ValidationService {
         }
     }
 
-    static passwordValidator(control) {
+    static passwordValidator(control:any) {
         if (control.value.match(/^(?=.*[0-9])[a-zA-Z0-9!@#$%^&*]{6,100}$/)) {
             return null;
         } else {
@@ -33,11 +33,11 @@ export class ValidationService {
         }
     }
 
-    static fileValidator(control) {
-        if (control.value.match(/^.+\.([pP][dD][fF])$/)) {
+    static fileValidator(fileName : string):string {
+        if (fileName.match(/^.+\.([pP][dD][fF])$/)) {
             return null;
         } else {
-            return { 'invalidFileFormat': true };
+            return  'Invalid File Format' ;
         }
     }
     

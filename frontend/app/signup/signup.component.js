@@ -78,17 +78,24 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                     this._user.state = value.state;
                     this._user.zipCode = value.zipCode;
                     var result;
-                    this._signupService.signup(this._user).subscribe(function (response) {
-                        //    console.log(response["status"]);
-                        // this.signupResult=response;
-                        _this.resultMessage = "Thanks for registration please check your email for activation";
-                        _this.messageType = "success";
-                    }, function (error) {
-                        if (error["status"] == 400) {
-                            _this.resultMessage = "Error , please try again later";
+                    this._signupService.isRegister(this._user.username).subscribe(function (response) {
+                        console.log(response);
+                        if (!response["existed"]) {
+                            _this._signupService.signup(_this._user).subscribe(function (response) {
+                                console.log(response);
+                                // this.signupResult=response;
+                                _this.resultMessage = "Thanks for registration please check your email for activation";
+                                _this.messageType = "success";
+                            }, function (error) {
+                                _this.resultMessage = "Error , please try again later";
+                                _this.messageType = "error";
+                                (function (error) { return _this.signupError = error; });
+                            });
+                        }
+                        else {
+                            _this.resultMessage = "Error , email Address already exist";
                             _this.messageType = "error";
                         }
-                        (function (error) { return _this.signupError = error; });
                     });
                     console.log('presssss');
                 };

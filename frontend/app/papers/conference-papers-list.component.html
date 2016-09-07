@@ -1,0 +1,46 @@
+<div class='panel panel-primary'>
+
+
+
+    <div class='panel-heading'>
+        {{pageTitle}}
+    </div>
+
+
+   <result-messages [(message)]='resultMessage' [(messageType)]='messageType'></result-messages>
+
+    <!-- Filter the papers   -->
+    <div class='panel-body' *ngIf='papers && papers.length'>
+        <div class='has-error' *ngIf='errorMessage'>{{errorMessage}}</div>
+
+        <div class='table-responsive'>
+            <table class='table'>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Status</th>
+                        <th>Submission Date </th>
+                        <th> Attached File </th>
+                        <th>Reviewers</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor='#paper of papers'>
+                        <td><a [routerLink]="['PaperDetail',{id:paper._id}]">{{paper.title}}</a></td>
+                        <td>{{paper.status | lowercase}}</td>
+                        <td>{{paper.createdOn}}</td>
+                        <td>
+                            <a href="#" (click)='getFile($event,paper.generatedFileName,paper.fileName)' target="_blank"><img src='./app/assets/images/pdf-icon.png' [style.width.px]='imageWidth' [style.height.px]='imageHeight'></a>
+                        </td>
+
+                        <td>
+                            <a [routerLink]="['AssigReview',{id:paper._id}]" style='width:80px'>
+Reviewers        </a>
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

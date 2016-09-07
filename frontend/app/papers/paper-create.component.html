@@ -123,21 +123,10 @@
           </div>
           <div class="form-group">
             <label for="attFile">Attached file </label>
-            <input type="file"   id="attFile" ngControl="attFile" (change)="onChange($event)" required>
+            <input type="file"   id="attFile" ngControl="attFile" (change)="onChange($event)" >
             <control-messages [control]="fileForm.controls.attFile"></control-messages>
           </div>
-
-<div class="form-group">
-									<label for="attFile" class="col-lg-3 control-label">Attach file</label>
-									<div class="col-lg-8"><input ngControl="attFile" (change)="onChange($event)" required id="file" type="file" required>
-									   <control-messages [control]="fileForm.controls.attFile"></control-messages>
-									   <div class="fieldnote note">File upload limit through this form is 64.0MB.</div>
-									   
-									</div>
-									
-								</div>
-
-          <button type="submit" class="btn btn-default"  (click)="create($event,fileForm.value)"> Submit</button>
+          <button type="submit" class="btn btn-default" [disabled]="!fileForm.valid" (click)="create($event,fileForm.value)"> Submit</button>
         </form>
       </div>
     </fieldset>

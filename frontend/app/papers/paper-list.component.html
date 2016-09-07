@@ -2,10 +2,13 @@
     <div class='panel-heading'>
         {{pageTitle}}
     </div>
+               <result-messages [(message)]='resultMessage' [(messageType)]='messageType'></result-messages>
 
     <!-- Filter the papers   -->
-    <div class='panel-body'>
+    <div class='panel-body' *ngIf='papers && papers.length'>
+
         <div class='row'>
+
             <div class='col-md-2'>Filter by:</div>
             <div class='col-md-4'>
                 <input type='text' [(ngModel)]='listFilter' />
@@ -17,13 +20,10 @@
             </div>
         </div>
 
-        <div class='has-error' *ngIf='errorMessage'>{{errorMessage}}</div>
- <select *ngIf='country && country.length'>
-                <option *ngFor="#o of country" [value]="o" >{{o.woeid}}</option>
-            </select>
+ 
         <div class='table-responsive'>
             <table class='table' 
-            *ngIf='papers && papers.length' >
+             >
                 <thead>
                     <tr>
                      
@@ -38,10 +38,10 @@
                 </thead>
                 <tbody>
                   <tr  *ngFor='#paper of papers | paperFilter:listFilter'>
-         <td><a [routerLink]="['PaperDetail',{id:paper.id}]">{{paper.title}}</a></td>
+         <td><a [routerLink]="['PaperDetail',{id:paper._id}]">{{paper.title}}</a></td>
   <td>{{paper.status | lowercase}}</td>
   <td>{{paper.createdOn}}</td>
-     <td><a *ngIf='showFile' href="#" (click)='getFile($event,paper.generatedFileName)' target="_blank"><img src='./app/assets/images/pdf-icon.png' [style.width.px]='imageWidth' [style.height.px]='imageHeight'></a></td>
+     <td><a *ngIf='showFile' href="#" (click)='getFile($event,paper.generatedFileName,paper.fileName)' target="_blank"><img src='./app/assets/images/pdf-icon.png' [style.width.px]='imageWidth' [style.height.px]='imageHeight'></a></td>
  
 <td></td>
         

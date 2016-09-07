@@ -16,6 +16,8 @@ import {IPaper} from '../service/app.interface';
         pageTitle: string='Paper Detail';
         paper: IPaper;
          errorMessage: string;
+          imageWidth:number=50;
+    imageHeight:number=40;
         constructor(private _paperService: AppService,
             private _routeParams:RouteParams ,private _router :Router)
         {
@@ -24,13 +26,17 @@ import {IPaper} from '../service/app.interface';
         }
          ngOnInit() {
         if (!this.paper) {
-            let id = +this._routeParams.get('id');
+            let id = this._routeParams.get('id');
             // this.pageTitle += `: ${id}`;
             this.getPaper(id);
         }
     }
-
-    getPaper(id: number) {
+getFile(event,generatedFileName,fileName)
+ {
+         event.preventDefault();
+         this._paperService.getFiles(generatedFileName,fileName);
+ }
+    getPaper(id: string) {
         this._paperService.getPaper(id)
             .subscribe(
             paper => this.paper = paper,

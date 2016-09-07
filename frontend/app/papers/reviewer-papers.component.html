@@ -1,0 +1,41 @@
+<div class='panel panel-primary'>
+
+    <div class='panel-heading'>
+        {{pageTitle}}
+    </div>
+   <result-messages [(message)]='resultMessage' [(messageType)]='messageType'></result-messages>
+
+    <!-- Filter the papers   -->
+    <div class='panel-body' *ngIf='tasks && tasks.length'>
+
+        <div class='table-responsive'>
+            <table class='table'>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Asssigned Date</th>
+                                                <th>Details</th>
+
+                        <th>Review</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor='#task of tasks'>
+                                 <td><a [routerLink]="['PaperDetail',{id:task.submissionId}]">{{task.taskDesc}}</a></td>
+
+                        <td>{{task.taskDesc}}</td>
+                        <td>{{task.createdOn}}</td>
+                                                                    <td>Details</td>
+   
+
+                        <td>
+                           
+Reviewe     
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

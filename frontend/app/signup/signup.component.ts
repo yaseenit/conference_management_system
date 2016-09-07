@@ -41,9 +41,14 @@ export class SignUpComponent {
         this._user.state = value.state;
         this._user.zipCode = value.zipCode;
         let result;
-        this._signupService.signup(this._user).subscribe(
-            response => {
-                //    console.log(response["status"]);
+        this._signupService.isRegister(this._user.username).subscribe(
+            response=>{
+                console.log(response);
+                if(!response["existed"])
+                {
+              this._signupService.signup(this._user).subscribe(
+                response => {
+                 console.log(response);
                 // this.signupResult=response;
 
                 this.resultMessage = "Thanks for registration please check your email for activation";
@@ -53,15 +58,24 @@ export class SignUpComponent {
 
             },
             error => {
-                if (error["status"] == 400) {
+                
                     this.resultMessage = "Error , please try again later";
                     this.messageType = "error";
 
-                }
+               
                 error => this.signupError = <any>error
 
             }
         );
+                }
+                else
+                {
+                     this.resultMessage = "Error , email Address already exist";
+                    this.messageType = "error";
+                }
+            }
+        )
+     
 
         console.log('presssss');
     }

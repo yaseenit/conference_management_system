@@ -35,12 +35,12 @@ System.register([], function(exports_1, context_1) {
                         return { 'invalidPassword': true };
                     }
                 };
-                ValidationService.fileValidator = function (control) {
-                    if (control.value.match(/^.+\.([pP][dD][fF])$/)) {
+                ValidationService.fileValidator = function (fileName) {
+                    if (fileName.match(/^.+\.([pP][dD][fF])$/)) {
                         return null;
                     }
                     else {
-                        return { 'invalidFileFormat': true };
+                        return 'Invalid File Format';
                     }
                 };
                 ValidationService.checkEqualPassword = function (group) {

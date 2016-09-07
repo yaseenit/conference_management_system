@@ -1,4 +1,4 @@
-import {Component, ElementRef} from 'angular2/core';
+import {Component, ElementRef,OnInit} from 'angular2/core';
 import {RouteParams, Router} from 'angular2/router';
 import {AppService} from '../service/app.service';
 import {IPaper, IPaperAuthor, PaperAuthor, Paper} from '../service/app.interface';
@@ -17,7 +17,7 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
 
 
 })
-export class PaperCreateComponent {
+export class PaperCreateComponent implements OnInit {
   paperAuthors: PaperAuthor[] = [];
   keywords: string[] = [];
   authorForm: ControlGroup;
@@ -36,8 +36,11 @@ export class PaperCreateComponent {
   resultMessage: string = "";
   messageType: string = "";
   checkKey = true;
-  
-  // author bll
+  conferenceId:string;
+   ngOnInit():void{
+              this.conferenceId= this._routeParams.get('id');
+
+   }
   addAuthor(event, value: any) {
     event.preventDefault();
     if (this.checkAuthor(value.email)) {
@@ -150,7 +153,13 @@ export class PaperCreateComponent {
     //this.files[0].name;
    
     if(this.files)
-   console.log(ValidationService.fileValidator(this.files[0].name));
+    {
+      if( ValidationService.fileValidator(this.files[0].name))
+      {
+       this.resultMessage = "file extention should be pdf";
+      this.messageType = "error";
+      }
+    }
     
   }
 
@@ -162,13 +171,14 @@ export class PaperCreateComponent {
     this.paper.keywords = this.keywords;
     this.paper.abstract = value.abstract;
     this.paper.title = value.title;
-
+    this.paper.conferenceId=this.conferenceId;
     let check = true;
 
     if (this.paperAuthors.length <= 0) {
       this.resultMessage = "Please add the Authors";
       this.messageType = "error";
       check = false;
+      return;
     }
     console.log(this.keywords.length);
 
@@ -176,13 +186,30 @@ export class PaperCreateComponent {
       this.resultMessage = "Please add the Keywords";
       this.messageType = "error";
       check = false;
+      return;
+    }
+    if(!this.files)
+    {
+       this.resultMessage = "Please choose file";
+      this.messageType = "error";
+      check = false;
+      return;
     }
 
 
     if (check) {
-      this._paperService.paperSubmission(this.paper, this.files);
+      try{
+     this._paperService.paperSubmission(this.paper, this.files);
       this.resultMessage = "Paper has been submitted Successfully";
       this.messageType = "success";
+      
+   
+      }
+      catch(err)
+      { this.resultMessage = "An error ,please try again later";
+      this.messageType = "error";
+
+      }
     }
 
   }
@@ -190,7 +217,7 @@ export class PaperCreateComponent {
 
 
 
-  constructor(fb: FormBuilder, kf: FormBuilder, ff: FormBuilder, _Element: ElementRef, private _paperService: AppService) {
+  constructor(fb: FormBuilder, kf: FormBuilder, ff: FormBuilder, _Element: ElementRef, private _paperService: AppService,private _routeParams:RouteParams) {
     this.elementRef = _Element;
     this.selectedIdx = -1;
     this.keywordForm = kf.group({
@@ -198,7 +225,7 @@ export class PaperCreateComponent {
     });
     this.fileForm = ff.group({
       abstract: ['', Validators.required],
-      attFile: ['',  Validators.compose([ValidationService.fileValidator, Validators.required])],
+      attFile: [''],
       title: ['',Validators.required]
 
     });
