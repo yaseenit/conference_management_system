@@ -107,18 +107,33 @@ var submissionController = function (Submission) {
         var id = req.body._id;
         delete data._id;
 
-        Submission.update({ _id: id }, data, function (err, numAffected) {
+        Submission.findOneAndUpdate({ _id: id }, data, function (err, submission) {
             if (err)
                 res.status(500).send(err);
             else {
-                res.json(req.submission);
+                res.json(submission);
             }
         });
     }
-
-var editStatus = function (req, res) {
-    
-}
+    var editStatus = function (req, res) {
+        var data;
+        if (req.body.status)
+            data.status = req.body.status;
+        if (req.body.dateline)
+            data.deadline = new Date(req.body.deadline)
+        var id = req.body._id || '';
+        if (id && data) {
+            Submission.findOneAndUpdate({ _id: id }, data, function (err, submission) {
+                if (err)
+                    res.status(500).send(err);
+                else {
+                    res.json(submission);
+                }
+            });
+        } else {
+            res.status(400).send({ message: "submission id and data should be provided.", code: 400 });
+        }
+    }
     var patch = function (req, res) {
         if (req.body._id)
             delete req.body._id;
@@ -188,7 +203,7 @@ var editStatus = function (req, res) {
         put: put,
         removed: removed,
         patch: patch,
-        editStatus:editStatus
+        editStatus: editStatus
     }
 }
 
