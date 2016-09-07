@@ -3,199 +3,142 @@
         {{pageTitle}}
     </div>
 
-    <div class="panel-body" style="margin:20px">
+    <div class="panel-body">
+        <div class='row'>
+            <div class="panel-body" style="margin:20px">
 
-        <div class="row">
-            <div class="row-md-12">
-                <label class="col-md-1" style="text-align:left">Title:</label>
-                <div class="col-md-11">
-                    <p>{{paper.title}}</p>
-                </div>
-            </div>
+                <div class="row">
+                    <div class="row">
+                        <label class="col-md-3" style="text-align:left">Title:</label>
+                        <div class="col-md-9">
+                            <p>{{paper.title}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-md-3" style="text-align:left">Created On:</label>
+                        <div class="col-md-9">
+                            <p>{{ stringAsDate(paper.createdOn) | date}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-md-3" style="text-align:left">DeadLine:</label>
+                        <div class="col-md-9">
+                            <p>{{ stringAsDate(paper.deadline) | date}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-md-3" style="text-align:left">Status:</label>
+                        <div class="col-md-9">
+                            <p>{{paper.status}}</p>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <label class="col-md-3" style="text-align:left">Abstract:</label>
+                        <div class="col-md-9" style="text-align:left">
+                            <p>{{paper.abstract}}</p>
+                        </div>
+                    </div>
+                    <br>
 
-            <br>
+                    <div class="row">
+                        <label class="col-md-3 control-label" style="text-align:left">Author(s):</label>
+                        <div class="col-md-9" style="text-align:left">
 
-            <div class="row-md-12">
-                <label class="col-md-2 control-label" style="text-align:left">Author(s):</label>
-                <table class="table table-striped table-hover table-bordered ">
-                    <thead>
-                        <tr>
-                            <th>Given Name</th>
-                            <th>Family Name</th>
-                            <th>Email</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="#paper of paper.authorList">
-                            <td>{{paper.givenName}}</td>
-                            <td>{{paper.familyName}}</td>
-                            <td>{{paper.email}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <br>
-            <div class="row-md-12">
-                <label class="col-md-2 " style="text-align:left;">Keywords:</label>
-                <div class="col-md-12" style="text-align:left">
-                    <p>{{paper.keywords}}</p>
+                            <table class="table table-striped table-hover table-bordered ">
+                                <thead>
+                                    <tr>
+                                        <th>Given Name</th>
+                                        <th>Family Name</th>
+                                        <th>Email</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="#paper of paper.authorList">
+                                        <td>{{paper.givenName}}</td>
+                                        <td>{{paper.familyName}}</td>
+                                        <td>{{paper.email}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    <br>
+                    <div class="row">
+                        <label class="col-md-3" style="text-align:left;">Keywords:</label>
+                        <div class="col-md-9" style="text-align:left">
+                            <p>{{paper.keywords}}</p>
+                        </div>
+                    </div>
+                    <br>
+
+                    <div class="row">
+                        <label class="col-md-3" style="text-align:left">Uploaded Paper</label>
+                        <div class="col-md-9" style="text-align:left">
+                            <a href="#" (click)='getFile($event,paper.generatedFileName,paper.fileName)' target="_blank">
+                                <img src='./app/assets/images/paper.ico' [style.width.px]='imageWidth' [style.height.px]='imageHeight'></a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <br>
-            <div class="row-md-12">
-                <label class="col-md-2" style="text-align:left">Abstract:</label>
-                <div class="col-md-12" style="text-align:left">
-                    <p>{{paper.abstract}}</p>
-                </div>
-            </div>
-            <br>
-            <div class="row-md-12">
-                <label class="col-md-2 " style="text-align:left">Uploaded Paper</label>
-                <div class="col-md-12" style="text-align:left">
-                    <a [href]='paper.fileId' target="_blank">
-                        <img class='center-block img-responsive' [style.width.px]='50' [style.margin.px]='2' src="./app/assets/images/paper.ico"
-                        />
-                    </a>
-                </div>
+                <hr>
             </div>
         </div>
-        <hr>
-        <form class="form-horizontal" *ngFor="#review of paper.review">
-
-            <div class="form" *ngIf="checkEdit()">
-                <label>Reviewer Expertise</label>
-                <div class="radio">
-                    <ul style="list-style-type:none; no-padding;" required>
-                        <li><label><input type="radio" ngModel="{checked: expertiseReview.val == '1'}"  (click)="expertiseReview.val='1'" name="expertise" value="1" [checked]='review.expertise=="1"'>Not Familiar</label></li>
-                        <li><label><input type="radio" ngModel="{checked: expertiseReview.val == '2'}" (click)="expertiseReview.val='2'" name="expertise" value="2" [checked]='review.expertise=="2"' >Low</label></li>
-                        <li><label><input type="radio" ngModel="{checked: expertiseReview.val == '3'}" (click)="expertiseReview.val='3'" name="expertise" value="3" [checked]='review.expertise=="3"'>Moderate</label></li>
-                        <li><label><input type="radio" ngModel="{checked: expertiseReview.val == '4'}" (click)="expertiseReview.val='4'" name="expertise" value="4" [checked]='review.expertise=="4"'>High</label></li>
-                        <li><label><input type="radio" ngModel="{checked: expertiseReview.val == '5'}" (click)="expertiseReview.val='5'" name="expertise" value="5" [checked]='review.expertise=="5"'>Expert</label></li>
-                    </ul>
-                </div>
-                <control-messages [control]="reviewForm.controls.expertise"></control-messages>
-            </div>
-
-            <div class="form" *ngIf="checkEdit()">
-                <label>Overall Evaluation</label>
-                <div class="radio">
-                    <ul style="list-style-type:none; no-padding;" required>
-                        <li><label><input type="radio" ngModel="{checked: evaluationReview.eval == '1'}" (click)="evaluationReview.eval='1'" name="evaluation" value="1" [checked]='review.evaluation=="1"'>Strong Reject</label></li>
-                        <li><label><input type="radio" ngModel="{checked: evaluationReview.eval == '2'}" (click)="evaluationReview.eval='2'" name="evaluation" value="2" [checked]='review.evaluation=="2"'>Reject</label></li>
-                        <li><label><input type="radio" ngModel="{checked: evaluationReview.eval == '3'}" (click)="evaluationReview.eval='3'" name="evaluation" value="3" [checked]='review.evaluation=="3"'>Borderline Paper</label></li>
-                        <li><label><input type="radio" ngModel="{checked: evaluationReview.eval == '4'}" (click)="evaluationReview.eval='4'" name="evaluation" value="4" [checked]='review.evaluation=="4"'>Accept</label></li>
-                        <li><label><input type="radio" ngModel="{checked: evaluationReview.eval == '5'}" (click)="evaluationReview.eval='5'" name="evaluation" value="5" [checked]='review.evaluation=="5"'>Strong Accept</label></li>
-                    </ul>
-                </div>
-                <control-messages [control]="reviewForm.controls.evaluation"></control-messages>
-            </div>
-</form>
- <form [ngFormModel]="reviewForm" *ngFor="#review of paper.review"> 
-            <div class="form-group" *ngIf="checkEdit()">
-                <label class="col-md-2" style="text-align:left">Summary</label>
-                <div class="col-md-12" style="text-align:left">
-                    <textarea class="form-control " rows="4" id="summary" ngControl="summary" name="summary" [(ngModel)]="review.summary" required></textarea>
-                </div>
-                <control-messages [control]="reviewForm.controls.summary"></control-messages>
-            </div>
-
-            <div class="form-group" *ngIf="checkEdit()">
-                <label class="col-md-2" style="text-align:left">Major Strong Points</label>
-                <div class="col-md-12" style="text-align:left">
-                    <textarea class="form-control " rows="4" id="strongPoints" ngControl="strongPoints" [(ngModel)]="review.strongPoints" required></textarea>
-                </div>
-                <control-messages [control]="reviewForm.controls.majorStrongPoints"></control-messages>
-            </div>
-
-            <div class="form-group" *ngIf="checkEdit()">
-                <label class="col-md-2" style="text-align:left">Major Weak Points</label>
-                <div class="col-md-12" style="text-align:left">
-                    <textarea class="form-control" rows="4" id="weakPoints" ngControl="weakPoints" [(ngModel)]="review.weakPoints" required></textarea>
-                </div>
-                <control-messages [control]="reviewForm.controls.majorWeakPoints"></control-messages>
-            </div>
-
-            <div class="form-group" *ngIf="checkEdit()">
-                <label class="col-md-2" style="text-align:left">Comments</label>
-                <div class="col-md-12" style="text-align:left">
-                    <textarea class="form-control" rows="4" id="comments" ngControl="comments" [(ngModel)]="review.comments" required></textarea>
-                </div>
-                <control-messages [control]="reviewForm.controls.comments"></control-messages>
-            </div>
-
-            <div class="form-group col-md-12"  *ngIf="checkEdit()">
-                <button type="submit" class="btn btn-primary btn-block" (click)="addReviews($event,reviewForm.value)" style="width:80px">Submit</button>
-            </div>
-        </form>
-
-        <div class="row" *ngFor="#reviewI of paper.review">
-
-            <div class="row-md-12" *ngIf="!checkEdit()">
-                <div class="col-md-12">
-                    <label>Reviewer Expertise</label>
-                    <div class="col-md-12" [ngSwitch]='reviewI.expertise'>
-                        <div *ngSwitchWhen="'1'">Not Familiar</div>
-                        <div *ngSwitchWhen="'2'">Low</div>
-                        <div *ngSwitchWhen="'3'">Moderate</div>
-                        <div *ngSwitchWhen="'4'">High</div>
-                        <div *ngSwitchWhen="'5'">Expert</div>
+        <div class="row" *ngIf="hasReview">
+            <div class="col-md-12">
+                <div class="row">
+                    <label class="col-md-3" style="text-align:left;">summary:</label>
+                    <div class="col-md-9" style="text-align:left">
+                        <p>{{review.summary}}</p>
                     </div>
                 </div>
 
-            </div>
-            <br>
-            <div class="row-md-12" *ngIf="!checkEdit()">
-                <div class="col-md-12">
-                    <label>Overall Evaluation</label>
-                    <div class="col-md-12" [ngSwitch]='reviewI.evaluation'>
-                        <div *ngSwitchWhen="'1'">Strong Reject</div>
-                        <div *ngSwitchWhen="'2'">Reject</div>
-                        <div *ngSwitchWhen="'3'">Borderline Paper</div>
-                        <div *ngSwitchWhen="'4'">Accept</div>
-                        <div *ngSwitchWhen="'5'">Strong Accept</div>
+                 <div class="row">
+                    <label class="col-md-3" style="text-align:left;">strong Points:</label>
+                    <div class="col-md-9" style="text-align:left">
+                        <p>{{review.strongPoints}}</p>
+                    </div>
+                </div>
+   <div class="row">
+                    <label class="col-md-3" style="text-align:left;">weak Points:</label>
+                    <div class="col-md-9" style="text-align:left">
+                        <p>{{review.weakPoints}}</p>
+                    </div>
+                </div>
+   <div class="row">
+                    <label class="col-md-3" style="text-align:left;">detailed Comments:</label>
+                    <div class="col-md-9" style="text-align:left">
+                        <p>{{review.detailedComments}}</p>
+                    </div>
+                </div>
+  
+
+
+
+
+                <div class="row form-group">
+                    <label class="col-md-3" style="text-align:left">expertise  : <b>{{review.expertise}}</b></label>
+                    <div class="col-md-9" style="text-align:left">
+                        <rating [(ngModel)]="review.expertise" [max]="maxRateValue" [readonly]="true" (onHover)="overStarDoSomething($event)"
+                            (onLeave)="resetRatingStar($event)" [titles]="['one','two','three','four','five']"></rating>
+                        <span class="label" [ngClass]="{'label-warning': ratingPercent<30, 'label-info': ratingPercent>=30 && ratingPercent<70, 'label-success': ratingPercent>=70}"
+                            [ngStyle]="{display: (overStar && !isRatingReadonly) ? 'inline' : 'none'}">{{ratingPercent}}%</span>
+                        <hr/>
                     </div>
                 </div>
 
-            </div>
-            <br>
-            <div class="row-md-12" *ngIf="!checkEdit()">
-                <label class="col-md-2 control-label" style="text-align:left">Summary</label>
-                <div class="col-md-12" style="text-align:left">
-                    <p>{{reviewI.summary}}</p>
+
+                <div class="row form-group">
+                    <label class="col-md-3" style="text-align:left">overall Evaluation  : <b>{{review.overallEvaluation}}</b></label>
+                    <div class="col-md-9" style="text-align:left">
+                        <rating [(ngModel)]="review.overallEvaluation" [max]="maxRateValue" [readonly]="true" (onHover)="overStarEva($event)"
+                            (onLeave)="resetRatingStarEva($event)" [titles]="['one','two','three','four','five']"></rating>
+                        <span class="label" [ngClass]="{'label-warning': ratingPercentEvaluation<30, 'label-info': ratingPercentEvaluation>=30 && ratingPercentEvaluation<70, 'label-success': ratingPercentEvaluation>=70}"
+                            [ngStyle]="{display: (overStarEvaluation && !isRatingReadonly) ? 'inline' : 'none'}">{{ratingPercentEvaluation}}%</span>
+                        <hr/>
+                    </div>
                 </div>
-
             </div>
-
-            <div class="row-md-12" *ngIf="!checkEdit()">
-                <label class="col-md-2 control-label" style="text-align:left">Major Strong Points</label>
-                <div class="col-md-12" style="text-align:left">
-                    <p>{{reviewI.strongPoints}}</p>
-                </div>
-
-            </div>
-
-            <div class="row-md-12" *ngIf="!checkEdit()">
-                <label class="col-md-2 control-label" style="text-align:left">Major Weak Points</label>
-                <div class="col-md-12" style="text-align:left">
-                    <p>{{reviewI.weakPoints}}</p>
-                </div>
-
-            </div>
-
-            <div class="row-md-12" *ngIf="!checkEdit()">
-                <label class="col-md-2 control-label" style="text-align:left">Comments</label>
-                <div class="col-md-12" style="text-align:left">
-                    <p>{{reviewI.comments}}</p>
-                </div>
-
-            </div>
-
         </div>
-    </div>
-
-    <div class="panel-footer">
-        <a class="btn btn-default" (click)="onBack()">
-            <i class="glyphicon glyphicon-chevron-left"></i> Back
-        </a>
     </div>
 </div>

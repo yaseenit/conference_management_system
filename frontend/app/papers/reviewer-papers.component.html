@@ -23,7 +23,7 @@
                                  <td>{{task.taskDesc}}</td>
 
                         <td>{{ stringAsDate(task.createdOn) | date}}</td>
-                              <td> <a [routerLink]="['PaperDetail',{id:task.submissionId}]">Details</a></td>
+                              <td> <a [routerLink]="['ReviewDetail',{id:task.submissionId}]">Details</a></td>
    
 
                         <td>  <a [routerLink]="['ReviewCreate',{id:task.submissionId}]">New/Edit Review </a>     

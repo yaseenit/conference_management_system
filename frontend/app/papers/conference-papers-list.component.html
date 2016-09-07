@@ -21,7 +21,7 @@
                         <th>Status</th>
                          <th>Submission Date </th>
                         <th>DeadLine</th>
-                        <th> Attached File </th>
+                        <th>File</th>
                    
                         <th>Reviewers</th>
                        <th> action </th>
@@ -41,7 +41,10 @@
                         </td>
                          <td><a href="#" (click)="updateStatus($event,'accepted',paper._id)" *ngIf="getSubmissionStatus(paper.status)"> Accept</a>
                          <a href="#" (click)="updateStatus($event,'rejected',paper._id)" *ngIf="getSubmissionStatus(paper.status)"> Reject</a>
-                    <a [routerLink]="['PaperDetail',{id:paper._id}]">Details</a>     </td>
+                    <a href="#" [routerLink]="['PaperDetail',{id:paper._id}]">Details</a>  
+                    
+                    <a href="#" [routerLink]="['EditDeadline',{id:paper._id,conferenceId:paper.conferenceId}]"  *ngIf="getSubmissionStatus(paper.status)"> Change DeadLine</a>
+                       </td>
                     </tr>
                 </tbody>
             </table>

@@ -67,7 +67,7 @@ export class ConferencePaperComponent implements OnInit
     }
     getSubmissionIncompletedStatus(status:string)
     {
-           if(status=="incompleted")        
+      if(status=="incompleted")        
             return false;     
         else
         return true;

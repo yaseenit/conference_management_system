@@ -18,7 +18,7 @@ export class ConferenceComponent implements OnInit {
     messageType: string = "";
     ngOnInit(): void {
         console.log("dddd");
-        this.pageTitle = "My conference";
+        this.pageTitle = "My conferences";
         this._service.getUserConference().subscribe(
             response => {
                 this.conferences = <ConferenceModel[]>response["conferences"];

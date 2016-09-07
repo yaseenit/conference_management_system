@@ -37,7 +37,7 @@ System.register(['angular2/core', '../service/app.service', 'angular2/router', '
                 ConferenceComponent.prototype.ngOnInit = function () {
                     var _this = this;
                     console.log("dddd");
-                    this.pageTitle = "My conference";
+                    this.pageTitle = "My conferences";
                     this._service.getUserConference().subscribe(function (response) {
                         _this.conferences = response["conferences"];
                         if (_this.conferences.length == 0) {

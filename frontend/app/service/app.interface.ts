@@ -23,6 +23,7 @@ export class ConferenceModel {
     status: boolean=true;
     authors: any[]=[];
     tasks:any[]=[];
+    _id:string;
     constructor()
     {
         
@@ -100,7 +101,7 @@ export class PaperAuthor implements IPaperAuthor
 //for review
 export interface IReview
 {
-    
+    _id:string;
     expertise:number;
     overallEvaluation:number;
     summary:string;
@@ -114,9 +115,8 @@ export interface IReview
 }
 
 export class Review implements IReview
-{
-    
-        
+{  
+    _id:string="";
     expertise:number=0;
     overallEvaluation:number=0;
     summary:string="";
