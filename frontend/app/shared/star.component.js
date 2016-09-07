@@ -23,7 +23,7 @@ System.register(['angular2/core'], function(exports_1, context_1) {
                     this.ratingClicked = new core_1.EventEmitter();
                 }
                 StarComponent.prototype.ngOnChanges = function () {
-                    //  this.starWidth=this.rating * 86 /5
+                    this.starWidth = this.rating * 86 / 5;
                 };
                 StarComponent.prototype.onClick = function () {
                     this.ratingClicked.emit(this.rating.toString());

@@ -76,6 +76,7 @@ System.register([], function(exports_1, context_1) {
             exports_1("PaperAuthor", PaperAuthor);
             Review = (function () {
                 function Review() {
+                    this._id = "";
                     this.expertise = 0;
                     this.overallEvaluation = 0;
                     this.summary = "";

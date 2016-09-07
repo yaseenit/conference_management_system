@@ -2,47 +2,50 @@
     <div class="panel-heading" style="font-size:large">
         {{pageTitle}}
     </div>
+                    <result-messages [(message)]='resultMessage' [(messageType)]='messageType'></result-messages>
 
-    <div class="panel-body" style="margin:20px">
+    <div class="panel-body" *ngIf="messageType!='success'">
         <div class='row'>
                 <div class="panel-body" style="margin:20px">
 
         <div class="row">
-            <div class="row-md-12">
+            <div class="row">
                 <label class="col-md-3" style="text-align:left">Title:</label>
-                <div class="col-md-31">
+                <div class="col-md-9">
                     <p>{{paper.title}}</p>
                 </div>
             </div>
-            <div class="row-md-12">
+            <div class="row">
                 <label class="col-md-3" style="text-align:left">Created On:</label>
-                <div class="col-md-31">
+                <div class="col-md-9">
                     <p>{{ stringAsDate(paper.createdOn) | date}}</p>
                 </div>
             </div>
-             <div class="row-md-12">
+             <div class="row">
                 <label class="col-md-3" style="text-align:left">DeadLine:</label>
-                <div class="col-md-31">
+                <div class="col-md-9">
                     <p>{{ stringAsDate(paper.deadline) | date}}</p>
                 </div>
             </div>
-             <div class="row-md-12">
+             <div class="row">
                 <label class="col-md-3" style="text-align:left">Status:</label>
-                <div class="col-md-31">
+                <div class="col-md-9">
                     <p>{{paper.status}}</p>
                 </div>
             </div>
             <br>
-                <div class="row-md-12">
-                <label class="col-md-2" style="text-align:left">Abstract:</label>
-                <div class="col-md-32" style="text-align:left">
+                <div class="row">
+                <label class="col-md-3" style="text-align:left">Abstract:</label>
+                <div class="col-md-9" style="text-align:left">
                     <p>{{paper.abstract}}</p>
                 </div>
             </div>
             <br>
 
-            <div class="row-md-12">
-                <label class="col-md-2 control-label" style="text-align:left">Author(s):</label>
+            <div class="row">
+                <label class="col-md-3 control-label" style="text-align:left">Author(s):</label>
+                                <div class="col-md-9" style="text-align:left">
+
                 <table class="table table-striped table-hover table-bordered ">
                     <thead>
                         <tr>
@@ -58,20 +61,21 @@
                             <td>{{paper.email}}</td>
                         </tr>
                     </tbody>
-                </table>
+                </table></div>
+
             </div>
             <br>
-            <div class="row-md-12">
-                <label class="col-md-2 " style="text-align:left;">Keywords:</label>
-                <div class="col-md-32" style="text-align:left">
+            <div class="row">
+                <label class="col-md-3" style="text-align:left;">Keywords:</label>
+                <div class="col-md-9" style="text-align:left">
                     <p>{{paper.keywords}}</p>
                 </div>
             </div>
             <br>
   
-            <div class="row-md-12">
-                <label class="col-md-2 " style="text-align:left">Uploaded Paper</label>
-                <div class="col-md-32" style="text-align:left">
+            <div class="row">
+                <label class="col-md-3" style="text-align:left">Uploaded Paper</label>
+                <div class="col-md-9" style="text-align:left">
                     <a  href="#" (click)='getFile($event,paper.generatedFileName,paper.fileName)' target="_blank">
                         <img src='./app/assets/images/paper.ico' [style.width.px]='imageWidth' [style.height.px]='imageHeight'></a>
                 </div>
@@ -80,53 +84,71 @@
         <hr>  
         </div>
     </div>
-        <div class="row">
-            <div class="row-md-12">
+        <div class="row" *ngIf="allowReview">
+            <div class="col-md-12">
 
 
      <form [ngFormModel]="reviewForm" > 
-            <div class="form-group" >
-                <label class="col-md-2" style="text-align:left">Summary</label>
-                <div class="col-md-12" style="text-align:left">
+            <div class="row form-group" >
+                <label class="col-md-3" style="text-align:left">Summary</label>
+                <div class="col-md-9" style="text-align:left">
                     <textarea class="form-control " rows="4" id="summary" ngControl="summary" name="summary" [(ngModel)]="review.summary" required></textarea>
+                               <control-messages [control]="reviewForm.controls.summary"></control-messages>
+
                 </div>
-                <control-messages [control]="reviewForm.controls.summary"></control-messages>
             </div>
-            <div class="form-group" >
-                <label class="col-md-2" style="text-align:left">strong Points</label>
-                <div class="col-md-12" style="text-align:left">
+            <div class="row form-group" >
+                <label class="col-md-3" style="text-align:left">strong Points</label>
+                <div class="col-md-9" style="text-align:left">
                     <textarea class="form-control " rows="4" id="strongPoints" ngControl="strongPoints" name="strongPoints" [(ngModel)]="review.strongPoints" required></textarea>
+                               <control-messages [control]="reviewForm.controls.strongPoints"></control-messages>
+
                 </div>
-                <control-messages [control]="reviewForm.controls.strongPoints"></control-messages>
             </div>        
-             <div class="form-group" >
-                <label class="col-md-2" style="text-align:left">weak Points</label>
-                <div class="col-md-12" style="text-align:left">
+             <div class="row form-group" >
+                <label class="col-md-3" style="text-align:left">weak Points</label>
+                <div class="col-md-9" style="text-align:left">
                     <textarea class="form-control " rows="4" id="weakPoints" ngControl="weakPoints" name="weakPoints" [(ngModel)]="review.weakPoints" required></textarea>
+                               <control-messages [control]="reviewForm.controls.weakPoints"></control-messages>
+
                 </div>
-                <control-messages [control]="reviewForm.controls.weakPoints"></control-messages>
             </div>
 
-        <div class="form-group" >
-                <label class="col-md-2" style="text-align:left">expertise  : <b>{{currentRate}}</b></label>
-                <div class="col-md-12" style="text-align:left">
-                    <rating [(ngModel)]="currentRate" [max]="maxRateValue" [readonly]="isRatingReadonly"
+                 <div class="row form-group" >
+                <label class="col-md-3" style="text-align:left">Comments</label>
+                <div class="col-md-9" style="text-align:left">
+                    <textarea class="form-control " rows="4" id="detailedComments" ngControl="detailedComments" name="weakPoints" [(ngModel)]="review.detailedComments" required></textarea>
+                               <control-messages [control]="reviewForm.controls.detailedComments"></control-messages>
+
+                </div>
+            </div>
+
+        <div class="row form-group" >
+                <label class="col-md-3" style="text-align:left">expertise  : <b>{{review.expertise}}</b></label>
+                <div class="col-md-9" style="text-align:left">
+                    <rating [(ngModel)]="review.expertise" [max]="maxRateValue" [readonly]="isRatingReadonly"
                             (onHover)="overStarDoSomething($event)" (onLeave)="resetRatingStar($event)"
-                            [titles]="['one','two','three']"></rating>
+                            [titles]="['one','two','three','four','five']"></rating>
                     <span class="label"
                           [ngClass]="{'label-warning': ratingPercent<30, 'label-info': ratingPercent>=30 && ratingPercent<70, 'label-success': ratingPercent>=70}"
                           [ngStyle]="{display: (overStar && !isRatingReadonly) ? 'inline' : 'none'}">{{ratingPercent}}%</span>
-                    <hr/>                </div>
+                    <hr/>          
+                    </div>
             </div>
 
-             <div class="form-group" >
-                <label class="col-md-2" style="text-align:left">overall Evaluation</label>
-                <div class="col-md-12" style="text-align:left">
-
-
-                </div>
+                       
+              <div class="row form-group" >
+                <label class="col-md-3" style="text-align:left">overall Evaluation  : <b>{{review.overallEvaluation}}</b></label>
+                <div class="col-md-9" style="text-align:left">
+                    <rating [(ngModel)]="review.overallEvaluation" [max]="maxRateValue" [readonly]="isRatingReadonly"
+                            (onHover)="overStarEva($event)" (onLeave)="resetRatingStarEva($event)"
+                            [titles]="['one','two','three','four','five']"></rating>
+                    <span class="label"
+                          [ngClass]="{'label-warning': ratingPercentEvaluation<30, 'label-info': ratingPercentEvaluation>=30 && ratingPercentEvaluation<70, 'label-success': ratingPercentEvaluation>=70}"
+                          [ngStyle]="{display: (overStarEvaluation && !isRatingReadonly) ? 'inline' : 'none'}">{{ratingPercentEvaluation}}%</span>
+                    <hr/>          
+                    </div>
             </div>
-           
       
 
             <div class="form-group col-md-12"  >
