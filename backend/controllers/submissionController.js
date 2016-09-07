@@ -120,14 +120,14 @@ var submissionController = function (Submission) {
         });
     }
     var editStatus = function (req, res) {
-        var data={};
+        var data = {};
         if (req.body.status)
             data.status = req.body.status;
         if (req.body.deadline)
             data.deadline = new Date(req.body.deadline)
         var id = req.body._id || '';
         if (id && data) {
-                        console.log("data");
+            console.log("data");
             console.log(data);
             Submission.findOneAndUpdate({ _id: id }, data, function (err, submission) {
                 if (err)
@@ -165,39 +165,43 @@ var submissionController = function (Submission) {
             if (err)
                 res.status(500).send(err);
             else if (submission) {
-                req.submission = submission;
-                req.submission.remove(function (err) {
-                    if (err)
-                        res.status(500).send(err);
-                    else {
-                        var user = req.user;
-                        user.submissions.pull(submission._id);
-                        //TODO remove reviews and paper
+                if (req.isChair || (submission.createdBy.toUpperCase() === req.uesr.username.toUpperCase())) // chair or user own this
+                {
+                    submission.remove(function (err) {
+                        if (err)
+                            res.status(500).send(err);
+                        else {
+                            var user = req.user;
+                            user.submissions.pull(submission._id);
+                            fs.unlink(uploadedFilesPath + submission.generatedFileName);//remove the related paper file
+                            //TODO remove reviews 
 
-                        user.save(function (err, user) {
-                            if (err) {
-                                req.submission.save();
-                                res.status(500).send(err);
-                                return;
-                            }
-                            else {
-                                res.status(204).json({ message: "Submission has be deleted.", code: 204 });
-                            }
-                        });
-                    }
-                });
-            }
+                            user.save(function (err, user) {
+                                if (err) {
+                                    res.status(500).send(err);
+                                    return;
+                                }
+                                else {
+                                    res.status(204).json({ message: "Submission has be deleted.", code: 204 });
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    res.status(403);
+                    res.json({
+                        "status": 403,
+                        "message": "Not Authorized"
+                    });
+                }
+            }// Not found
             else {
                 var user = req.user;
                 user.submissions.pull(submission._id);
                 user.save(function (err, user) {
                     if (err) {
-                        req.submission.save();
                         res.status(500).send(err);
                         return;
-                    }
-                    else {
-                        res.status(204).json({ message: "Submission has be deleted.", code: 204 });
                     }
                 });
                 res.status(404).send('no submission for the requested submissionId is found to be deleted');
