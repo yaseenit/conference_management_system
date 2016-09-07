@@ -14,8 +14,7 @@ module.exports = function (app) {
 	var downloadController = require('../controllers/downloadFileController')(app);
     var reportingController = require('../controllers/reportingController')();
     var conferenceController = require('../controllers/conferenceController')();
-
-
+var reportingControllerAuthors = require('../controllers/reportingControllerAuthors')();
 
 	//var user = require('./users.js');
 
