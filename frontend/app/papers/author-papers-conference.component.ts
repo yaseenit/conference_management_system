@@ -37,7 +37,15 @@ export class AuthorPapersConferenceComponent implements OnInit
         console.log('init page');
          this.conferenceId= this._routeParams.get('id');
          this.pageTitle ='Conference: '+this._routeParams.get('title');
-         this._paperService.getPapers().subscribe(
+         this.fillPaperList();
+
+        
+     
+
+    }
+
+    fillPaperList()
+    {        this._paperService.getPapers().subscribe(
             papers =>{ this.papers=papers.filter((pap : IPaper) =>
             pap.conferenceId.indexOf(this.conferenceId) !=-1);
         
@@ -66,9 +74,6 @@ export class AuthorPapersConferenceComponent implements OnInit
             }
         );
 
-        
-     
-
     }
     checkConferenceDate(endate:any)
     {
@@ -83,13 +88,33 @@ export class AuthorPapersConferenceComponent implements OnInit
            else
             this.checkConferenceEndDate= true;
     }
+     updateStatus(event,status:string,submissionId:string)
+ { 
+      event.preventDefault();
+     this._paperService.submissionUpdateStatus(status,submissionId,this.conferenceId).subscribe(
+            response => {
+
+               console.log(response);
+                this.messageType="success";
+                this.resultMessage="Submission "+ status+" successfully";
+                          this.fillPaperList();
+
+                
+             },
+            error =>{
+                 this.messageType="error";
+                this.resultMessage=error["message"];
+             }
+        );
+     
+ }
 
    stringAsDate(dateStr) {
         return new Date(dateStr);
     }
   checkSubmissionStatus(status:string,deadline:any):boolean
     {
-      if(status=="rejected")
+      if(status!="incompleted")
       {
           // this.resultMessage="Cann't assigned reviewer to rejected paper";
          //   this.messageType="error";
