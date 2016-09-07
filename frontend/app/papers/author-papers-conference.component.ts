@@ -32,13 +32,14 @@ export class AuthorPapersConferenceComponent implements OnInit
     }
     country:any[];
     pinApi:any[];
+    checkConferenceEndDate:boolean=false;
     ngOnInit():void{
         console.log('init page');
          this.conferenceId= this._routeParams.get('id');
          this.pageTitle ='Conference: '+this._routeParams.get('title');
          this._paperService.getPapers().subscribe(
-            papers =>{ this.papers=papers.filter((con : IPaper) =>
-            con.conferenceId.indexOf(this.conferenceId) !=-1);
+            papers =>{ this.papers=papers.filter((pap : IPaper) =>
+            pap.conferenceId.indexOf(this.conferenceId) !=-1);
         
                   if(this.papers.length==0)
             {
@@ -55,9 +56,61 @@ export class AuthorPapersConferenceComponent implements OnInit
            }
         );
 
+        this._paperService.getConferenceDetails(this.conferenceId).subscribe(
+            response=>{
+              this.checkConferenceDate(response.enddate);
+            },
+            error =>{
+                    this.messageType="erro";
+                this.resultMessage=error["message"];
+            }
+        );
+
         
      
 
+    }
+    checkConferenceDate(endate:any)
+    {
+        var current = new Date();
+           if( new Date(endate).getTime()<current.getTime())
+           {
+              this.resultMessage="you  cann't make new submission after conference end date";
+             this.messageType="alert ";
+              this.checkConferenceEndDate= false;
+
+           }
+           else
+            this.checkConferenceEndDate= true;
+    }
+
+   stringAsDate(dateStr) {
+        return new Date(dateStr);
+    }
+  checkSubmissionStatus(status:string,deadline:any):boolean
+    {
+      if(status=="rejected")
+      {
+          // this.resultMessage="Cann't assigned reviewer to rejected paper";
+         //   this.messageType="error";
+            return false;
+      }
+      else
+      {
+           var current = new Date();
+           if( new Date(deadline).getTime()<current.getTime())
+           {
+        //    this.resultMessage="Cann't assigned reviewer, paper reach deadline" + deadline ;
+       //     this.messageType="error";
+            return false;
+
+           }
+           else
+           { 
+               return true;
+
+           }
+      }
     }
  getFile(event,generatedFileName,fileName)
  {

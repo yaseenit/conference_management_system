@@ -27,15 +27,10 @@ export class ChangePasswordComponent {
   resultMessage: string = "";
     messageType: string = "";
     changePassword(event, value: any) {
-
         event.preventDefault();
-      
         this._service.changePassword(value.password,value.oldPassword).subscribe(response => {
-                this.resultMessage = "Thanks for registration please check your email for activation";
+                this.resultMessage = "Your password has been changed";
                 this.messageType = "success";
-
-
-
             },
             error => {
                 
@@ -44,7 +39,6 @@ export class ChangePasswordComponent {
             }
         );
         console.log('presssss');
-
     }
     constructor(_fb: FormBuilder, private _service: AppService,private _router :Router) {
 

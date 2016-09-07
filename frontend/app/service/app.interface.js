@@ -51,7 +51,7 @@ System.register([], function(exports_1, context_1) {
                     this.submissionDate = new Date();
                     this.userId = "";
                     this.abstract = "";
-                    this.deadline = "";
+                    this.deadline = new Date();
                     this.createdOn = "";
                     this.generatedFileName = "";
                     this.conferenceId = "";

@@ -8,7 +8,7 @@ export interface IPaper{
     submissionDate:Date;
     userId:string;
     abstract:string;
-    deadline:string;
+    deadline:Date;
     createdOn:string;
     generatedFileName:string;
     conferenceId:string;
@@ -64,7 +64,7 @@ export class Paper implements IPaper
     submissionDate:Date=new Date();
     userId:string="";
     abstract:string="";
-    deadline:string="";
+    deadline:Date=new Date();
     createdOn:string="";
     generatedFileName:string="";
     conferenceId:string="";

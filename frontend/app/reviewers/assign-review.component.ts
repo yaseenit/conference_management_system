@@ -27,6 +27,8 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
         resultMessage:string="";
         messageType:string="";
         conferenceId:string="";
+        chkSubmissionStatus:boolean=false;
+
         constructor(_fb: FormBuilder, private _reviewerService: AppService,  private _routeParams:RouteParams ) {
         this.form = _fb.group({
             userName: ['', Validators.compose([ValidationService.emailValidator,Validators.required])]
@@ -44,7 +46,7 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
             respone => {
                 this.PaperReviewers=respone.reviewers;
                 this.conferenceId=respone.conferenceId;
-
+  this.checkSubmissionStatus(respone.status,respone.deadline);
 
             },
             error =>
@@ -53,6 +55,31 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
              this.messageType="error";
             }
         );
+    }
+    checkSubmissionStatus(status:string,deadline:any)
+    {
+      if(status=="rejected")
+      {
+           this.chkSubmissionStatus=false;
+           this.resultMessage="Cann't assigned reviewer to rejected paper";
+            this.messageType="error";
+      }
+      else
+      {
+           var current = new Date();
+           if( new Date(deadline).getTime()<current.getTime())
+           {
+            this.resultMessage="Cann't assigned reviewer, paper reach deadline" + deadline ;
+            this.messageType="error";
+           this.chkSubmissionStatus=false;
+
+           }
+           else
+           {
+                          this.chkSubmissionStatus=true;
+
+           }
+      }
     }
     assign(event,value: any ) {
         this.messageType="";
@@ -106,7 +133,7 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
         else
     return true;
       }
-
+   
    removeReviewer(_userName:string):void
   {
       this._reviewerService.removeReviewers(_userName,this.submissionId,this.conferenceId).subscribe(

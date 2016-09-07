@@ -47,6 +47,11 @@ export class ConferencePaperComponent implements OnInit
              }
         );
     }
+     
+     
+       stringAsDate(dateStr) {
+        return new Date(dateStr);
+    }
  getFile(event,generatedFileName,fileName)
  {
          event.preventDefault();

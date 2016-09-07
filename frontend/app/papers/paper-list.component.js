@@ -66,6 +66,9 @@ System.register(['angular2/core', './paper-filter.pipe', '../shared/star.compone
                             error => this.errorMessage=<any>error
                         );*/
                 };
+                PaperListComponent.prototype.stringAsDate = function (dateStr) {
+                    return new Date(dateStr);
+                };
                 PaperListComponent.prototype.getFile = function (event, generatedFileName, fileName) {
                     event.preventDefault();
                     this._paperService.getFiles(generatedFileName, fileName);

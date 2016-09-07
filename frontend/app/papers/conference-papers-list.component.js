@@ -59,6 +59,9 @@ System.register(['angular2/core', '../service/app.service', 'angular2/router', '
                         _this.resultMessage = error["message"];
                     });
                 };
+                ConferencePaperComponent.prototype.stringAsDate = function (dateStr) {
+                    return new Date(dateStr);
+                };
                 ConferencePaperComponent.prototype.getFile = function (event, generatedFileName, fileName) {
                     event.preventDefault();
                     this._paperService.getFiles(generatedFileName, fileName);

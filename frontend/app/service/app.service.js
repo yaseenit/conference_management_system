@@ -194,8 +194,8 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                 };
                 //for reviewergetReview(id: number): Observable<IReview> {
                 AppService.prototype.getReview = function (id) {
-                    return this.getPapers()
-                        .map(function (reviews) { return reviews.find(function (p) { return p.id === id; }); }); //.do(data => console.log("All:" + JSON.stringify(data)));
+                    // return this.getPapers()
+                    // .map((reviews: IReview[]) => reviews.find(p => p.id === id))//.do(data => console.log("All:" + JSON.stringify(data)));
                 };
                 AppService.prototype.getReviews = function () {
                     return this._http.get(this._reviewUrl)

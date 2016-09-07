@@ -9,12 +9,29 @@
 
         <div class="row">
             <div class="row-md-12">
-                <label class="col-md-1" style="text-align:left">Title:</label>
-                <div class="col-md-11">
+                <label class="col-md-3" style="text-align:left">Title:</label>
+                <div class="col-md-31">
                     <p>{{paper.title}}</p>
                 </div>
             </div>
-
+            <div class="row-md-12">
+                <label class="col-md-3" style="text-align:left">Created On:</label>
+                <div class="col-md-31">
+                    <p>{{ stringAsDate(paper.createdOn) | date}}</p>
+                </div>
+            </div>
+             <div class="row-md-12">
+                <label class="col-md-3" style="text-align:left">DeadLine:</label>
+                <div class="col-md-31">
+                    <p>{{ stringAsDate(paper.deadline) | date}}</p>
+                </div>
+            </div>
+             <div class="row-md-12">
+                <label class="col-md-3" style="text-align:left">Status:</label>
+                <div class="col-md-31">
+                    <p>{{paper.status}}</p>
+                </div>
+            </div>
             <br>
 
             <div class="row-md-12">
@@ -39,21 +56,21 @@
             <br>
             <div class="row-md-12">
                 <label class="col-md-2 " style="text-align:left;">Keywords:</label>
-                <div class="col-md-12" style="text-align:left">
+                <div class="col-md-32" style="text-align:left">
                     <p>{{paper.keywords}}</p>
                 </div>
             </div>
             <br>
             <div class="row-md-12">
                 <label class="col-md-2" style="text-align:left">Abstract:</label>
-                <div class="col-md-12" style="text-align:left">
+                <div class="col-md-32" style="text-align:left">
                     <p>{{paper.abstract}}</p>
                 </div>
             </div>
             <br>
             <div class="row-md-12">
                 <label class="col-md-2 " style="text-align:left">Uploaded Paper</label>
-                <div class="col-md-12" style="text-align:left">
+                <div class="col-md-32" style="text-align:left">
 
 
                     <a  href="#" (click)='getFile($event,paper.generatedFileName,paper.fileName)' target="_blank">
