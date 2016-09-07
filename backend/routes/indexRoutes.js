@@ -108,8 +108,13 @@ var job = new CronJob('00 30 01 * * 1-5', function() {
 
 
 
-	app.post('/api/v1/:conferenceId/review/', reviewRoutes.create);
+	app.post('/api/v1/:conferenceId/review/create', reviewRoutes.create);
+	app.post('/api/v1/:conferenceId/review/edit', reviewRoutes.edit);
+
 	app.get('/api/v1/:conferenceId/review/:submissionId', reviewRoutes.getReiewBySubmissionId); // as a reviewer
+
+	app.get('/api/v1/:conferenceId/chair/review/:submissionId', reviewRoutes.getRviewsBySubmissionId); // as a chair
+
 
     app.get('/api/v1/review/', reviewRoutes.getAll); // as an author
 	app.delete('/api/v1/review/:reviewId', reviewRoutes.remove);
