@@ -111,6 +111,9 @@ var submissionController = function (Submission) {
         Submission.findOneAndUpdate({ _id: id }, data, function (err, submission) {
             if (err)
                 res.status(500).send(err);
+            else if (!submission) {
+                res.status(400).send({ message: "given submission id does not existed ", code: 400 });
+            }
             else {
                 res.json(submission);
             }
@@ -127,6 +130,9 @@ var submissionController = function (Submission) {
             Submission.findOneAndUpdate({ _id: id }, data, function (err, submission) {
                 if (err)
                     res.status(500).send(err);
+                else if (!submission) {
+                    res.status(400).send({ message: "given submission id does not existed ", code: 400 });
+                }
                 else {
                     res.json(submission);
                 }
