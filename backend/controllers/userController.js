@@ -54,10 +54,10 @@ var userController = function (User) {
     var getAllSubmissions = function (req, res) {
         var conferenceId = req.params.conferenceId;
         var query = {
-            'conferenceId' : conferenceId
+            'conferenceId': conferenceId
         };
         Submission.find(query)
-           // .populate('submissions') //,'attribure attribure ...')
+            // .populate('submissions') //,'attribure attribure ...')
             .exec(function (err, submissions) {
                 if (err)
                     res.status(500).send(err);
@@ -159,32 +159,32 @@ var userController = function (User) {
     }
 
     var getProfile = function (req, res) {
-    // var get = function (req, res) {
+        // var get = function (req, res) {
 
-    //     var query = {};
+        //     var query = {};
 
-    //     if (req.query.genre) {
-    //         query.genre = req.query.genre;
-    //     }
-    //     User.find(query, function (err, users) {
-    //         if (err)
-    //             res.status(500).send(err);
-    //         else
-    //             res.json(users);
-    //     });
-    // }
+        //     if (req.query.genre) {
+        //         query.genre = req.query.genre;
+        //     }
+        //     User.find(query, function (err, users) {
+        //         if (err)
+        //             res.status(500).send(err);
+        //         else
+        //             res.json(users);
+        //     });
+        // }
         if (req.user) {
-        User.findById(req.user._id)
-            .populate('reviews')//,'submissions') TODO
-            .populate('conferences')
-            .populate('submissions')
-            .populate('tasks')
-            .exec(function (err, user) {
-                if (err)
-                    res.status(500).send(err);
-                else
-                    res.json(user);
-            });
+            User.findById(req.user._id)
+                .populate('reviews')//,'submissions') TODO
+                .populate('conferences')
+                .populate('submissions')
+                .populate('tasks')
+                .exec(function (err, user) {
+                    if (err)
+                        res.status(500).send(err);
+                    else
+                        res.json(user);
+                });
         } else {//should not reach here
             res.status(500).json({ message: "request for unlogged in user", code: 500 })
         }
@@ -209,6 +209,8 @@ var userController = function (User) {
         if (req.body.address)
             req.user.address = req.body.address;
 
+
+
         req.user.save(function (err) {
             if (err)
                 res.status(500).send(err);
@@ -219,36 +221,68 @@ var userController = function (User) {
     }
     var deleteProfile = function (req, res) {
 
-        var username =req.user.username;
-        if(req.user.role.toLowerCase().localeCompare("chair")==0){
-            res.status(403).json({message:"Chair user can not be removed! please refere to the adminstrator.",code:403});
+        var username = req.user.username;
+        if (req.user.role.toLowerCase().localeCompare("chair") == 0) {
+            res.status(403).json({ message: "Chair user can not be removed! please refere to the adminstrator.", code: 403 });
         }
-        else{
-            req.user.remove(function(err){
-                if(err)
+        else {
+            req.user.remove(function (err) {
+                if (err)
                     res.status(500).send(err);
-                else{
-                    res.status(204).json({message: username+" has been removed successfully.",code:204});
+                else {
+                    res.status(204).json({ message: username + " has been removed successfully.", code: 204 });
                 }
             });
         }
     }
 
-    return {
-        post: post,
-        getAllAuthors: getAllAuthors,
-        getAllReviewers: getAllReviewers,
-        getAllReviews: getAllReviews,
-        getAllSubmissions: getAllSubmissions,
-        createTask: createTask,
-        getAllTasks: getAllTasks,
-        editTask: editTask,
+    var changeProfilePassword = function (req, res) {
+        var oldPassword = req.body.oldPassword || '';
+        var newPasword = req.body.newPasword || '';
 
+        if (newPasword == '' || oldPassword == '') {
+            res.status(400);
+            res.json({
+                "status": 400,
+                "message": "both old and new passwords must be provided."
+            });
+            return;
+        }
+    if (User.authenticate(oldPassword)) {
+        req.user.password = newPasword;
+        req.user.save(function (err) {
+            if (err)
+                res.status(500).send(err);
+            else {
+                res.json(req.user);
+            }
+        });
 
-        getProfile: getProfile,
-        editProfile: editProfile,
-        deleteProfile: deleteProfile
     }
+    else {
+        res.status(400);
+        res.json({
+            "status": 400,
+            "message": "wrong password."
+        });
+    }
+}
+return {
+    post: post,
+    getAllAuthors: getAllAuthors,
+    getAllReviewers: getAllReviewers,
+    getAllReviews: getAllReviews,
+    getAllSubmissions: getAllSubmissions,
+    createTask: createTask,
+    getAllTasks: getAllTasks,
+    editTask: editTask,
+
+
+    getProfile: getProfile,
+    editProfile: editProfile,
+    deleteProfile: deleteProfile,
+        changeProfilePassword : changeProfilePassword
+}
 }
 
 module.exports = userController;
