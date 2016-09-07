@@ -3,7 +3,7 @@ var reportingController = function () {
 
     var get = function (req, res) {
       var agg= [
-          {$group:{ institute:"$institute",total:{ $sum:1}
+          {$group:{ _id:null,count:{ $sum:1}
 
           }}
 
