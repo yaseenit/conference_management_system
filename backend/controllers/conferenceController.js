@@ -30,7 +30,7 @@ var conferenceController = function () {
                         if (user.familyName) {
                             name = user.familyName;
                         }
-                        Email.subject = "CMS Conference has beeb created successfully";
+                        Email.subject = "CMS Conference has been created successfully";
                         Email.html = "<p>Dear Mr/Ms " + name + ",<br>You have successfully created a new conference with title " + req.body.title + "<br>Best of luck with your conferece. Thank you.</p>";
                         var emailController = require('../controllers/emailController')(Email);
                     }

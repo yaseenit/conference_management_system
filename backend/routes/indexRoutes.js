@@ -121,12 +121,14 @@ var job = new CronJob('00 30 01 * * 1-5', function() {
 	app.get('/api/v1/review/:reviewId', reviewRoutes.getOne);
 
 
-
+                                                            
 
 	// /*
 	// * Routes that can be accessed only by autheticated users
 	// */
 	app.get('/api/v1/submissions/', submissionRoutes.getAll);
+
+
 	app.post('/api/v1/:conferenceId/submissions/create', submissionRoutes.create);
 	app.post('/api/v1/:conferenceId/submissions/edit', submissionRoutes.update);
 	app.post('/api/v1/:conferenceId/submissions/editStatus', submissionRoutes.editStatus);
