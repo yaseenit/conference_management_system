@@ -92,6 +92,10 @@ var job = new CronJob('00 30 01 * * 1-5', function() {
 	app.delete('/api/v1/profile/', userRoutes.deleteProfile);
 
 
+	app.post('/api/v1/profile/public', userRoutes.getPublicProfileByEmail);
+
+
+
    app.post('/api/v1/conference/',conferenceController.post);
    app.get('/api/v1/conference/:conferenceId',conferenceController.getById);
    app.get('/api/v1/conference/',conferenceController.getAll);
