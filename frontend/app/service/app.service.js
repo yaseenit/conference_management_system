@@ -38,7 +38,7 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                     this._http = _http;
                     this._router = _router;
                     this.jsonp = jsonp;
-                    this._rootUrl = "http://myremoteserverwg117.ddns.net:4000/";
+                    this._rootUrl = "http://myremoteserverwg117.ddns.net:3000";
                     this._apiUrl = this._rootUrl + "api/v1/";
                     this._taskUrl = this._apiUrl + "chair/tasks/";
                     this._paperUrl = this._apiUrl + 'submissions/';

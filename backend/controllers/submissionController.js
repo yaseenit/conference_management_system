@@ -136,6 +136,10 @@ var submissionController = function (Submission) {
                 }
                 else {
                     res.json(submission);
+                    Email.to = submission.createdBy;
+                    Email.subject = "CMS Submission mail";
+                    Email.html = "<p>Dear Mr/Ms Author,<br>The status of your submission "+ submission.title +" has been changed. Thank you.</p>";
+                    var emailController = require('../controllers/emailController')(Email);
                 }
             });
         } else {
@@ -194,14 +198,6 @@ var submissionController = function (Submission) {
                 }
             }// Not found
             else {
-                var user = req.user;
-                user.submissions.pull(submission._id);
-                user.save(function (err, user) {
-                    if (err) {
-                        res.status(500).send(err);
-                        return;
-                    }
-                });
                 res.status(404).send('no submission for the requested submissionId is found to be deleted');
             }
         });

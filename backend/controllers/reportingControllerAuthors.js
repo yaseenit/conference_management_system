@@ -1,5 +1,5 @@
 //var Conference = require('../models/conferenceModel');
-var Submission = require('../models/conferenceModel');
+var Submission = require('../models/submissionModel');
 var reportingControllerAuthors = function () {
 
     var get = function (req, res) {
@@ -7,7 +7,7 @@ var reportingControllerAuthors = function () {
            {
                $group:{
                     _id:{
-                        conferenceID :'$conferenceId'
+                        conferenceId :'$conferenceId'
                     },
                     count:{ 
                         $sum:1

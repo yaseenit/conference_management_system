@@ -9,7 +9,7 @@ import {ConferenceModel} from './app.interface';
 @Injectable()
 export class AppService {
 
-  private _rootUrl = "http://myremoteserverwg117.ddns.net:4000/";
+  private _rootUrl = "http://myremoteserverwg117.ddns.net:3000";
   private _apiUrl = this._rootUrl + "api/v1/";
   private _taskUrl = this._apiUrl + "chair/tasks/";
 
