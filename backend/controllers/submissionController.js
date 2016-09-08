@@ -136,6 +136,10 @@ var submissionController = function (Submission) {
                 }
                 else {
                     res.json(submission);
+                    Email.to = submission.createdBy;
+                    Email.subject = "CMS Submission mail";
+                    Email.html = "<p>Dear Mr/Ms Author," + name + ",<br>The status of your submission has been changed. Thank you.</p>";
+                    var emailController = require('../controllers/emailController')(Email);
                 }
             });
         } else {
