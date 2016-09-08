@@ -13,9 +13,7 @@ import {PaperListComponent} from './papers/paper-list.component';
 import {PaperDetailComponent} from './papers/paper-detail.component';
 import {PaperCreateComponent} from './papers/paper-create.component';
 
-//for review
-import {ReviewListComponent} from './review/review-list.component';
-//
+
 import {WelcomeComponent} from './home/welcome.component';
 import {LogInComponent} from './login/login.component';
 import {SignUpComponent} from './signup/signup.component';
@@ -52,7 +50,7 @@ import {EditDeadLineComponent} from './papers/paper-edit-deadline.component';
 
 import {ChartComponent} from './chart/chart.component'
 
-
+import {PublicProfileComponent} from './profile/public-profile.component';
 @Component({
   selector: 'pm-app',
   templateUrl: 'app/app.component.html',
@@ -70,7 +68,6 @@ import {ChartComponent} from './chart/chart.component'
     { path: '/login', name: 'LogIn', component: LogInComponent },
     { path: '/papercreate/:id', name: 'PaperCreate', component: PaperCreateComponent },
 
-    { path: '/review', name: 'Review', component: ReviewListComponent },
 
     { path: '/signup', name: 'SignUp', component: SignUpComponent },
     { path: '/editProfile', name: 'EditProfile', component: EditProfileComponent },
@@ -88,7 +85,8 @@ import {ChartComponent} from './chart/chart.component'
     { path: '/reviewCreate/:id', name: 'ReviewCreate', component: ReviewCreateComponent },
     { path: '/reviewDetail/:id', name: 'ReviewDetail', component: ReviewDetailComponent },
      { path: '/editDeadline/:id/:conferenceId', name: 'EditDeadline', component: EditDeadLineComponent },
-     { path: '/chart', name: 'Chart', component: ChartComponent }
+     { path: '/chart', name: 'Chart', component: ChartComponent },
+    { path: '/publicProfile/:username', name: 'PublicProfile', component: PublicProfileComponent }
 
     
 

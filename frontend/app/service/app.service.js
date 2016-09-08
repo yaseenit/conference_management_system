@@ -41,8 +41,6 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                     this._rootUrl = "http://myremoteserverwg117.ddns.net:3000/";
                     this._apiUrl = this._rootUrl + "api/v1/";
                     this._taskUrl = this._apiUrl + "chair/tasks/";
-                    // private _inviteUrl = this._apiUrl + "/addAuthor/";
-                    //private _paperUrl=this._apiUrl+'submissions/';
                     this._paperUrl = this._apiUrl + 'submissions/';
                     this._profileUrl = this._apiUrl + 'profile/';
                     this._uploadUrl = this._apiUrl + 'submissions/';
@@ -53,6 +51,7 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                     this._signupUrl = this._rootUrl + "register";
                     this._isRegisterUrl = this._rootUrl + "isRegister";
                     this._reportUrl = this._apiUrl + 'report/';
+                    this._publicProfileUrl = this._apiUrl + "profile/public";
                 }
                 AppService.prototype.getPapers = function () {
                     return this._http.get(this._paperUrl, { headers: headers_1.ContentHeaders })
@@ -264,6 +263,12 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                     var _token = this.getToken();
                     var token = JSON.stringify({ _token: _token });
                     return this._http.get(this._profileUrl, { headers: headers_1.ContentHeaders })
+                        .map(function (response) { return response.json(); })
+                        .catch(this.handleError).do(function (data) { return console.log("All:" + JSON.stringify(data)); });
+                };
+                AppService.prototype.getPublicProfile = function (username) {
+                    var body = JSON.stringify({ username: username });
+                    return this._http.post(this._publicProfileUrl, body, { headers: headers_1.ContentHeaders })
                         .map(function (response) { return response.json(); })
                         .catch(this.handleError).do(function (data) { return console.log("All:" + JSON.stringify(data)); });
                 };

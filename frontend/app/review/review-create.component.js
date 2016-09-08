@@ -136,6 +136,9 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                         _this.messageType = error["_body"].message;
                     });
                 };
+                ReviewCreateComponent.prototype.onBack = function () {
+                    this._router.navigate(['ReviewerPapers']);
+                };
                 ReviewCreateComponent = __decorate([
                     core_1.Component({
                         templateUrl: 'app/review/review-create.component.html',

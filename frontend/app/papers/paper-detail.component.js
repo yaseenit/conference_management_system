@@ -35,8 +35,6 @@ System.register(['angular2/core', '../service/app.service', '../shared/rating.co
                     this.pageTitle = 'Paper Detail';
                     this.imageWidth = 50;
                     this.imageHeight = 40;
-                    //  let id=+this._routeParams.get('id');
-                    //  this.pageTitle += `: ${id}`;
                 }
                 PaperDetailComponent.prototype.ngOnInit = function () {
                     if (!this.paper) {
@@ -63,12 +61,12 @@ System.register(['angular2/core', '../service/app.service', '../shared/rating.co
                     }, function (error) { return _this.errorMessage = error; });
                 };
                 PaperDetailComponent.prototype.onBack = function () {
-                    this._router.navigate(['Papers']);
+                    window.history.back();
                 };
                 PaperDetailComponent = __decorate([
                     core_1.Component({
                         templateUrl: 'app/papers/paper-detail.component.html',
-                        directives: [rating_component_1.Rating]
+                        directives: [rating_component_1.Rating, router_1.ROUTER_DIRECTIVES]
                     }), 
                     __metadata('design:paramtypes', [app_service_1.AppService, router_1.RouteParams, router_1.Router])
                 ], PaperDetailComponent);

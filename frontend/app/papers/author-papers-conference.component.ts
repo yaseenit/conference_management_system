@@ -17,8 +17,8 @@ export class AuthorPapersConferenceComponent implements OnInit
 {
     pageTitle : string;
     errorMessage : string;
-    imageWidth:number=50;
-    imageHeight:number=40;
+    imageWidth:number=30;
+    imageHeight:number=20;
     showFile :boolean=false;
     listFilter:string='';
     papers : IPaper[];
@@ -145,4 +145,7 @@ export class AuthorPapersConferenceComponent implements OnInit
     constructor(private _paperService :AppService,private _router :Router,private _routeParams:RouteParams)
     {
     }
+       onBack(): void{
+            this._router.navigate(['ConferenceSubmission']);
+        }
 }

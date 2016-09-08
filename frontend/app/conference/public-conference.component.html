@@ -9,7 +9,7 @@
 
 
         <div class='table-responsive'>
-            <table class='table' 
+            <table class='table table-bordered table-striped table-hover'
             *ngIf='conferences && conferences.length' >
                 <thead>
                     <tr>
@@ -33,5 +33,10 @@
                 </tbody>
             </table>
         </div>
+    </div>
+         <div class='panel-footer'>
+        <a class='btn btn-default' (click)='onBack()' style='width:80px'>
+            <i class='glyphicon glyphicon-chevron-left'></i> Back
+        </a>
     </div>
 </div>

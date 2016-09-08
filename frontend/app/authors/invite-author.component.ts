@@ -149,6 +149,9 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
         }
        );  
    }
+    onBack(): void{
+            this._router.navigate(['Conference']);
+        }
 
 
     }

@@ -156,6 +156,9 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                         }
                     });
                 };
+                AssigReviewComponent.prototype.onBack = function () {
+                    window.history.back();
+                };
                 AssigReviewComponent = __decorate([
                     core_1.Component({
                         templateUrl: 'app/reviewers/assign-review.component.html',

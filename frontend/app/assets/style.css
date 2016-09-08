@@ -22,22 +22,18 @@
 }
 .navbar-inverse{
         border-color: #6bc8ff !important;
-        background-color:#000 !important;
 }
 a.authorGroup, button.authorGroup {
     color: #28b62c !important;
-    background-color: #000;
 }
 a.reviewerGroup,button.reviewerGroup
 {
       color: #6bc8ff !important;
-    background-color: #000;
 }
 
 
 a.chairGroup, button.chairGroup {
     color: red !important;
-    background-color: #000;
 }
 
 control-messages div,.errorMsg {
