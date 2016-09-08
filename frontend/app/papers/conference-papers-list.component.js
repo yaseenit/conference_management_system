@@ -95,6 +95,9 @@ System.register(['angular2/core', '../service/app.service', 'angular2/router', '
                         _this.resultMessage = error["message"];
                     });
                 };
+                ConferencePaperComponent.prototype.onBack = function () {
+                    this._router.navigate(['Conference']);
+                };
                 ConferencePaperComponent = __decorate([
                     core_1.Component({
                         templateUrl: 'app/papers/conference-papers-list.component.html',

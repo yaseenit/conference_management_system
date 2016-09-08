@@ -63,6 +63,9 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                         zipCode: ['']
                     }, { validator: validation_service_1.ValidationService.checkEqualPassword });
                 }
+                SignUpComponent.prototype.ngOnInit = function () {
+                    this._signupService.checkCredentialsForSignUp();
+                };
                 SignUpComponent.prototype.signup = function (event, value) {
                     var _this = this;
                     event.preventDefault();

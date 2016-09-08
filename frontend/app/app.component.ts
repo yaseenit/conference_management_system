@@ -13,9 +13,7 @@ import {PaperListComponent} from './papers/paper-list.component';
 import {PaperDetailComponent} from './papers/paper-detail.component';
 import {PaperCreateComponent} from './papers/paper-create.component';
 
-//for review
-import {ReviewListComponent} from './review/review-list.component';
-//
+
 import {WelcomeComponent} from './home/welcome.component';
 import {LogInComponent} from './login/login.component';
 import {SignUpComponent} from './signup/signup.component';
@@ -50,7 +48,9 @@ import {ReviewDetailComponent} from './review/review-detail.component';
 
 import {EditDeadLineComponent} from './papers/paper-edit-deadline.component';
 
+import {ChartComponent} from './chart/chart.component'
 
+import {PublicProfileComponent} from './profile/public-profile.component';
 @Component({
   selector: 'pm-app',
   templateUrl: 'app/app.component.html',
@@ -68,7 +68,6 @@ import {EditDeadLineComponent} from './papers/paper-edit-deadline.component';
     { path: '/login', name: 'LogIn', component: LogInComponent },
     { path: '/papercreate/:id', name: 'PaperCreate', component: PaperCreateComponent },
 
-    { path: '/review', name: 'Review', component: ReviewListComponent },
 
     { path: '/signup', name: 'SignUp', component: SignUpComponent },
     { path: '/editProfile', name: 'EditProfile', component: EditProfileComponent },
@@ -85,7 +84,11 @@ import {EditDeadLineComponent} from './papers/paper-edit-deadline.component';
     { path: '/paperEdit/:id', name: 'PaperEdit', component: PaperEditComponent },
     { path: '/reviewCreate/:id', name: 'ReviewCreate', component: ReviewCreateComponent },
     { path: '/reviewDetail/:id', name: 'ReviewDetail', component: ReviewDetailComponent },
-     { path: '/editDeadline/:id/:conferenceId', name: 'EditDeadline', component: EditDeadLineComponent }
+     { path: '/editDeadline/:id/:conferenceId', name: 'EditDeadline', component: EditDeadLineComponent },
+     { path: '/chart', name: 'Chart', component: ChartComponent },
+    { path: '/publicProfile/:username', name: 'PublicProfile', component: PublicProfileComponent }
+
+    
 
 
 
@@ -127,14 +130,19 @@ export class AppComponent implements OnInit {
 
   }
   removeProfile(event) {
-    event.preventDefault();
-    this._confirmService.activate("Are you sure to remove your Profile?")
-      .then(res => {
-        if (res)
-          console.log(`Confirmed: ${res}`);
-        else
-          console.log("NO")
-      });
+    event.preventDefault(); 
+     this._logInService.removeProfile().subscribe(
+    response => {
+       this._logInService.logout();
+        window.location.reload();
+
+      }, error => {
+        this.resultMessage = error["message"];
+        this.messageType = "error";});
+
+        
+     
+      
   }
   logOut() {
     this._logInService.logout();

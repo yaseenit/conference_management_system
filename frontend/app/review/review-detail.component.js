@@ -107,6 +107,9 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                     //
                     console.log(message);
                 };
+                ReviewDetailComponent.prototype.onBack = function () {
+                    this._router.navigate(['ReviewerPapers']);
+                };
                 ReviewDetailComponent = __decorate([
                     core_1.Component({
                         templateUrl: 'app/review/review-detail.component.html',

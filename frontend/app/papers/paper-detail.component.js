@@ -1,4 +1,4 @@
-System.register(['angular2/core', '../service/app.service', 'angular2/router'], function(exports_1, context_1) {
+System.register(['angular2/core', '../service/app.service', '../shared/rating.component', 'angular2/router'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', '../service/app.service', 'angular2/router'], 
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, app_service_1, router_1;
+    var core_1, app_service_1, rating_component_1, router_1;
     var PaperDetailComponent;
     return {
         setters:[
@@ -19,6 +19,9 @@ System.register(['angular2/core', '../service/app.service', 'angular2/router'], 
             },
             function (app_service_1_1) {
                 app_service_1 = app_service_1_1;
+            },
+            function (rating_component_1_1) {
+                rating_component_1 = rating_component_1_1;
             },
             function (router_1_1) {
                 router_1 = router_1_1;
@@ -32,8 +35,6 @@ System.register(['angular2/core', '../service/app.service', 'angular2/router'], 
                     this.pageTitle = 'Paper Detail';
                     this.imageWidth = 50;
                     this.imageHeight = 40;
-                    //  let id=+this._routeParams.get('id');
-                    //  this.pageTitle += `: ${id}`;
                 }
                 PaperDetailComponent.prototype.ngOnInit = function () {
                     if (!this.paper) {
@@ -52,14 +53,20 @@ System.register(['angular2/core', '../service/app.service', 'angular2/router'], 
                 PaperDetailComponent.prototype.getPaper = function (id) {
                     var _this = this;
                     this._paperService.getPaper(id)
-                        .subscribe(function (paper) { return _this.paper = paper; }, function (error) { return _this.errorMessage = error; });
+                        .subscribe(function (paper) {
+                        _this.paper = paper;
+                        _this._paperService.getAllReview(_this.paper.conferenceId, id).subscribe(function (rs) {
+                            _this.reviews = rs;
+                        });
+                    }, function (error) { return _this.errorMessage = error; });
                 };
                 PaperDetailComponent.prototype.onBack = function () {
-                    this._router.navigate(['Papers']);
+                    window.history.back();
                 };
                 PaperDetailComponent = __decorate([
                     core_1.Component({
-                        templateUrl: 'app/papers/paper-detail.component.html'
+                        templateUrl: 'app/papers/paper-detail.component.html',
+                        directives: [rating_component_1.Rating, router_1.ROUTER_DIRECTIVES]
                     }), 
                     __metadata('design:paramtypes', [app_service_1.AppService, router_1.RouteParams, router_1.Router])
                 ], PaperDetailComponent);

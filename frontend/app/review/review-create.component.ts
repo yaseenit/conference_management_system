@@ -34,6 +34,8 @@ export class ReviewCreateComponent implements OnInit {
     resultMessage: string = "";
     messageType: string = "";
     allowReview:boolean=false;
+     flag:number=0;
+
     private resetRatingStar() {
         this.overStar = null;
     }
@@ -74,13 +76,16 @@ export class ReviewCreateComponent implements OnInit {
             paper =>{ this.paper = paper;
                  this.review.submissionId=id;
                 this.review.conferenceId=paper.conferenceId;
-                  this.review.conferenceId = paper.conferenceId;
                                            this.checkPaperStatus(paper.deadline);
 
                  this._paperService.getReview(paper.conferenceId,id).subscribe(
                      rs=>{
-                         if(rs._id!=null)
+                         if(rs!=null)
+                         {
                          this.review=rs;
+                        this.flag=1;
+
+                         }
                         }
                  );
             },
@@ -119,11 +124,9 @@ export class ReviewCreateComponent implements OnInit {
     submitReview(event:any,value:any)
     {
      event.preventDefault();
-     let flag=0;
-     if(this.review._id!=null)
-     flag=1;
+  
 
-            this._paperService.submitReview(this.review,flag).subscribe(
+            this._paperService.submitReview(this.review,this.flag).subscribe(
                 response => {
                 this.resultMessage = "Review submitted successfully";
                 this.messageType = "success";
@@ -138,6 +141,9 @@ export class ReviewCreateComponent implements OnInit {
         );
 
     }
+      onBack(): void{
+            this._router.navigate(['ReviewerPapers']);
+        }
 
 }
 

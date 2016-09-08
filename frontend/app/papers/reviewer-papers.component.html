@@ -9,7 +9,7 @@
     <div class='panel-body' *ngIf='tasks && tasks.length'>
 
         <div class='table-responsive'>
-            <table class='table'>
+            <table class='table table-bordered table-striped table-hover'>
                 <thead>
                     <tr>
                         <th>Title</th>
@@ -33,5 +33,12 @@
                 </tbody>
             </table>
         </div>
+    </div>
+       <div class='panel-footer'>
+
+        <a class='btn btn-default' (click)='onBack()' style='width:80px'>
+            <i class='glyphicon glyphicon-chevron-left'></i> Back
+        </a>       
+
     </div>
 </div>

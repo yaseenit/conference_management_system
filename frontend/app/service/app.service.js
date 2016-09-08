@@ -41,8 +41,6 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                     this._rootUrl = "http://myremoteserverwg117.ddns.net:4000/";
                     this._apiUrl = this._rootUrl + "api/v1/";
                     this._taskUrl = this._apiUrl + "chair/tasks/";
-                    // private _inviteUrl = this._apiUrl + "/addAuthor/";
-                    //private _paperUrl=this._apiUrl+'submissions/';
                     this._paperUrl = this._apiUrl + 'submissions/';
                     this._profileUrl = this._apiUrl + 'profile/';
                     this._uploadUrl = this._apiUrl + 'submissions/';
@@ -52,6 +50,8 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                     this._getFileUrl = this._rootUrl + "api/v1/download/";
                     this._signupUrl = this._rootUrl + "register";
                     this._isRegisterUrl = this._rootUrl + "isRegister";
+                    this._reportUrl = this._apiUrl + 'report/';
+                    this._publicProfileUrl = this._apiUrl + "profile/public";
                 }
                 AppService.prototype.getPapers = function () {
                     return this._http.get(this._paperUrl, { headers: headers_1.ContentHeaders })
@@ -62,6 +62,12 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                 AppService.prototype.getPaper = function (id) {
                     console.log(id);
                     return this._http.get(this._paperUrl + id, { headers: headers_1.ContentHeaders })
+                        .map(function (response) { return response.json(); })
+                        .do(function (data) { return console.log("All:" + JSON.stringify(data)); })
+                        .catch(this.handleError);
+                };
+                AppService.prototype.getAllReview = function (conferenceId, submissionId) {
+                    return this._http.get(this._apiUrl + conferenceId + "/chair/review/" + submissionId, { headers: headers_1.ContentHeaders })
                         .map(function (response) { return response.json(); })
                         .do(function (data) { return console.log("All:" + JSON.stringify(data)); })
                         .catch(this.handleError);
@@ -114,13 +120,17 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                     var detailedComments = review.detailedComments;
                     var conferenceId = review.conferenceId;
                     var submissionId = review.submissionId;
-                    var _id = review._id;
-                    var body = JSON.stringify({ expertise: expertise, overallEvaluation: overallEvaluation, summary: summary, strongPoints: strongPoints, weakPoints: weakPoints, detailedComments: detailedComments, conferenceId: conferenceId, submissionId: submissionId, _id: _id });
+                    var body;
                     console.log(body);
                     // /api/v1/:conferenceId/review/edit
                     var action = "create";
-                    if (flag == 1)
+                    if (flag == 1) {
                         action = "edit";
+                        var _id = review._id;
+                        body = JSON.stringify({ expertise: expertise, overallEvaluation: overallEvaluation, summary: summary, strongPoints: strongPoints, weakPoints: weakPoints, detailedComments: detailedComments, conferenceId: conferenceId, submissionId: submissionId, _id: _id });
+                    }
+                    else
+                        body = JSON.stringify({ expertise: expertise, overallEvaluation: overallEvaluation, summary: summary, strongPoints: strongPoints, weakPoints: weakPoints, detailedComments: detailedComments, conferenceId: conferenceId, submissionId: submissionId });
                     return this._http.post(this._apiUrl + review.conferenceId + "/review/" + action, body, { headers: headers_1.ContentHeaders })
                         .map(function (response) { return response.json(); })
                         .do(function (data) { return console.log("All:" + JSON.stringify(data)); })
@@ -256,6 +266,12 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                         .map(function (response) { return response.json(); })
                         .catch(this.handleError).do(function (data) { return console.log("All:" + JSON.stringify(data)); });
                 };
+                AppService.prototype.getPublicProfile = function (username) {
+                    var body = JSON.stringify({ username: username });
+                    return this._http.post(this._publicProfileUrl, body, { headers: headers_1.ContentHeaders })
+                        .map(function (response) { return response.json(); })
+                        .catch(this.handleError).do(function (data) { return console.log("All:" + JSON.stringify(data)); });
+                };
                 AppService.prototype.updateProfile = function (_user) {
                     var familyName = _user.familyName;
                     var givenName = _user.givenName;
@@ -315,6 +331,11 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                         this._router.navigate(['Welcome']);
                     }
                 };
+                AppService.prototype.checkCredentialsForSignUp = function () {
+                    if (localStorage.getItem("token") != null) {
+                        this._router.navigate(['Welcome']);
+                    }
+                };
                 AppService.prototype.isLog = function () {
                     if (localStorage.getItem("token") == null)
                         return false;
@@ -338,6 +359,48 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                     localStorage.removeItem("username");
                     localStorage.removeItem("_id");
                     this._router.navigate(['Welcome']);
+                };
+                AppService.prototype.removeProfile = function () {
+                    return this._http.delete(this._profileUrl, { headers: headers_1.ContentHeaders })
+                        .map(function (response) { return response.json(); }).catch(this.handleError);
+                };
+                //chart starts
+                AppService.prototype.getStatusChart = function () {
+                    var conferenceId = "57d08000d34a22617c2a3a47";
+                    return this._http.get(this._apiUrl + conferenceId + "/chair/submissions", { headers: headers_1.ContentHeaders })
+                        .map(function (response) { return response.json()
+                        .reduce(function (res, obj) {
+                        if (!(obj.status in res)) {
+                            res.__array.push(res[obj.status] = obj);
+                            res[obj.status].counter = 1;
+                        }
+                        else {
+                            res[obj.status].counter += 1;
+                        }
+                        return res;
+                    }, { array: [] })._array.sort(function (a, b) { return b.counter - a.counter; }); })
+                        .catch(this.handleError);
+                };
+                AppService.prototype.getTopicChart = function () {
+                    return this._http.get(this._paperUrl, { headers: headers_1.ContentHeaders })
+                        .map(function (response) { return response.json()
+                        .reduce(function (res, obj) {
+                        if (!(obj.keywords in res)) {
+                            res.__array.push(res[obj.keywords] = obj);
+                            res[obj.keywords].counter = 1;
+                        }
+                        else {
+                            res[obj.keywords].counter += 1;
+                        }
+                        return res;
+                    }, { array: [] })._array
+                        .sort(function (a, b) { return b.counter - a.counter; }); })
+                        .catch(this.handleError);
+                };
+                AppService.prototype.getReportChart = function () {
+                    return this._http.get(this._reportUrl, { headers: headers_1.ContentHeaders })
+                        .map(function (response) { return response.json(); })
+                        .catch(this.handleError);
                 };
                 AppService._base64_data = "";
                 AppService = __decorate([

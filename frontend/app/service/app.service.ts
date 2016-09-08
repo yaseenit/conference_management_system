@@ -3,7 +3,7 @@ import {Http, Response, URLSearchParams, Jsonp, ConnectionBackend} from 'angular
 import {Observable} from 'rxjs/Observable';
 import {Router} from 'angular2/router';
 import { ContentHeaders, ContentHeaderOnlyToken, ContentHeadersWithoutToken} from './headers';
-import {IPaper, ICountry, IUser, Paper, User, IReview, Chair, ITask, Review} from "./app.interface";
+import {IPaper, ICountry, IUser, Paper, User, IReview, Chair, ITask, Review,IChart} from "./app.interface";
 import {FileService} from './file.service';
 import {ConferenceModel} from './app.interface';
 @Injectable()
@@ -12,8 +12,6 @@ export class AppService {
   private _rootUrl = "http://myremoteserverwg117.ddns.net:4000/";
   private _apiUrl = this._rootUrl + "api/v1/";
   private _taskUrl = this._apiUrl + "chair/tasks/";
-  // private _inviteUrl = this._apiUrl + "/addAuthor/";
-  //private _paperUrl=this._apiUrl+'submissions/';
 
   private _paperUrl = this._apiUrl + 'submissions/';
   
@@ -27,6 +25,8 @@ export class AppService {
   private _isRegisterUrl = this._rootUrl + "isRegister";
   private _responseCode: any;
   private static _base64_data: string = "";
+  private _reportUrl = this._apiUrl + 'report/';
+  private _publicProfileUrl=this._apiUrl+"profile/public";
   constructor(private _http: Http, private _router: Router, private jsonp: Jsonp) {
 
   }
@@ -44,7 +44,16 @@ export class AppService {
       .do(data => console.log("All:" + JSON.stringify(data)))
       .catch(this.handleError);
   }
+  
 
+  getAllReview(conferenceId: string,submissionId:string): Observable<Review[]> {
+    
+    return this._http.get(this._apiUrl + conferenceId + "/chair/review/"+submissionId, { headers: ContentHeaders })
+      .map((response: Response) => <Review[]>response.json())
+      .do(data => console.log("All:" + JSON.stringify(data)))
+      .catch(this.handleError);
+  }
+  
 
   getUserConference(): Observable<ITask[]> {
     return this._http.get(this._profileUrl, { headers: ContentHeaders })
@@ -96,13 +105,20 @@ export class AppService {
     let detailedComments: string = review.detailedComments;
     let conferenceId: string = review.conferenceId;
     let submissionId: string = review.submissionId;
-    let _id=review._id;
-    let body = JSON.stringify({ expertise, overallEvaluation, summary, strongPoints, weakPoints, detailedComments, conferenceId, submissionId ,_id});
+       let body;
     console.log(body);
    // /api/v1/:conferenceId/review/edit
      let action="create";
      if(flag==1)
+     {
       action="edit";
+      let _id=review._id;
+     body = JSON.stringify({ expertise, overallEvaluation, summary, strongPoints, weakPoints, detailedComments, conferenceId, submissionId ,_id});
+
+     }
+     else
+          body = JSON.stringify({ expertise, overallEvaluation, summary, strongPoints, weakPoints, detailedComments, conferenceId, submissionId });
+
 
     return this._http.post(this._apiUrl+review.conferenceId+"/review/"+action, body, { headers: ContentHeaders })
       .map((response: Response) => <IPaper>response.json())
@@ -263,6 +279,12 @@ export class AppService {
       .map((response: Response) => <IUser>response.json())
       .catch(this.handleError).do(data => console.log("All:" + JSON.stringify(data)));
   }
+  getPublicProfile(username): Observable<IUser> {
+    let body = JSON.stringify({ username });
+    return this._http.post(this._publicProfileUrl,body, { headers: ContentHeaders })
+      .map((response: Response) => <IUser>response.json())
+      .catch(this.handleError).do(data => console.log("All:" + JSON.stringify(data)));
+  }
   updateProfile(_user: User): Observable<any[]> {
     let familyName = _user.familyName;
     let givenName = _user.givenName;
@@ -327,10 +349,17 @@ export class AppService {
     if (localStorage.getItem("token") == null) {
       this._router.navigate(['Welcome']);
     }
-   
-
-
   }
+
+   checkCredentialsForSignUp() {
+    
+    if (localStorage.getItem("token") != null) {
+      this._router.navigate(['Welcome']);
+    }
+   }
+
+
+  
   isLog(): boolean {
     if (localStorage.getItem("token") == null)
       return false;
@@ -355,4 +384,54 @@ export class AppService {
     localStorage.removeItem("_id");
     this._router.navigate(['Welcome']);
   }
+
+  removeProfile():Observable<any>
+  {
+     return this._http.delete(this._profileUrl, { headers: ContentHeaders })
+      .map((response: Response) => <any>response.json()).catch(this.handleError);
+  }
+
+
+  //chart starts
+ 	getStatusChart():Observable<any[]>{
+
+     let  conferenceId="57d08000d34a22617c2a3a47";
+       return this._http.get(this._apiUrl + conferenceId + "/chair/submissions", { headers: ContentHeaders })
+       .map((response :Response)=> <any[]>response.json()
+       .reduce(function(res, obj) {   
+            if (!(obj.status in res)){                    
+                res.__array.push(res[obj.status] = obj);
+                res[obj.status].counter = 1;
+              }
+            else {
+                res[obj.status].counter += 1;
+            }
+            return res;
+        }, {array:[]})._array.sort(function(a,b) { return b.counter - a.counter; }))      
+       .catch(this.handleError);          
+    }
+
+  getTopicChart():Observable<any[]>{
+        return  this._http.get(this._paperUrl, { headers: ContentHeaders })
+        .map((response :Response)=><any[]>response.json()
+        .reduce(function(res, obj) {   
+            if (!(obj.keywords in res)){                    
+                res.__array.push(res[obj.keywords] = obj);
+                res[obj.keywords].counter = 1;
+              }
+            else {
+                res[obj.keywords].counter += 1;
+            }
+            return res;
+        }, {array:[]})._array
+                        .sort(function(a,b) { return b.counter - a.counter; }))
+        .catch(this.handleError);          
+    }
+
+    getReportChart():Observable<any[]>{
+      return  this._http.get(this._reportUrl, { headers: ContentHeaders })
+      .map((response: Response) => <any[]>response.json())
+      .catch(this.handleError);          
+    }
+  //chart ends
 }

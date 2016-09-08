@@ -1,4 +1,4 @@
-import {Component} from 'angular2/core';
+import {Component,OnInit} from 'angular2/core';
 import {RouteParams, Router} from 'angular2/router';
 import { ROUTER_DIRECTIVES } from  'angular2/router';
 import {AppService} from '../service/app.service'
@@ -18,7 +18,7 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
         directives: [ROUTER_DIRECTIVES, GoogleplaceDirective, ControlMessagesComponent, ResultMessagesComponent],
     })
 
-export class SignUpComponent {
+export class SignUpComponent  implements OnInit {
     form: ControlGroup;
     _user: User;
     valid: boolean = false;
@@ -27,6 +27,10 @@ export class SignUpComponent {
     messageType: string = "";
     signupError: any[];
     signupResult: any[];
+
+ngOnInit(): any    {
+      this._signupService.checkCredentialsForSignUp();
+    }
     signup(event, value: any) {
         event.preventDefault();
         this._user = new User();

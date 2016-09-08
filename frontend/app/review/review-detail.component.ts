@@ -97,6 +97,9 @@ export class ReviewDetailComponent implements OnInit {
 
     }
 
+  onBack(): void{
+            this._router.navigate(['ReviewerPapers']);
+        }
 
 }
 
