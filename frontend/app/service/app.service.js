@@ -105,7 +105,7 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                         .do(function (data) { return console.log("All:" + JSON.stringify(data)); })
                         .catch(this.handleError);
                 };
-                AppService.prototype.submitReview = function (review) {
+                AppService.prototype.submitReview = function (review, flag) {
                     var expertise = review.expertise;
                     var overallEvaluation = review.overallEvaluation;
                     var summary = review.summary;
@@ -114,9 +114,14 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                     var detailedComments = review.detailedComments;
                     var conferenceId = review.conferenceId;
                     var submissionId = review.submissionId;
-                    var body = JSON.stringify({ expertise: expertise, overallEvaluation: overallEvaluation, summary: summary, strongPoints: strongPoints, weakPoints: weakPoints, detailedComments: detailedComments, conferenceId: conferenceId, submissionId: submissionId });
+                    var _id = review._id;
+                    var body = JSON.stringify({ expertise: expertise, overallEvaluation: overallEvaluation, summary: summary, strongPoints: strongPoints, weakPoints: weakPoints, detailedComments: detailedComments, conferenceId: conferenceId, submissionId: submissionId, _id: _id });
                     console.log(body);
-                    return this._http.post(this._apiUrl + review.conferenceId + "/review", body, { headers: headers_1.ContentHeaders })
+                    // /api/v1/:conferenceId/review/edit
+                    var action = "create";
+                    if (flag == 1)
+                        action = "edit";
+                    return this._http.post(this._apiUrl + review.conferenceId + "/review/" + action, body, { headers: headers_1.ContentHeaders })
                         .map(function (response) { return response.json(); })
                         .do(function (data) { return console.log("All:" + JSON.stringify(data)); })
                         .catch(this.handleError);

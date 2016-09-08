@@ -25,15 +25,18 @@
 
  <div class="form-group">
     <label for="startdate">start date</label>
-    <input type="date"  class="form-control" id="startdate" placeholder="startdate"  ngControl="startdate"  >
+  <datepicker [(ngModel)]="startdate" [minDate]="minDate" [showWeeks]="false"></datepicker>
+   <input type="hidden" [(ngModel)]="startdate" class="form-control" id="startdate" placeholder="startdate" ngControl="startdate">
+
           <control-messages [control]="form.controls.startdate"></control-messages>
 
   </div>
 
  <div class="form-group">
     <label for="enddate">end date</label>
-    <input type="date"  class="form-control" id="enddate" placeholder="enddate"  ngControl="enddate">
-          <control-messages [control]="form.controls.enddate"></control-messages>
+  <datepicker [(ngModel)]="enddate" [minDate]="minDate" [showWeeks]="false"></datepicker>
+   <input type="hidden" [(ngModel)]="enddate" class="form-control" id="enddate" placeholder="enddate" ngControl="enddate">
+   <control-messages [control]="form.controls.enddate"></control-messages>
 
   </div>
 

@@ -87,7 +87,7 @@ export class AppService {
       .catch(this.handleError);
   }
 
-  submitReview(review: Review) {
+  submitReview(review: Review,flag:number) {
     let expertise: number = review.expertise;
     let overallEvaluation: number = review.overallEvaluation;
     let summary: string = review.summary;
@@ -96,9 +96,15 @@ export class AppService {
     let detailedComments: string = review.detailedComments;
     let conferenceId: string = review.conferenceId;
     let submissionId: string = review.submissionId;
-    let body = JSON.stringify({ expertise, overallEvaluation, summary, strongPoints, weakPoints, detailedComments, conferenceId, submissionId });
+    let _id=review._id;
+    let body = JSON.stringify({ expertise, overallEvaluation, summary, strongPoints, weakPoints, detailedComments, conferenceId, submissionId ,_id});
     console.log(body);
-    return this._http.post(this._apiUrl+review.conferenceId+"/review", body, { headers: ContentHeaders })
+   // /api/v1/:conferenceId/review/edit
+     let action="create";
+     if(flag==1)
+      action="edit";
+
+    return this._http.post(this._apiUrl+review.conferenceId+"/review/"+action, body, { headers: ContentHeaders })
       .map((response: Response) => <IPaper>response.json())
       .do(data => console.log("All:" + JSON.stringify(data)))
       .catch(this.handleError);

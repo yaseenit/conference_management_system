@@ -126,7 +126,10 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                 ReviewCreateComponent.prototype.submitReview = function (event, value) {
                     var _this = this;
                     event.preventDefault();
-                    this._paperService.submitReview(this.review).subscribe(function (response) {
+                    var flag = 0;
+                    if (this.review._id != null)
+                        flag = 1;
+                    this._paperService.submitReview(this.review, flag).subscribe(function (response) {
                         _this.resultMessage = "Review submitted successfully";
                         _this.messageType = "success";
                     }, function (error) {
