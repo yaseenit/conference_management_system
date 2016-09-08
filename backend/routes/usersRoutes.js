@@ -26,7 +26,7 @@ var userRoutes = function (app) {
     var editProfile=userController.editProfile;
 	var deleteProfile=userController.deleteProfile;
 
-
+var getPublicProfileByEmail = userController.getPublicProfileByEmail;
 
 
     return {
@@ -46,7 +46,8 @@ var userRoutes = function (app) {
 
 		getProfile:getProfile,
 		editProfile:editProfile,
-		deleteProfile:deleteProfile
+		deleteProfile:deleteProfile,
+		getPublicProfileByEmail:getPublicProfileByEmail
     }
 }
 module.exports = userController;
