@@ -113,8 +113,8 @@ var reviewController = function (Review) {
     }
 
     var getRviewsBySubmissionId = function (req, res) {
-        if (req.isChair) {
-            var submissionId = req.params.submissionId;
+        var submissionId = req.params.submissionId;
+        if (req.isChair || user.submissions.indexOf(submissionId) > -1) {
             Review.find({ conferenceId: req.params.conferenceId, submissionId: submissionId }, function (err, reviews) {
                 if (err)
                     res.status(500).send(err);
