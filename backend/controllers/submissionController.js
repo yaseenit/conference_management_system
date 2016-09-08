@@ -31,7 +31,6 @@ var submissionController = function (Submission) {
                         user.save(function (err, user) {
                             if (err) {
                                 submission.remove();
-                                fs.unlink(uploadedFilesPath + generatedFileName);
                                 res.status(500).send(err);
                                 return;
                             }
@@ -172,7 +171,6 @@ var submissionController = function (Submission) {
                         else {
                             var user = req.user;
                             user.submissions.pull(submission._id);
-                            fs.unlink(uploadedFilesPath + submission.generatedFileName);//remove the related paper file
                             //TODO remove reviews 
 
                             user.save(function (err, user) {

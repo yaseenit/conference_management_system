@@ -6,7 +6,10 @@ var mongoose = require('mongoose'),
     // bcrypt = require('bcrypt'),
     // SALT_WORK_FACTOR = 10,
 	Schema = mongoose.Schema;
-
+var taskSchema = require('../models/taskModel');
+var submissionSchema = require('../models/submissionModel');
+var conferenceSchema = require('../models/conferenceModel');
+var reviewSchema = require('../models/reviewModel');
 
 // Define a new 'UserSchema'
 var UserSchema = new Schema({
@@ -124,7 +127,7 @@ UserSchema.pre('save', function (next) {
 
 UserSchema.methods.authenticate = function (candidatePassword) {
 	return (new Buffer(candidatePassword).toString('base64') === this.password)
-//return bcrypt.compareSync(candidatePassword, this.password);
+	//return bcrypt.compareSync(candidatePassword, this.password);
 };
 
 
@@ -238,6 +241,17 @@ UserSchema.statics.findTheUserByUsername = function (username, done) {
 		return done(null, user);
 	});
 };
+
+
+UserSchema.pre('remove', function (next) {
+    // 'this' is the client being removed. Provide callbacks here if you want
+    // to be notified of the calls' result.
+    taskSchema.remove({ assignedTo: this.username }).exec();
+	submissionSchema.remove({ createdBy: this.username }).exec();
+	conferenceSchema.remove({ chair: this._id }).exec();
+	reviewSchema.remove({ createdBy: this.username }).exec();
+    next();
+});
 
 
 // Create the 'User' model out of the 'UserSchema'
