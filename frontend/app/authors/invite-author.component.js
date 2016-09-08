@@ -61,6 +61,7 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                 };
                 InviteAuthorComponent.prototype.getConferenceDetails = function (id) {
                     var _this = this;
+                    this.chairUserName = this._service.getCurrentUserEmail();
                     this._service.getConferenceDetails(id).subscribe(function (response) {
                         _this.authorList = response.authors;
                         _this.checkConferenceDate(response.startdate, response.enddate);
@@ -81,26 +82,32 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                 InviteAuthorComponent.prototype.Invite = function (event, value) {
                     var _this = this;
                     event.preventDefault();
-                    this.messageType = "";
-                    this.resultMessage = "";
-                    if (this.checkAuthor(value.userName)) {
-                        this.authorList[this.arrayIndex] = value.userName;
-                        this.arrayIndex++;
-                        //   console.log(value.email);
-                        // this.clearForm();
-                        this._service.inviteAuthor(value.userName, this.ConferenceId).subscribe(function (response) {
-                            _this.authorList = response.authors;
-                            _this.resultMessage = "author" + value.userName + " has been invited";
-                            _this.messageType = "success";
-                            console.log(response);
-                            _this.clearForm();
-                        }, function (error) {
-                            _this.resultMessage = "Error " + error["message"];
-                            _this.messageType = "error";
-                        });
+                    if (this.chairUserName != value.userName) {
+                        this.messageType = "";
+                        this.resultMessage = "";
+                        if (this.checkAuthor(value.userName)) {
+                            this.authorList[this.arrayIndex] = value.userName;
+                            this.arrayIndex++;
+                            //   console.log(value.email);
+                            // this.clearForm();
+                            this._service.inviteAuthor(value.userName, this.ConferenceId).subscribe(function (response) {
+                                _this.authorList = response.authors;
+                                _this.resultMessage = "author" + value.userName + " has been invited";
+                                _this.messageType = "success";
+                                console.log(response);
+                                _this.clearForm();
+                            }, function (error) {
+                                _this.resultMessage = "Error " + error["message"];
+                                _this.messageType = "error";
+                            });
+                        }
+                        else {
+                            this.resultMessage = 'Author email already exists';
+                            this.messageType = "error";
+                        }
                     }
                     else {
-                        this.resultMessage = 'Author email already exists';
+                        this.resultMessage = 'As a chair,you are not allowed to participate in this conference ';
                         this.messageType = "error";
                     }
                 };
@@ -129,6 +136,9 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                         _this.resultMessage = "Error " + error["message"];
                         _this.messageType = "error";
                     });
+                };
+                InviteAuthorComponent.prototype.onBack = function () {
+                    this._router.navigate(['Conference']);
                 };
                 InviteAuthorComponent = __decorate([
                     core_1.Component({

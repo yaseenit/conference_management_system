@@ -13,10 +13,7 @@ import {PaperListComponent} from './papers/paper-list.component';
 import {PaperDetailComponent} from './papers/paper-detail.component';
 import {PaperCreateComponent} from './papers/paper-create.component';
 
-//for review
-import {ReviewListComponent} from './review/review-list.component';
-import {ReviewDetailComponent} from './review/review-detail.component';
-//
+
 import {WelcomeComponent} from './home/welcome.component';
 import {LogInComponent} from './login/login.component';
 import {SignUpComponent} from './signup/signup.component';
@@ -36,16 +33,24 @@ import {Router} from 'angular2/router';
 import {ConfirmService} from "./service/confirm.service";
 import {ConfirmComponent} from "./shared/confirm.component";
 
-import  {CreateConferenceComponent} from "./conference/create-conference.component";
+import {CreateConferenceComponent} from "./conference/create-conference.component";
 import {ConferenceComponent} from "./conference/conference.component";
 
 import {PublicConferenceComponent} from './conference/public-conference.component';
-import  {AuthorPapersConferenceComponent} from './papers/author-papers-conference.component';
+import {AuthorPapersConferenceComponent} from './papers/author-papers-conference.component';
 import {ConferencePaperComponent} from './papers/conference-papers-list.component';
-import  {ReviewerPaperComponent} from './papers/reviewer-papers.component';
+import {ReviewerPaperComponent} from './papers/reviewer-papers.component';
 
 import {PaperEditComponent} from './papers/paper-edit.component';
 
+import {ReviewCreateComponent} from './review/review-create.component';
+import {ReviewDetailComponent} from './review/review-detail.component';
+
+import {EditDeadLineComponent} from './papers/paper-edit-deadline.component';
+
+import {ChartComponent} from './chart/chart.component'
+
+import {PublicProfileComponent} from './profile/public-profile.component';
 @Component({
   selector: 'pm-app',
   templateUrl: 'app/app.component.html',
@@ -63,22 +68,29 @@ import {PaperEditComponent} from './papers/paper-edit.component';
     { path: '/login', name: 'LogIn', component: LogInComponent },
     { path: '/papercreate/:id', name: 'PaperCreate', component: PaperCreateComponent },
 
-    { path :'/review',name: 'Review',component:ReviewListComponent},
-    { path :'/review/:id',name: 'ReviewDetail',component:ReviewDetailComponent},
 
     { path: '/signup', name: 'SignUp', component: SignUpComponent },
     { path: '/editProfile', name: 'EditProfile', component: EditProfileComponent },
-    { path: '/viewProfile', name: 'ViewProfile', component: ViewProfileComponent }, 
+    { path: '/viewProfile', name: 'ViewProfile', component: ViewProfileComponent },
     { path: '/assignReview/:id', name: 'AssigReview', component: AssigReviewComponent },
     { path: '/inviteAuthor/:id', name: 'InviteAuthor', component: InviteAuthorComponent },
     { path: '/changePassword', name: 'ChangePassword', component: ChangePasswordComponent },
     { path: '/conference', name: 'Conference', component: ConferenceComponent },
-    {path :'/createconference',name: 'CreateConference',component:CreateConferenceComponent},
-    {path:'/conferenceSubmission', name:'ConferenceSubmission',component:PublicConferenceComponent},
-    {path:'/authorPapersConference/:id/:title',name:'AuthorPapersConference',component:AuthorPapersConferenceComponent},
-    {path:'/conferencePaper/:id/:title',name:'ConferencePapers',component:ConferencePaperComponent},
-     {path:'/reviewerPapers',name:'ReviewerPapers',component:ReviewerPaperComponent},
-          {path:'/paperEdit/:id',name:'PaperEdit',component:PaperEditComponent}
+    { path: '/createconference', name: 'CreateConference', component: CreateConferenceComponent },
+    { path: '/conferenceSubmission', name: 'ConferenceSubmission', component: PublicConferenceComponent },
+    { path: '/authorPapersConference/:id/:title', name: 'AuthorPapersConference', component: AuthorPapersConferenceComponent },
+    { path: '/conferencePaper/:id/:title', name: 'ConferencePapers', component: ConferencePaperComponent },
+    { path: '/reviewerPapers', name: 'ReviewerPapers', component: ReviewerPaperComponent },
+    { path: '/paperEdit/:id', name: 'PaperEdit', component: PaperEditComponent },
+    { path: '/reviewCreate/:id', name: 'ReviewCreate', component: ReviewCreateComponent },
+    { path: '/reviewDetail/:id', name: 'ReviewDetail', component: ReviewDetailComponent },
+     { path: '/editDeadline/:id/:conferenceId', name: 'EditDeadline', component: EditDeadLineComponent },
+     { path: '/chart', name: 'Chart', component: ChartComponent },
+    { path: '/publicProfile/:username', name: 'PublicProfile', component: PublicProfileComponent }
+
+    
+
+
 
   ]
 )
@@ -97,9 +109,9 @@ export class AppComponent implements OnInit {
   isActive = false;
 
   //for review
-    getReviewList:string;
-    token:string;
-    email:string;
+  getReviewList: string;
+  token: string;
+  email: string;
   //
   constructor(private _logInService: AppService, fb: FormBuilder, private _router: Router, private _confirmService: ConfirmService) {
     this.form = fb.group({
@@ -108,25 +120,29 @@ export class AppComponent implements OnInit {
     });
   }
   ngOnInit(): any {
+    this._logInService.checkCredentials();
     this.messageType = "";
     this.resultMessage = "";
     this.isLog = this._logInService.isLog();
     if (this.isLog)
       this.currentUser = this._logInService.getCurrentUserEmail();
     console.log(this.currentUser);
-    //   componentHandler.upgradeDom();
-
 
   }
   removeProfile(event) {
-    event.preventDefault();
-    this._confirmService.activate("Are you sure to remove your Profile?")
-      .then(res => {
-        if (res)
-          console.log(`Confirmed: ${res}`);
-        else
-          console.log("NOOOOOOOOOOOOOOOOOOOOOOOO")
-      });
+    event.preventDefault(); 
+     this._logInService.removeProfile().subscribe(
+    response => {
+       this._logInService.logout();
+        window.location.reload();
+
+      }, error => {
+        this.resultMessage = error["message"];
+        this.messageType = "error";});
+
+        
+     
+      
   }
   logOut() {
     this._logInService.logout();
@@ -139,7 +155,7 @@ export class AppComponent implements OnInit {
   login(event, value: any) {
     this.messageType = "";
     this.resultMessage = "";
-     event.preventDefault();
+    event.preventDefault();
     this._logInService.login(value.email, value.password).subscribe(
       loginResponse => {
         console.log(loginResponse);
@@ -147,8 +163,6 @@ export class AppComponent implements OnInit {
           if (loginResponse["user"].is_confirmed == false) {
             this.resultMessage = "please check your email for activation link";
             this.messageType = "error";
-
-
           }
           else {
             localStorage.setItem('token', loginResponse["token"]);
@@ -160,7 +174,7 @@ export class AppComponent implements OnInit {
           }
         }
         else {
-        this.resultMessage = loginResponse["message"];
+          this.resultMessage = loginResponse["message"];
           this.messageType = "error";
         }
 

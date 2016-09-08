@@ -41,13 +41,7 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                     this._rootUrl = "http://myremoteserverwg117.ddns.net:3000/";
                     this._apiUrl = this._rootUrl + "api/v1/";
                     this._taskUrl = this._apiUrl + "chair/tasks/";
-                    // private _inviteUrl = this._apiUrl + "/addAuthor/";
-                    //private _paperUrl=this._apiUrl+'submissions/';
-                    //for reviewer
                     this._paperUrl = this._apiUrl + 'submissions/';
-                    this._reviewUrl = 'api/papers/paperwithreview.json';
-                    //
-                    this._reviewerPaperUrl = this._apiUrl + "submissions2/";
                     this._profileUrl = this._apiUrl + 'profile/';
                     this._uploadUrl = this._apiUrl + 'submissions/';
                     this._conferenceUrl = this._apiUrl + "conference/";
@@ -56,6 +50,8 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                     this._getFileUrl = this._rootUrl + "api/v1/download/";
                     this._signupUrl = this._rootUrl + "register";
                     this._isRegisterUrl = this._rootUrl + "isRegister";
+                    this._reportUrl = this._apiUrl + 'report/';
+                    this._publicProfileUrl = this._apiUrl + "profile/public";
                 }
                 AppService.prototype.getPapers = function () {
                     return this._http.get(this._paperUrl, { headers: headers_1.ContentHeaders })
@@ -66,6 +62,12 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                 AppService.prototype.getPaper = function (id) {
                     console.log(id);
                     return this._http.get(this._paperUrl + id, { headers: headers_1.ContentHeaders })
+                        .map(function (response) { return response.json(); })
+                        .do(function (data) { return console.log("All:" + JSON.stringify(data)); })
+                        .catch(this.handleError);
+                };
+                AppService.prototype.getAllReview = function (conferenceId, submissionId) {
+                    return this._http.get(this._apiUrl + conferenceId + "/chair/review/" + submissionId, { headers: headers_1.ContentHeaders })
                         .map(function (response) { return response.json(); })
                         .do(function (data) { return console.log("All:" + JSON.stringify(data)); })
                         .catch(this.handleError);
@@ -103,14 +105,41 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                     };
                     req.send();
                 };
+                AppService.prototype.getReview = function (conferenceId, submissionId) {
+                    return this._http.get(this._apiUrl + conferenceId + "/review/" + submissionId, { headers: headers_1.ContentHeaders })
+                        .map(function (response) { return response.json(); })
+                        .do(function (data) { return console.log("All:" + JSON.stringify(data)); })
+                        .catch(this.handleError);
+                };
+                AppService.prototype.submitReview = function (review, flag) {
+                    var expertise = review.expertise;
+                    var overallEvaluation = review.overallEvaluation;
+                    var summary = review.summary;
+                    var strongPoints = review.strongPoints;
+                    var weakPoints = review.weakPoints;
+                    var detailedComments = review.detailedComments;
+                    var conferenceId = review.conferenceId;
+                    var submissionId = review.submissionId;
+                    var body;
+                    console.log(body);
+                    // /api/v1/:conferenceId/review/edit
+                    var action = "create";
+                    if (flag == 1) {
+                        action = "edit";
+                        var _id = review._id;
+                        body = JSON.stringify({ expertise: expertise, overallEvaluation: overallEvaluation, summary: summary, strongPoints: strongPoints, weakPoints: weakPoints, detailedComments: detailedComments, conferenceId: conferenceId, submissionId: submissionId, _id: _id });
+                    }
+                    else
+                        body = JSON.stringify({ expertise: expertise, overallEvaluation: overallEvaluation, summary: summary, strongPoints: strongPoints, weakPoints: weakPoints, detailedComments: detailedComments, conferenceId: conferenceId, submissionId: submissionId });
+                    return this._http.post(this._apiUrl + review.conferenceId + "/review/" + action, body, { headers: headers_1.ContentHeaders })
+                        .map(function (response) { return response.json(); })
+                        .do(function (data) { return console.log("All:" + JSON.stringify(data)); })
+                        .catch(this.handleError);
+                };
                 AppService.prototype.handleError = function (error) {
                     console.error(error);
                     return Observable_1.Observable.throw(error.json().error || error);
                 };
-                //  getPaper(id: number): Observable<IPaper> {
-                //  return this.getPapers()
-                //    .map((products: IPaper[]) => products.find(p => p.id === id));
-                //  }
                 AppService.prototype.assignReviewers = function (username, submissionId, conferenceId) {
                     var body = JSON.stringify({ username: username, submissionId: submissionId });
                     console.log(body);
@@ -144,10 +173,8 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                         .catch(this.handleError);
                 };
                 AppService.prototype.getConferenceDetails = function (conferencId) {
-                    return this._http.get(this._conferenceUrl + conferencId, { headers: headers_1.ContentHeaders })
-                        .map(function (response) { return response.json(); })
-                        .do(function (data) { return console.log("All:" + JSON.stringify(data)); })
-                        .catch(this.handleError);
+                    return this.getAllConference()
+                        .map(function (conf) { return conf.find(function (p) { return p._id == conferencId; }); });
                 };
                 AppService.prototype.paperSubmission = function (_paper, attFile) {
                     var result = 0;
@@ -167,7 +194,7 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                         var conferenceId = _paper.conferenceId;
                         var body = JSON.stringify({ title: title, abstract: abstract, authorList: authorList, keywords: keywords, based64_data: based64_data, size: size, fileName: fileName, conferenceId: conferenceId });
                         // console.log(body);
-                        xx._http.post(xx._apiUrl + conferenceId + '/submissions/', body, { headers: headers_1.ContentHeaders })
+                        xx._http.post(xx._apiUrl + conferenceId + '/submissions/create', body, { headers: headers_1.ContentHeaders })
                             .do(function (data) { return console.log("All:" + JSON.stringify(data)); })
                             .subscribe(function (response) {
                             result = 1;
@@ -185,39 +212,34 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                     var abstract = _paper.abstract;
                     var keywords = _paper.keywords;
                     var conferenceId = _paper.conferenceId;
-                    var body = JSON.stringify({ title: title, abstract: abstract, authorList: authorList, keywords: keywords });
+                    var _id = _paper.id;
+                    var body = JSON.stringify({ title: title, abstract: abstract, authorList: authorList, keywords: keywords, _id: _id });
                     // console.log(body);
-                    return this._http.post(this._apiUrl + conferenceId + '/submissions/', body, { headers: headers_1.ContentHeaders })
+                    return this._http.post(this._apiUrl + conferenceId + '/submissions/edit', body, { headers: headers_1.ContentHeaders })
                         .map(function (response) { return response.json(); })
                         .do(function (data) { return console.log("All:" + JSON.stringify(data)); })
                         .catch(this.handleError);
                 };
-                //for reviewergetReview(id: number): Observable<IReview> {
-                AppService.prototype.getReview = function (id) {
-                    return this.getPapers()
-                        .map(function (reviews) { return reviews.find(function (p) { return p.id === id; }); }); //.do(data => console.log("All:" + JSON.stringify(data)));
-                };
-                AppService.prototype.getReviews = function () {
-                    return this._http.get(this._reviewUrl)
+                //
+                AppService.prototype.submissionUpdateStatus = function (status, _id, conferenceId) {
+                    var body = JSON.stringify({ status: status, _id: _id });
+                    // console.log(body);
+                    return this._http.post(this._apiUrl + conferenceId + '/submissions/editStatus', body, { headers: headers_1.ContentHeaders })
                         .map(function (response) { return response.json(); })
                         .do(function (data) { return console.log("All:" + JSON.stringify(data)); })
                         .catch(this.handleError);
                 };
-                AppService.prototype.addReview = function (id, expertise, evaluation, summary, strongPoints, weakPoints, comments) {
-                    var _this = this;
-                    // addReview(_review: any) {
-                    var body = JSON.stringify({ id: id, expertise: expertise, evaluation: evaluation, summary: summary, strongPoints: strongPoints, weakPoints: weakPoints, comments: comments });
-                    console.log(body);
-                    this._http.post(this._reviewUrl, body, { headers: headers_1.ContentHeaders })
-                        .subscribe(function (res) { return res.json()
-                        .catch(_this.handleError); });
+                AppService.prototype.editDeadline = function (deadline, _id, conferenceId) {
+                    var body = JSON.stringify({ deadline: deadline, _id: _id });
+                    // console.log(body);
+                    return this._http.post(this._apiUrl + conferenceId + '/submissions/editStatus', body, { headers: headers_1.ContentHeaders })
+                        .map(function (response) { return response.json(); })
+                        .do(function (data) { return console.log("All:" + JSON.stringify(data)); })
+                        .catch(this.handleError);
                 };
                 AppService.prototype.createConference = function (_conf) {
                     var result;
                     var title = _conf.title;
-                    // var chair:any=new Chair();
-                    //chair.username=this.getCurrentUserEmail();
-                    //chair._id=localStorage.getItem("_id");
                     var chair = localStorage.getItem("_id");
                     var conferenceLocation = _conf.conferenceLocation;
                     var startdate = _conf.startdate;
@@ -229,31 +251,24 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                         .do(function (data) { return console.log("All:" + data); })
                         .catch(this.handleError);
                 };
-                AppService.prototype.getReviewList = function () {
-                    var username = this.getCurrentUserEmail();
-                    var token = this.getToken();
-                    var body = JSON.stringify({ token: token, username: username });
-                    return this._http.post(this._reviewUrl, body, { headers: headers_1.ContentHeaders })
+                AppService.prototype.changePassword = function (newPassword, oldPassword) {
+                    var body = JSON.stringify({ oldPassword: oldPassword, newPassword: newPassword });
+                    console.log(body);
+                    return this._http.post(this._profileUrl + "changePassword", body, { headers: headers_1.ContentHeaders })
                         .map(function (response) { return response.json(); })
-                        .do(function (data) { return console.log("All:" + JSON.stringify(data)); })
-                        .catch(this.handleError);
-                };
-                //
-                AppService.prototype.changePassword = function (password, oldPassword) {
-                    var body = JSON.stringify({ oldPassword: oldPassword, password: password });
-                    this._http.post("", body, { headers: headers_1.ContentHeaders })
-                        .do(function (data) { return console.log("All:" + JSON.stringify(data)); })
-                        .subscribe(function (response) {
-                        //   this._router.navigate(['Welcome']);
-                    }, function (error) {
-                        // alert(error.text());
-                        console.log(error.json().status);
-                    });
+                        .catch(this.handleError)
+                        .do(function (data) { return console.log("All:" + JSON.stringify(data)); });
                 };
                 AppService.prototype.getUserProfile = function () {
                     var _token = this.getToken();
                     var token = JSON.stringify({ _token: _token });
                     return this._http.get(this._profileUrl, { headers: headers_1.ContentHeaders })
+                        .map(function (response) { return response.json(); })
+                        .catch(this.handleError).do(function (data) { return console.log("All:" + JSON.stringify(data)); });
+                };
+                AppService.prototype.getPublicProfile = function (username) {
+                    var body = JSON.stringify({ username: username });
+                    return this._http.post(this._publicProfileUrl, body, { headers: headers_1.ContentHeaders })
                         .map(function (response) { return response.json(); })
                         .catch(this.handleError).do(function (data) { return console.log("All:" + JSON.stringify(data)); });
                 };
@@ -313,7 +328,12 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                 };
                 AppService.prototype.checkCredentials = function () {
                     if (localStorage.getItem("token") == null) {
-                        this._router.navigate(['LogIn']);
+                        this._router.navigate(['Welcome']);
+                    }
+                };
+                AppService.prototype.checkCredentialsForSignUp = function () {
+                    if (localStorage.getItem("token") != null) {
+                        this._router.navigate(['Welcome']);
                     }
                 };
                 AppService.prototype.isLog = function () {
@@ -339,6 +359,48 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2/
                     localStorage.removeItem("username");
                     localStorage.removeItem("_id");
                     this._router.navigate(['Welcome']);
+                };
+                AppService.prototype.removeProfile = function () {
+                    return this._http.delete(this._profileUrl, { headers: headers_1.ContentHeaders })
+                        .map(function (response) { return response.json(); }).catch(this.handleError);
+                };
+                //chart starts
+                AppService.prototype.getStatusChart = function () {
+                    var conferenceId = "57d08000d34a22617c2a3a47";
+                    return this._http.get(this._apiUrl + conferenceId + "/chair/submissions", { headers: headers_1.ContentHeaders })
+                        .map(function (response) { return response.json()
+                        .reduce(function (res, obj) {
+                        if (!(obj.status in res)) {
+                            res.__array.push(res[obj.status] = obj);
+                            res[obj.status].counter = 1;
+                        }
+                        else {
+                            res[obj.status].counter += 1;
+                        }
+                        return res;
+                    }, { array: [] })._array.sort(function (a, b) { return b.counter - a.counter; }); })
+                        .catch(this.handleError);
+                };
+                AppService.prototype.getTopicChart = function () {
+                    return this._http.get(this._paperUrl, { headers: headers_1.ContentHeaders })
+                        .map(function (response) { return response.json()
+                        .reduce(function (res, obj) {
+                        if (!(obj.keywords in res)) {
+                            res.__array.push(res[obj.keywords] = obj);
+                            res[obj.keywords].counter = 1;
+                        }
+                        else {
+                            res[obj.keywords].counter += 1;
+                        }
+                        return res;
+                    }, { array: [] })._array
+                        .sort(function (a, b) { return b.counter - a.counter; }); })
+                        .catch(this.handleError);
+                };
+                AppService.prototype.getReportChart = function () {
+                    return this._http.get(this._reportUrl, { headers: headers_1.ContentHeaders })
+                        .map(function (response) { return response.json(); })
+                        .catch(this.handleError);
                 };
                 AppService._base64_data = "";
                 AppService = __decorate([

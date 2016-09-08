@@ -37,18 +37,20 @@ export class PaperEditComponent implements OnInit {
   messageType: string = "";
   checkKey = true;
   conferenceId:string;
+  id:string;
    ngOnInit():void{
           //    this.conferenceId= this._routeParams.get('id');
            if(!this.paper)
            {
              this.paper=new Paper();
-            let id = this._routeParams.get('id');
+            this.id = this._routeParams.get('id');
             // this.pageTitle += `: ${id}`;
-            this.getPaper(id);
+            this.getPaper(this.id);
            }
        
 
    }
+   // get submission details from api
     getPaper(id: string) {
         this._paperService.getPaper(id)
             .subscribe(
@@ -62,6 +64,7 @@ export class PaperEditComponent implements OnInit {
             error => this.errorMessage = <any>error);
             
     }
+// add author to paperAuthor Array
   addAuthor(event, value: any) {
     event.preventDefault();
     if (this.checkAuthor(value.email)) {
@@ -75,6 +78,7 @@ export class PaperEditComponent implements OnInit {
        this.checkKey = false;
   }
 
+// clear author form after adding author to array 
   clearAuthorForm(): void {
     for (var name in this.authorForm.controls) {
       (<Control>this.authorForm.controls[name]).updateValue("");
@@ -188,6 +192,7 @@ export class PaperEditComponent implements OnInit {
     event.preventDefault();
    // this.paper = new Paper();
     this.paper.authorList = [];
+  
     this.paper.authorList = this.paperAuthors;
     this.paper.keywords = this.keywords;
     this.paper.abstract = value.abstract;
@@ -213,10 +218,12 @@ export class PaperEditComponent implements OnInit {
 
     if (check) {
       try{
+            this.paper.id=this.id;
+console.log(this.paper.id);
       this._paperService.paperSubmissionEdit(<Paper>this.paper).subscribe(
             response => {
-                this.messageType="alert";
-                this.resultMessage="there are no available any assigned submission for review";
+                this.messageType="success";
+                this.resultMessage="submission updated successfully";
                 
             
           },

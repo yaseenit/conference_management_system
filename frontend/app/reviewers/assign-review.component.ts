@@ -27,6 +27,8 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
         resultMessage:string="";
         messageType:string="";
         conferenceId:string="";
+        chkSubmissionStatus:boolean=false;
+        authorUserName:string;
         constructor(_fb: FormBuilder, private _reviewerService: AppService,  private _routeParams:RouteParams ) {
         this.form = _fb.group({
             userName: ['', Validators.compose([ValidationService.emailValidator,Validators.required])]
@@ -43,8 +45,9 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
         this._reviewerService.getPaper(id).subscribe(
             respone => {
                 this.PaperReviewers=respone.reviewers;
+                this.authorUserName=respone.createdBy;
                 this.conferenceId=respone.conferenceId;
-
+  this.checkSubmissionStatus(respone.status,respone.deadline);
 
             },
             error =>
@@ -54,10 +57,37 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
             }
         );
     }
+    checkSubmissionStatus(status:string,deadline:any)
+    {
+      if(status=="rejected")
+      {
+           this.chkSubmissionStatus=false;
+           this.resultMessage="Cann't assigned reviewer to rejected paper";
+            this.messageType="error";
+      }
+      else
+      {
+           var current = new Date();
+           if( new Date(deadline).getTime()<current.getTime())
+           {
+            this.resultMessage="Cann't assigned reviewer, paper reach deadline" + deadline ;
+            this.messageType="error";
+           this.chkSubmissionStatus=false;
+
+           }
+           else
+           {
+                          this.chkSubmissionStatus=true;
+
+           }
+      }
+    }
     assign(event,value: any ) {
+        event.preventDefault();
+        if(this.authorUserName!=value.userName)
+        {
         this.messageType="";
         this.resultMessage="";
-        event.preventDefault();
         if(this.checkReviewer(value.userName))
         {
         this._reviewerService.assignReviewers(value.userName,this.submissionId,this.conferenceId).subscribe(
@@ -84,6 +114,12 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
         }
         else
          this.errorMessage='reviewer email already assigned';
+        }
+        else
+        {
+         this.resultMessage="The reviewer of submission cann't be the author";
+         this.messageType="error";
+        }
       }
       clearForm():void
       {
@@ -106,7 +142,7 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
         else
     return true;
       }
-
+   
    removeReviewer(_userName:string):void
   {
       this._reviewerService.removeReviewers(_userName,this.submissionId,this.conferenceId).subscribe(
@@ -132,6 +168,9 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
   }
        );  
     }
+     onBack(): void{
+  window.history.back();
+        }
 
 
     }

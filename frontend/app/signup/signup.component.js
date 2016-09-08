@@ -63,6 +63,9 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                         zipCode: ['']
                     }, { validator: validation_service_1.ValidationService.checkEqualPassword });
                 }
+                SignUpComponent.prototype.ngOnInit = function () {
+                    this._signupService.checkCredentialsForSignUp();
+                };
                 SignUpComponent.prototype.signup = function (event, value) {
                     var _this = this;
                     event.preventDefault();
@@ -82,8 +85,6 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                         console.log(response);
                         if (!response["existed"]) {
                             _this._signupService.signup(_this._user).subscribe(function (response) {
-                                console.log(response);
-                                // this.signupResult=response;
                                 _this.resultMessage = "Thanks for registration please check your email for activation";
                                 _this.messageType = "success";
                             }, function (error) {
@@ -100,25 +101,27 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                     console.log('presssss');
                 };
                 SignUpComponent.prototype.getAddress = function (place) {
-                    this.address = place['formatted_address'];
-                    var location = place['geometry']['location'];
-                    var lat = location.lat();
-                    var lng = location.lng();
-                    console.log("Address Object", place);
-                    console.log(place['address_components'][0].long_name);
-                    for (var i = 0; i < place['address_components'].length; i++) {
-                        var addressType = place['address_components'][i].types[0];
-                        if (addressType == "country") {
-                            this.form.controls["country"].updateValue(place['address_components'][i].long_name);
-                        }
-                        if (addressType == "administrative_area_level_1") {
-                            this.form.controls["state"].updateValue(place['address_components'][i].long_name);
-                        }
-                        if (addressType == "postal_code") {
-                            this.form.controls["zipCode"].updateValue(place['address_components'][i].long_name);
-                        }
-                        if (addressType == "locality") {
-                            this.form.controls["city"].updateValue(place['address_components'][i].long_name);
+                    if (this.address) {
+                        this.address = place['formatted_address'];
+                        var location = place['geometry']['location'];
+                        var lat = location.lat();
+                        var lng = location.lng();
+                        console.log("Address Object", place);
+                        console.log(place['address_components'][0].long_name);
+                        for (var i = 0; i < place['address_components'].length; i++) {
+                            var addressType = place['address_components'][i].types[0];
+                            if (addressType == "country") {
+                                this.form.controls["country"].updateValue(place['address_components'][i].long_name);
+                            }
+                            if (addressType == "administrative_area_level_1") {
+                                this.form.controls["state"].updateValue(place['address_components'][i].long_name);
+                            }
+                            if (addressType == "postal_code") {
+                                this.form.controls["zipCode"].updateValue(place['address_components'][i].long_name);
+                            }
+                            if (addressType == "locality") {
+                                this.form.controls["city"].updateValue(place['address_components'][i].long_name);
+                            }
                         }
                     }
                 };

@@ -27,6 +27,7 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
         resultMessage:string="";
         messageType:string="";
         chkDate:boolean=false;
+        chairUserName:string;
         constructor(_fb: FormBuilder, private _service: AppService, private _router: Router,  private _routeParams:RouteParams ) {
         this.form = _fb.group({
             userName: ['', Validators.compose([ValidationService.emailValidator,Validators.required])]
@@ -38,9 +39,11 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
     }
     getConferenceDetails(id)
     {
+        this.chairUserName=this._service.getCurrentUserEmail();
         this._service.getConferenceDetails(id).subscribe(
             response=>{
                 this.authorList=response.authors;
+                
                 this.checkConferenceDate(response.startdate,response.enddate);
             }
             ,error =>
@@ -62,7 +65,10 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
         {  this.chkDate= false; }
     }
     Invite(event:any,value: any ) {
+    
         event.preventDefault();
+        if(this.chairUserName!=value.userName)
+        {
         this.messageType="";
         this.resultMessage="";
         if(this.checkAuthor(value.userName))
@@ -95,6 +101,14 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
                   this.messageType="error";
 
         }
+        }
+        else
+        {
+             this.resultMessage='As a chair,you are not allowed to participate in this conference ';
+            this.messageType="error";
+        }
+
+
       }
       clearForm():void
       {
@@ -135,6 +149,9 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
         }
        );  
    }
+    onBack(): void{
+            this._router.navigate(['Conference']);
+        }
 
 
     }

@@ -9,33 +9,36 @@
     <div class='panel-body' *ngIf='tasks && tasks.length'>
 
         <div class='table-responsive'>
-            <table class='table'>
+            <table class='table table-bordered table-striped table-hover'>
                 <thead>
                     <tr>
                         <th>Title</th>
                         <th>Asssigned Date</th>
-                                                <th>Details</th>
-
-                        <th>Review</th>
+                         <th>Details</th>
+                         <th>Review</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor='#task of tasks'>
-                                 <td><a [routerLink]="['PaperDetail',{id:task.submissionId}]">{{task.taskDesc}}</a></td>
+                                 <td>{{task.taskDesc}}</td>
 
-                        <td>{{task.taskDesc}}</td>
-                        <td>{{task.createdOn}}</td>
-                                                                    <td>Details</td>
+                        <td>{{ stringAsDate(task.createdOn) | date}}</td>
+                              <td> <a [routerLink]="['ReviewDetail',{id:task.submissionId}]">Details</a></td>
    
 
-                        <td>
-                           
-Reviewe     
+                        <td>  <a [routerLink]="['ReviewCreate',{id:task.submissionId}]">New/Edit Review </a>     
                         </td>
 
                     </tr>
                 </tbody>
             </table>
         </div>
+    </div>
+       <div class='panel-footer'>
+
+        <a class='btn btn-default' (click)='onBack()' style='width:80px'>
+            <i class='glyphicon glyphicon-chevron-left'></i> Back
+        </a>       
+
     </div>
 </div>

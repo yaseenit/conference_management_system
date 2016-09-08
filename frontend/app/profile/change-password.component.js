@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', '../service/app.service', 'angular2/common', '../shared/control-message.component', '../service/validation.service'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/router', '../service/app.service', 'angular2/common', '../shared/control-message.component', '../service/validation.service', '../shared/result-message.component'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, router_2, app_service_1, common_1, control_message_component_1, validation_service_1;
+    var core_1, router_1, router_2, app_service_1, common_1, control_message_component_1, validation_service_1, result_message_component_1;
     var ChangePasswordComponent;
     return {
         setters:[
@@ -32,6 +32,9 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
             },
             function (validation_service_1_1) {
                 validation_service_1 = validation_service_1_1;
+            },
+            function (result_message_component_1_1) {
+                result_message_component_1 = result_message_component_1_1;
             }],
         execute: function() {
             ChangePasswordComponent = (function () {
@@ -39,6 +42,8 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                     this._service = _service;
                     this._router = _router;
                     this.valid = false;
+                    this.resultMessage = "";
+                    this.messageType = "";
                     this.form = _fb.group({
                         oldPassword: ['', common_1.Validators.compose([common_1.Validators.required, validation_service_1.ValidationService.passwordValidator])],
                         password: ['', common_1.Validators.compose([common_1.Validators.required, validation_service_1.ValidationService.passwordValidator])],
@@ -46,18 +51,21 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                     }, { validator: validation_service_1.ValidationService.checkEqualPassword });
                 }
                 ChangePasswordComponent.prototype.changePassword = function (event, value) {
+                    var _this = this;
                     event.preventDefault();
-                    if (confirm("Are you sure you want to change the Password ??")) {
-                        this._service.changePassword(value.password, value.oldPassword);
-                        console.log('presssss');
-                    }
-                    else
-                        return null;
+                    this._service.changePassword(value.password, value.oldPassword).subscribe(function (response) {
+                        _this.resultMessage = "Your password has been changed";
+                        _this.messageType = "success";
+                    }, function (error) {
+                        _this.resultMessage = error["_body"].message;
+                        _this.messageType = "error";
+                    });
+                    console.log('presssss');
                 };
                 ChangePasswordComponent = __decorate([
                     core_1.Component({
                         templateUrl: 'app/profile/change-password.component.html',
-                        directives: [router_2.ROUTER_DIRECTIVES, control_message_component_1.ControlMessagesComponent]
+                        directives: [router_2.ROUTER_DIRECTIVES, control_message_component_1.ControlMessagesComponent, result_message_component_1.ResultMessagesComponent]
                     }), 
                     __metadata('design:paramtypes', [common_1.FormBuilder, app_service_1.AppService, router_1.Router])
                 ], ChangePasswordComponent);

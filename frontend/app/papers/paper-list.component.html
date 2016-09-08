@@ -22,15 +22,15 @@
 
  
         <div class='table-responsive'>
-            <table class='table' 
+            <table class='table table-bordered table-striped table-hover'
              >
                 <thead>
                     <tr>
                      
                         <th>Title</th>
                         <th>Status</th>
-                        <th>Submission Date </th>
-                         <th> <button class="btn btn-primary" (click)='toggleFile()'>
+          <th>Submission Date </th>
+                        <th>DeadLine</th>                         <th> <button class="btn btn-primary" (click)='toggleFile()'>
                           {{showFile ?'Hide' : 'Show File'}}
                           </button>
                       </th>
@@ -40,8 +40,8 @@
                   <tr  *ngFor='#paper of papers | paperFilter:listFilter'>
          <td><a [routerLink]="['PaperDetail',{id:paper._id}]">{{paper.title}}</a></td>
   <td>{{paper.status | lowercase}}</td>
-  <td>{{paper.createdOn}}</td>
-     <td><a *ngIf='showFile' href="#" (click)='getFile($event,paper.generatedFileName,paper.fileName)' target="_blank"><img src='./app/assets/images/pdf-icon.png' [style.width.px]='imageWidth' [style.height.px]='imageHeight'></a></td>
+  <td> {{ stringAsDate(paper.createdOn) | date}}</td>
+    <td> {{ stringAsDate(paper.deadline) | date}}</td>       <td><a *ngIf='showFile' href="#" (click)='getFile($event,paper.generatedFileName,paper.fileName)' target="_blank"><img src='./app/assets/images/pdf-icon.png' [style.width.px]='imageWidth' [style.height.px]='imageHeight'></a></td>
  
 <td></td>
         
@@ -49,5 +49,10 @@
                 </tbody>
             </table>
         </div>
+    </div>
+     <div class='panel-footer'>
+        <a class='btn btn-default' (click)='onBack()' style='width:80px'>
+            <i class='glyphicon glyphicon-chevron-left'></i> Back
+        </a>
     </div>
 </div>

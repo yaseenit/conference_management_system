@@ -1,4 +1,4 @@
-import {Component} from 'angular2/core';
+import {Component,OnInit} from 'angular2/core';
 import {RouteParams, Router} from 'angular2/router';
 import { ROUTER_DIRECTIVES } from  'angular2/router';
 import {AppService} from '../service/app.service'
@@ -18,7 +18,7 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
         directives: [ROUTER_DIRECTIVES, GoogleplaceDirective, ControlMessagesComponent, ResultMessagesComponent],
     })
 
-export class SignUpComponent {
+export class SignUpComponent  implements OnInit {
     form: ControlGroup;
     _user: User;
     valid: boolean = false;
@@ -27,6 +27,10 @@ export class SignUpComponent {
     messageType: string = "";
     signupError: any[];
     signupResult: any[];
+
+ngOnInit(): any    {
+      this._signupService.checkCredentialsForSignUp();
+    }
     signup(event, value: any) {
         event.preventDefault();
         this._user = new User();
@@ -48,21 +52,13 @@ export class SignUpComponent {
                 {
               this._signupService.signup(this._user).subscribe(
                 response => {
-                 console.log(response);
-                // this.signupResult=response;
-
                 this.resultMessage = "Thanks for registration please check your email for activation";
                 this.messageType = "success";
-
-
-
             },
             error => {
                 
                     this.resultMessage = "Error , please try again later";
-                    this.messageType = "error";
-
-               
+                    this.messageType = "error";           
                 error => this.signupError = <any>error
 
             }
@@ -103,6 +99,8 @@ export class SignUpComponent {
 
     public address: Object;
     getAddress(place: Object) {
+        if(this.address)
+        {
         this.address = place['formatted_address'];
         var location = place['geometry']['location'];
         var lat = location.lat();
@@ -124,6 +122,7 @@ export class SignUpComponent {
             if (addressType == "locality") {
                 (<Control>this.form.controls["city"]).updateValue(place['address_components'][i].long_name);
             }
+        }
         }
 
     }

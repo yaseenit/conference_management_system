@@ -3,7 +3,7 @@ import {IPaper,ICountry} from '../service/app.interface';
 import { PaperFilterPipe } from  './paper-filter.pipe' ;
 import { StarComponent } from  '../shared/star.component' ;
 import  {AppService} from '../service/app.service'
-import { ROUTER_DIRECTIVES } from  'angular2/router' ;
+import { ROUTER_DIRECTIVES,Router } from  'angular2/router' ;
 import { ResultMessagesComponent } from '../shared/result-message.component';
 
 @Component(
@@ -56,12 +56,18 @@ export class PaperListComponent implements OnInit
      
 
     }
+       stringAsDate(dateStr) {
+        return new Date(dateStr);
+    }
  getFile(event,generatedFileName,fileName)
  {
          event.preventDefault();
          this._paperService.getFiles(generatedFileName,fileName);
  }
-    constructor(private _paperService :AppService)
+    constructor(private _paperService :AppService,private _router:Router)
     {
     }
+     onBack(): void{
+            this._router.navigate(['Welcome']);
+        }
 }

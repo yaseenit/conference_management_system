@@ -10,15 +10,26 @@ var config = require('./config'),
 	compress = require('compression'),
 	bodyParser = require('body-parser'),
 	methodOverride = require('method-override'),
-	//session = require('express-session'),
-	//MongoStore = require('connect-mongo')(session),
-	//flash = require('connect-flash'),
-	//passport = require('passport'),
+//session = require('express-session'),
+//MongoStore = require('connect-mongo')(session),
+//flash = require('connect-flash'),
+//passport = require('passport'),
+    //fs = require('fs'),
     multer = require('multer');
 
 
 // Define the Express configuration method
 module.exports = function (db) {
+
+
+
+	// var hskey = fs.readFileSync( './config/hacksparrow-key.pem');
+	// var hscert = fs.readFileSync('./config/hacksparrow-cert.pem');
+
+	// var options = {
+	// 	key: hskey,
+	// 	cert: hscert
+	// };
 	// Create a new Express application instance
 	var app = express();
 

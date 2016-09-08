@@ -1,7 +1,7 @@
 import { Component,OnInit } from  'angular2/core' ;
 import {ConferenceModel} from '../service/app.interface';
 import  {AppService} from '../service/app.service'
-import { ROUTER_DIRECTIVES } from  'angular2/router' ;
+import { ROUTER_DIRECTIVES,Router } from  'angular2/router' ;
 import  {ConferenceFilterPipe} from './conference-filter.pipe'
 import { ResultMessagesComponent } from '../shared/result-message.component';
 
@@ -48,9 +48,14 @@ export class PublicConferenceComponent implements OnInit
         );
         
     }
- 
-    constructor(private _service :AppService)
+    stringAsDate(dateStr:any) {
+        return new Date(dateStr);
+    }
+    constructor(private _service :AppService,private _router:Router)
     {
 
     }
+     onBack(): void{
+            this._router.navigate(['Welcome']);
+        }
 }

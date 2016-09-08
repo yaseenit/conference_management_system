@@ -31,8 +31,9 @@ System.register(['angular2/core', '../service/app.service', 'angular2/router', '
             }],
         execute: function() {
             PublicConferenceComponent = (function () {
-                function PublicConferenceComponent(_service) {
+                function PublicConferenceComponent(_service, _router) {
                     this._service = _service;
+                    this._router = _router;
                     this.conferences = [];
                     this.resultMessage = "";
                     this.messageType = "";
@@ -58,13 +59,19 @@ System.register(['angular2/core', '../service/app.service', 'angular2/router', '
                         _this.resultMessage = error["message"];
                     });
                 };
+                PublicConferenceComponent.prototype.stringAsDate = function (dateStr) {
+                    return new Date(dateStr);
+                };
+                PublicConferenceComponent.prototype.onBack = function () {
+                    this._router.navigate(['Welcome']);
+                };
                 PublicConferenceComponent = __decorate([
                     core_1.Component({
                         templateUrl: 'app/conference/public-conference.component.html',
                         directives: [router_1.ROUTER_DIRECTIVES, result_message_component_1.ResultMessagesComponent],
                         pipes: [conference_filter_pipe_1.ConferenceFilterPipe],
                     }), 
-                    __metadata('design:paramtypes', [app_service_1.AppService])
+                    __metadata('design:paramtypes', [app_service_1.AppService, router_1.Router])
                 ], PublicConferenceComponent);
                 return PublicConferenceComponent;
             }());

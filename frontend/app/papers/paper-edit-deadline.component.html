@@ -1,0 +1,21 @@
+<div class="row">
+    <div class="col-md-8">
+        <result-messages [(message)]='resultMessage' [(messageType)]='messageType'></result-messages>
+
+        <fieldset *ngIf="messageType!='success'">
+            <legend>Change DeadLine</legend>
+
+            <form [ngFormModel]="form">
+
+                <div class="form-group">
+                    <label for="deadline">deadline</label>
+                    <datepicker [(ngModel)]="deadline" [minDate]="minDate" [showWeeks]="false"></datepicker>
+                     <input type="hidden" [(ngModel)]="deadline" class="form-control" id="deadline" placeholder="deadline" ngControl="deadline">
+                    <control-messages [control]="form.controls.deadline"></control-messages>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block" [disabled]="!form.valid" (click)="submit($event,form.value)">Update </button>
+            </form>
+        </fieldset>
+
+    </div>
+</div>

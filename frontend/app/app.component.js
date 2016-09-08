@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/http', 'rxjs/Rx', 'rxjs/add/operator/map', 'angular2/router', 'angular2/common', './papers/paper-list.component', './papers/paper-detail.component', './papers/paper-create.component', './review/review-list.component', './review/review-detail.component', './home/welcome.component', './login/login.component', './signup/signup.component', './reviewers/assign-review.component', './authors/invite-author.component', './service/app.service', './service/validation.service', './profile/edit-profile.component', './shared/control-message.component', './shared/result-message.component', './profile/view-profile.component', './profile/change-password.component', "./service/confirm.service", "./shared/confirm.component", "./conference/create-conference.component", "./conference/conference.component", './conference/public-conference.component', './papers/author-papers-conference.component', './papers/conference-papers-list.component', './papers/reviewer-papers.component', './papers/paper-edit.component'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/http', 'rxjs/Rx', 'rxjs/add/operator/map', 'angular2/router', 'angular2/common', './papers/paper-list.component', './papers/paper-detail.component', './papers/paper-create.component', './home/welcome.component', './login/login.component', './signup/signup.component', './reviewers/assign-review.component', './authors/invite-author.component', './service/app.service', './service/validation.service', './profile/edit-profile.component', './shared/control-message.component', './shared/result-message.component', './profile/view-profile.component', './profile/change-password.component', "./service/confirm.service", "./shared/confirm.component", "./conference/create-conference.component", "./conference/conference.component", './conference/public-conference.component', './papers/author-papers-conference.component', './papers/conference-papers-list.component', './papers/reviewer-papers.component', './papers/paper-edit.component', './review/review-create.component', './review/review-detail.component', './papers/paper-edit-deadline.component', './chart/chart.component', './profile/public-profile.component'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Rx', 'rxjs/add/operator
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, http_1, router_1, common_1, paper_list_component_1, paper_detail_component_1, paper_create_component_1, review_list_component_1, review_detail_component_1, welcome_component_1, login_component_1, signup_component_1, assign_review_component_1, invite_author_component_1, app_service_1, validation_service_1, edit_profile_component_1, control_message_component_1, result_message_component_1, view_profile_component_1, change_password_component_1, router_2, confirm_service_1, confirm_component_1, create_conference_component_1, conference_component_1, public_conference_component_1, author_papers_conference_component_1, conference_papers_list_component_1, reviewer_papers_component_1, paper_edit_component_1;
+    var core_1, http_1, router_1, common_1, paper_list_component_1, paper_detail_component_1, paper_create_component_1, welcome_component_1, login_component_1, signup_component_1, assign_review_component_1, invite_author_component_1, app_service_1, validation_service_1, edit_profile_component_1, control_message_component_1, result_message_component_1, view_profile_component_1, change_password_component_1, router_2, confirm_service_1, confirm_component_1, create_conference_component_1, conference_component_1, public_conference_component_1, author_papers_conference_component_1, conference_papers_list_component_1, reviewer_papers_component_1, paper_edit_component_1, review_create_component_1, review_detail_component_1, paper_edit_deadline_component_1, chart_component_1, public_profile_component_1;
     var AppComponent;
     return {
         setters:[
@@ -37,12 +37,6 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Rx', 'rxjs/add/operator
             },
             function (paper_create_component_1_1) {
                 paper_create_component_1 = paper_create_component_1_1;
-            },
-            function (review_list_component_1_1) {
-                review_list_component_1 = review_list_component_1_1;
-            },
-            function (review_detail_component_1_1) {
-                review_detail_component_1 = review_detail_component_1_1;
             },
             function (welcome_component_1_1) {
                 welcome_component_1 = welcome_component_1_1;
@@ -106,6 +100,21 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Rx', 'rxjs/add/operator
             },
             function (paper_edit_component_1_1) {
                 paper_edit_component_1 = paper_edit_component_1_1;
+            },
+            function (review_create_component_1_1) {
+                review_create_component_1 = review_create_component_1_1;
+            },
+            function (review_detail_component_1_1) {
+                review_detail_component_1 = review_detail_component_1_1;
+            },
+            function (paper_edit_deadline_component_1_1) {
+                paper_edit_deadline_component_1 = paper_edit_deadline_component_1_1;
+            },
+            function (chart_component_1_1) {
+                chart_component_1 = chart_component_1_1;
+            },
+            function (public_profile_component_1_1) {
+                public_profile_component_1 = public_profile_component_1_1;
             }],
         execute: function() {
             AppComponent = (function () {
@@ -124,22 +133,23 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Rx', 'rxjs/add/operator
                     });
                 }
                 AppComponent.prototype.ngOnInit = function () {
+                    this._logInService.checkCredentials();
                     this.messageType = "";
                     this.resultMessage = "";
                     this.isLog = this._logInService.isLog();
                     if (this.isLog)
                         this.currentUser = this._logInService.getCurrentUserEmail();
                     console.log(this.currentUser);
-                    //   componentHandler.upgradeDom();
                 };
                 AppComponent.prototype.removeProfile = function (event) {
+                    var _this = this;
                     event.preventDefault();
-                    this._confirmService.activate("Are you sure to remove your Profile?")
-                        .then(function (res) {
-                        if (res)
-                            console.log("Confirmed: " + res);
-                        else
-                            console.log("NOOOOOOOOOOOOOOOOOOOOOOOO");
+                    this._logInService.removeProfile().subscribe(function (response) {
+                        _this._logInService.logout();
+                        window.location.reload();
+                    }, function (error) {
+                        _this.resultMessage = error["message"];
+                        _this.messageType = "error";
                     });
                 };
                 AppComponent.prototype.logOut = function () {
@@ -195,8 +205,6 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Rx', 'rxjs/add/operator
                         { path: '/paper/:id', name: 'PaperDetail', component: paper_detail_component_1.PaperDetailComponent },
                         { path: '/login', name: 'LogIn', component: login_component_1.LogInComponent },
                         { path: '/papercreate/:id', name: 'PaperCreate', component: paper_create_component_1.PaperCreateComponent },
-                        { path: '/review', name: 'Review', component: review_list_component_1.ReviewListComponent },
-                        { path: '/review/:id', name: 'ReviewDetail', component: review_detail_component_1.ReviewDetailComponent },
                         { path: '/signup', name: 'SignUp', component: signup_component_1.SignUpComponent },
                         { path: '/editProfile', name: 'EditProfile', component: edit_profile_component_1.EditProfileComponent },
                         { path: '/viewProfile', name: 'ViewProfile', component: view_profile_component_1.ViewProfileComponent },
@@ -209,7 +217,12 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Rx', 'rxjs/add/operator
                         { path: '/authorPapersConference/:id/:title', name: 'AuthorPapersConference', component: author_papers_conference_component_1.AuthorPapersConferenceComponent },
                         { path: '/conferencePaper/:id/:title', name: 'ConferencePapers', component: conference_papers_list_component_1.ConferencePaperComponent },
                         { path: '/reviewerPapers', name: 'ReviewerPapers', component: reviewer_papers_component_1.ReviewerPaperComponent },
-                        { path: '/paperEdit/:id', name: 'PaperEdit', component: paper_edit_component_1.PaperEditComponent }
+                        { path: '/paperEdit/:id', name: 'PaperEdit', component: paper_edit_component_1.PaperEditComponent },
+                        { path: '/reviewCreate/:id', name: 'ReviewCreate', component: review_create_component_1.ReviewCreateComponent },
+                        { path: '/reviewDetail/:id', name: 'ReviewDetail', component: review_detail_component_1.ReviewDetailComponent },
+                        { path: '/editDeadline/:id/:conferenceId', name: 'EditDeadline', component: paper_edit_deadline_component_1.EditDeadLineComponent },
+                        { path: '/chart', name: 'Chart', component: chart_component_1.ChartComponent },
+                        { path: '/publicProfile/:username', name: 'PublicProfile', component: public_profile_component_1.PublicProfileComponent }
                     ]), 
                     __metadata('design:paramtypes', [app_service_1.AppService, common_1.FormBuilder, router_2.Router, confirm_service_1.ConfirmService])
                 ], AppComponent);

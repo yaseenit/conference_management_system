@@ -9,7 +9,7 @@
 
 
         <div class='table-responsive'>
-            <table class='table' 
+            <table class='table table-bordered table-striped table-hover'
             *ngIf='conferences && conferences.length' >
                 <thead>
                     <tr>
@@ -25,13 +25,18 @@
                   <tr  *ngFor='#con of conferences | conferenceFilter : username'>
   <td>{{con.title}}</td>
    <td>{{con.conferenceLocation}}</td>
-  <td>{{con.startdate}}</td>
-  <td>{{con.enddate}}</td>
+  <td>{{ stringAsDate(con.startdate) | date}}</td>
+  <td>{{ stringAsDate(con.enddate) | date}}</td>
 <td> <a [routerLink]="['AuthorPapersConference',{id:con._id,title:con.title}]" >Submission</a></td>
         
                       </tr>
                 </tbody>
             </table>
         </div>
+    </div>
+         <div class='panel-footer'>
+        <a class='btn btn-default' (click)='onBack()' style='width:80px'>
+            <i class='glyphicon glyphicon-chevron-left'></i> Back
+        </a>
     </div>
 </div>

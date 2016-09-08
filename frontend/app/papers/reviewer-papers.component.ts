@@ -44,7 +44,12 @@ export class ReviewerPaperComponent implements OnInit
              }
         );
     }
-
+   stringAsDate(dateStr) {
+        return new Date(dateStr);
+    }
+      onBack(): void{
+            this._router.navigate(['Welcome']);
+        }
     constructor(private _paperService :AppService,private _router :Router,private _routeParams:RouteParams)
     {
     }

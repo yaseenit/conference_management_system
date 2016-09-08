@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', '../service/app.service', 'angular2/common', './review-detail.pipe'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/router', '../service/app.service', '../service/app.interface', 'angular2/common', '../shared/control-message.component', '../shared/result-message.component', '../shared/rating.component'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,8 +10,8 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, app_service_1, common_1, review_detail_pipe_1, common_2;
-    var Expertise, Evaluation, ReviewDetailComponent;
+    var core_1, router_1, app_service_1, app_interface_1, router_2, common_1, control_message_component_1, result_message_component_1, rating_component_1;
+    var ReviewDetailComponent;
     return {
         setters:[
             function (core_1_1) {
@@ -19,103 +19,101 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
             },
             function (router_1_1) {
                 router_1 = router_1_1;
+                router_2 = router_1_1;
             },
             function (app_service_1_1) {
                 app_service_1 = app_service_1_1;
             },
+            function (app_interface_1_1) {
+                app_interface_1 = app_interface_1_1;
+            },
             function (common_1_1) {
                 common_1 = common_1_1;
-                common_2 = common_1_1;
             },
-            function (review_detail_pipe_1_1) {
-                review_detail_pipe_1 = review_detail_pipe_1_1;
+            function (control_message_component_1_1) {
+                control_message_component_1 = control_message_component_1_1;
+            },
+            function (result_message_component_1_1) {
+                result_message_component_1 = result_message_component_1_1;
+            },
+            function (rating_component_1_1) {
+                rating_component_1 = rating_component_1_1;
             }],
         execute: function() {
-            //import {NgbButtonCheckbox, NgbButtonRadio} from '../service/button';
-            (function (Expertise) {
-                Expertise[Expertise["notFamiliar"] = 1] = "notFamiliar";
-                Expertise[Expertise["low"] = 2] = "low";
-                Expertise[Expertise["moderate"] = 3] = "moderate";
-                Expertise[Expertise["high"] = 4] = "high";
-                Expertise[Expertise["expert"] = 5] = "expert";
-            })(Expertise || (Expertise = {}));
-            exports_1("Expertise", Expertise);
-            (function (Evaluation) {
-                Evaluation[Evaluation["strongReject"] = 1] = "strongReject";
-                Evaluation[Evaluation["reject"] = 2] = "reject";
-                Evaluation[Evaluation["borderlinePaper"] = 3] = "borderlinePaper";
-                Evaluation[Evaluation["accept"] = 4] = "accept";
-                Evaluation[Evaluation["strongAccept"] = 5] = "strongAccept";
-            })(Evaluation || (Evaluation = {}));
-            exports_1("Evaluation", Evaluation);
             ReviewDetailComponent = (function () {
-                function ReviewDetailComponent(_reviewService, _routeParams, _router, fb) {
-                    this._reviewService = _reviewService;
+                function ReviewDetailComponent(_paperService, _routeParams, _router, _fb) {
+                    this._paperService = _paperService;
                     this._routeParams = _routeParams;
                     this._router = _router;
-                    this.pageTitle = 'Paper Detail for Review';
-                    this.arrayIndex = 0;
-                    this.reviewForm = fb.group({
-                        expertise: ['', common_1.Validators.required],
-                        evaluation: ['', common_1.Validators.required],
-                        expertiseReview: ['', common_1.Validators.required],
-                        evaluationReview: ['', common_1.Validators.required],
-                        summary: ['', common_1.Validators.required],
-                        strongPoints: ['', common_1.Validators.required],
-                        weakPoints: ['', common_1.Validators.required],
-                        comments: ['', common_1.Validators.required]
-                    });
-                    this.expertiseReview = { val: "" };
-                    this.evaluationReview = { eval: "" };
-                    var id = +this._routeParams.get('id');
-                    this.pageTitle += ": " + id;
+                    this.imageWidth = 50;
+                    this.imageHeight = 40;
+                    this.isRatingReadonly = false;
+                    this.maxRateValue = 5;
+                    this.resultMessage = "";
+                    this.messageType = "";
+                    this.hasReview = false;
                 }
+                ;
+                ReviewDetailComponent.prototype.resetRatingStar = function () {
+                    this.overStar = null;
+                };
+                ReviewDetailComponent.prototype.resetRatingStarEva = function () {
+                    this.overStarEvaluation = null;
+                };
+                ReviewDetailComponent.prototype.overStarEva = function (value) {
+                    this.overStarEvaluation = value;
+                    this.ratingPercentEvaluation = 100 * (value / this.maxRateValue);
+                };
+                ;
+                //call this method when over a star
+                ReviewDetailComponent.prototype.overStarDoSomething = function (value) {
+                    this.overStar = value;
+                    this.ratingPercent = 100 * (value / this.maxRateValue);
+                };
+                ;
                 ReviewDetailComponent.prototype.ngOnInit = function () {
                     if (!this.paper) {
-                        var id = +this._routeParams.get('id');
-                        // this.pageTitle += `: ${id}`;
+                        this.pageTitle = "Submission Review";
+                        this.review = new app_interface_1.Review();
+                        //   this.review.expertise = 1;
+                        //    this.review.overallEvaluation = 1;
+                        var id = this._routeParams.get('id');
                         this.getPaper(id);
                     }
                 };
-                ReviewDetailComponent.prototype.checkEdit = function () {
-                    if (this.paper.status == "complete")
-                        return true;
-                    else
-                        return false;
+                ReviewDetailComponent.prototype.stringAsDate = function (dateStr) {
+                    return new Date(dateStr);
+                };
+                ReviewDetailComponent.prototype.getFile = function (event, generatedFileName, fileName) {
+                    event.preventDefault();
+                    this._paperService.getFiles(generatedFileName, fileName);
                 };
                 ReviewDetailComponent.prototype.getPaper = function (id) {
                     var _this = this;
-                    this._reviewService.getReview(id)
-                        .subscribe(
-                    //   paper => this.paper = paper,
-                    function (error) { return _this.errorMessage = error; });
+                    this._paperService.getPaper(id)
+                        .subscribe(function (paper) {
+                        _this.paper = paper;
+                        _this.review.submissionId = paper.id;
+                        _this.review.conferenceId = paper.conferenceId;
+                        _this._paperService.getReview(paper.conferenceId, id).subscribe(function (rs) {
+                            if (rs._id != null) {
+                                _this.review = rs;
+                                _this.hasReview = true;
+                            }
+                        });
+                    }, function (error) { return _this.errorMessage = error; });
                 };
-                /* getReviews(id: number) {
-                     this._reviewService.getReview(id)
-             
-                         .subscribe(
-                         reviewEdit => this.reviewEdit = reviewEdit,
-                         error => this.errorMessage = <any>error);
-                 }*/
-                // used for Get and Post
-                ReviewDetailComponent.prototype.addReviews = function (event, value) {
-                    event.preventDefault();
-                    var id = +this._routeParams.get('id');
-                    this._reviewService.addReview(id, this.expertiseReview.val, this.evaluationReview.eval, value.summary, value.strongPoints, value.weakPoints, value.comments),
-                        function (error) { return console.log("Error HTTP Post Service"); },
-                        console.log("Job Done Post !");
+                ReviewDetailComponent.prototype.onRatingClicked = function (message) {
+                    //
+                    console.log(message);
                 };
                 ReviewDetailComponent.prototype.onBack = function () {
-                    this._router.navigate(['Review']);
-                };
-                ReviewDetailComponent.prototype.onReview = function () {
-                    this._router.navigate(['ReviewCreate', { id: this.paper.id }]);
+                    this._router.navigate(['ReviewerPapers']);
                 };
                 ReviewDetailComponent = __decorate([
                     core_1.Component({
                         templateUrl: 'app/review/review-detail.component.html',
-                        pipes: [review_detail_pipe_1.KeysPipe],
-                        directives: [common_2.NgSwitch, common_2.NgSwitchWhen, common_2.NgSwitchDefault]
+                        directives: [router_2.ROUTER_DIRECTIVES, control_message_component_1.ControlMessagesComponent, result_message_component_1.ResultMessagesComponent, rating_component_1.Rating]
                     }), 
                     __metadata('design:paramtypes', [app_service_1.AppService, router_1.RouteParams, router_1.Router, common_1.FormBuilder])
                 ], ReviewDetailComponent);

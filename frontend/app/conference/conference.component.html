@@ -9,7 +9,7 @@
 
 
         <div class='table-responsive'>
-            <table class='table' 
+            <table class='table table-bordered table-striped table-hover'
             *ngIf='conferences && conferences.length' >
                 <thead>
                     <tr>
@@ -20,22 +20,29 @@
                         <th>End Date </th>
                         <th>Author</th>
                         <th>submissions</th>
+                        <th> Report </th>
                     </tr>
                 </thead>
                 <tbody>
                   <tr  *ngFor='#con of conferences'>
                   <td>{{con.title}}</td>
                   <td>{{con.conferenceLocation}}</td>
-  <td>{{con.startdate}}</td>
-  <td>{{con.enddate}}</td>
+  <td>{{ stringAsDate(con.startdate) | date}}</td>
+  <td>{{ stringAsDate(con.enddate) | date}}</td>
    <td> <a [routerLink]="['ConferencePapers',{id:con._id,title:con.title}]" >Submissions</a></td>
 
-<td> <a [routerLink]="['InviteAuthor',{id:con._id}]" >Author</a></td>
+<td> <a href="#"  [routerLink]="['InviteAuthor',{id:con._id}]" >Author</a></td>
+<td> <a href="#" >Report</a></td>
 
                       </tr>
                 </tbody>
             </table>
             <div  *ngIf='!conferences'><p>you don't have any conferenc click <a [routerLink]="['CreateConference']" >here</a> to create new conference</p></div>
         </div>
+    </div>
+      <div class='panel-footer'>
+        <a class='btn btn-default' (click)='onBack()' style='width:80px'>
+            <i class='glyphicon glyphicon-chevron-left'></i> Back
+        </a>
     </div>
 </div>

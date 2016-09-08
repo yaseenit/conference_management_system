@@ -1,12 +1,14 @@
-<div class="col-sm-12 col-lg-12 col-md-12">
+<div class='panel panel-primary'>
+    <div class='panel-heading'>
+    Reviewer(s)
+    </div>
 
-<fieldset>
-    <legend>Reviewer(s)</legend>
+
     <result-messages [(message)]='resultMessage' [(messageType)]='messageType'></result-messages>
 <div class="row">
     <div class="col-sm-6 col-lg-6 col-md-6">
 
- <form [ngFormModel]="form" >
+ <form [ngFormModel]="form" *ngIf='chkSubmissionStatus' >
   
   <div class="form-group">
     <label for="userName">Reviewer Email Address </label>
@@ -17,12 +19,7 @@
   </form>
 
 
-   <div class='panel-footer'>
-        <a class='btn btn-default' (click)='onBack()' style='width:80px'>
-            <i class='glyphicon glyphicon-chevron-left'></i> Back
-        </a>
 
-        </div>
 </div>
 <div class="col-sm-6 col-lg-6 col-md-6">
 
@@ -38,7 +35,7 @@
                   <tr  *ngFor='#username of PaperReviewers'>
                          <td>{{username}}</td>
                          <td>    
-                       <button type="button" class="btn btn-default btn-danger"  (click)='removeReviewer(username)'> remove</button></td>
+                       <button type="button" class="btn btn-default btn-danger"  (click)='removeReviewer(username)' *ngIf='chkSubmissionStatus'> remove</button></td>
                       </tr>
                 </tbody>
             </table>
@@ -47,7 +44,11 @@
 
     
 </div>
-        
-</fieldset>
+          <div class='panel-footer'>
+        <a class='btn btn-default' (click)='onBack()' style='width:80px'>
+            <i class='glyphicon glyphicon-chevron-left'></i> Back
+        </a>
+    </div> 
 </div>
+
   

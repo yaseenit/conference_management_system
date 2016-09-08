@@ -58,6 +58,12 @@ System.register(['angular2/core', '../service/app.service', 'angular2/router', '
                         _this.resultMessage = error["message"];
                     });
                 };
+                ReviewerPaperComponent.prototype.stringAsDate = function (dateStr) {
+                    return new Date(dateStr);
+                };
+                ReviewerPaperComponent.prototype.onBack = function () {
+                    this._router.navigate(['Welcome']);
+                };
                 ReviewerPaperComponent = __decorate([
                     core_1.Component({
                         templateUrl: 'app/papers/reviewer-papers.component.html',

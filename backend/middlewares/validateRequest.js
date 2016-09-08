@@ -49,7 +49,8 @@ module.exports = function (req, res, next) {
              console.log(user.conferences);
              console.log(req.params);
              console.log(user.conferences.indexOf(req.params.conferenceId));
-               if ((req.url.indexOf('chair') >= 0 && user.conferences.indexOf(req.params.conferenceId) > -1) || (req.url.indexOf('chair') < 0 && req.url.indexOf('/api/v1/') >= 0)) {
+             req.isChair = (req.url.indexOf('chair') >= 0 && user.conferences.indexOf(req.params.conferenceId) > -1);
+               if (req.isChair || (req.url.indexOf('chair') < 0 && req.url.indexOf('/api/v1/') >= 0)) {
                     req.user = user;
                     next(); // To move to next middleware
                 } else {

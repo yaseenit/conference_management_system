@@ -42,7 +42,7 @@ System.register([], function(exports_1, context_1) {
                 //
                 function Paper() {
                     this.title = "";
-                    this.id = 0;
+                    this.id = "";
                     this.status = "";
                     this.author = "";
                     this.fileId = "";
@@ -51,11 +51,12 @@ System.register([], function(exports_1, context_1) {
                     this.submissionDate = new Date();
                     this.userId = "";
                     this.abstract = "";
-                    this.deadline = "";
+                    this.deadline = new Date();
                     this.createdOn = "";
                     this.generatedFileName = "";
                     this.conferenceId = "";
                     this.reviewers = [];
+                    this.createdBy = "";
                     //for review
                     this.review = [];
                 }
@@ -75,18 +76,17 @@ System.register([], function(exports_1, context_1) {
             }());
             exports_1("PaperAuthor", PaperAuthor);
             Review = (function () {
-                function Review(_expertise, _evaluation, _summary, _strongPoints, _weakPoints, _comments) {
-                    this.expertise = "";
-                    this.evaluation = "";
+                function Review() {
+                    this._id = "";
+                    this.expertise = 0;
+                    this.overallEvaluation = 0;
                     this.summary = "";
                     this.strongPoints = "";
                     this.weakPoints = "";
-                    this.comments = "";
-                    this.expertise = _expertise;
-                    this.evaluation = _evaluation;
-                    this.strongPoints = _strongPoints;
-                    this.weakPoints = _weakPoints;
-                    this.comments = _comments;
+                    this.detailedComments = "";
+                    this.createdBy = "";
+                    this.conferenceId = "";
+                    this.submissionId = "";
                 }
                 return Review;
             }());

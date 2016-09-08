@@ -9,7 +9,6 @@
   <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="app/assets/style.css" rel="stylesheet" />
 
-    <link href="app/assets/shop-homepage.css" rel="stylesheet">
   <link href="https://bootswatch.com/lumen/bootstrap.min.css" rel="stylesheet" />
 
   <!-- 1. Load libraries -->
@@ -35,9 +34,11 @@
 
   <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBoCaLi08h42kqdo8HnCCznyzOTuVqhrs&libraries=places"
        ></script>-->
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/moment.min.js"></script>
   <!-- 2. Configure SystemJS -->
 
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
+  <script>var googleLoaded = false;</script>
 
   <script>
     System.config({
@@ -51,18 +52,7 @@
           });
           System.import('app/main')
                 .then(null, console.error.bind(console));
-                /*
-        System.config({
-        packages: {  
-           app: {
-            format: 'register',
-            defaultExtension: 'js'
-          }
-        
-        } 
-      });
-      System.import('app/main')
-            .then(null, console.error.bind(console));*/
+       
     </script>
 </head>
 

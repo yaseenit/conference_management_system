@@ -28,8 +28,9 @@ System.register(['angular2/core', '../service/app.service', 'angular2/router', '
             }],
         execute: function() {
             ConferenceComponent = (function () {
-                function ConferenceComponent(_service) {
+                function ConferenceComponent(_service, _router) {
                     this._service = _service;
+                    this._router = _router;
                     this.conferences = [];
                     this.resultMessage = "";
                     this.messageType = "";
@@ -37,7 +38,7 @@ System.register(['angular2/core', '../service/app.service', 'angular2/router', '
                 ConferenceComponent.prototype.ngOnInit = function () {
                     var _this = this;
                     console.log("dddd");
-                    this.pageTitle = "My conference";
+                    this.pageTitle = "My conferences";
                     this._service.getUserConference().subscribe(function (response) {
                         _this.conferences = response["conferences"];
                         if (_this.conferences.length == 0) {
@@ -50,12 +51,18 @@ System.register(['angular2/core', '../service/app.service', 'angular2/router', '
                         _this.resultMessage = error["message"];
                     });
                 };
+                ConferenceComponent.prototype.stringAsDate = function (dateStr) {
+                    return new Date(dateStr);
+                };
+                ConferenceComponent.prototype.onBack = function () {
+                    this._router.navigate(['Welcome']);
+                };
                 ConferenceComponent = __decorate([
                     core_1.Component({
                         templateUrl: 'app/conference/conference.component.html',
                         directives: [router_1.ROUTER_DIRECTIVES, result_message_component_1.ResultMessagesComponent]
                     }), 
-                    __metadata('design:paramtypes', [app_service_1.AppService])
+                    __metadata('design:paramtypes', [app_service_1.AppService, router_1.Router])
                 ], ConferenceComponent);
                 return ConferenceComponent;
             }());

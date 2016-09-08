@@ -1,6 +1,10 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
+var taskSchema = require('../models/taskModel');
+var uploadedFilesPath = require('../config/configurations').uploadedFilesPath;
+
+  
 
 var paperAuthor = new mongoose.Schema({
     familyName: {
@@ -22,7 +26,6 @@ var submissionSchema = new Schema({
         trim: true,
         lowercase: true
     },
-    // {type: Boolean, default:false},
     fileName: { type: String },
     generatedFileName: { type: String },
     deadline: {
@@ -39,6 +42,13 @@ var submissionSchema = new Schema({
 
 
 });
-
+submissionSchema.pre('remove', function(next) {
+    // 'this' is the client being removed. Provide callbacks here if you want
+    // to be notified of the calls' result.
+    taskSchema.remove({submissionId: this._id}).exec();
+    //Submission.remove({client_id: this._id}).exec();
+    fs.unlink(uploadedFilesPath + this.generatedFileName);
+    next();
+});
 
 module.exports = mongoose.model('Submission', submissionSchema);
