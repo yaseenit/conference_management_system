@@ -1,4 +1,4 @@
-System.register(['angular2/core', '../service/app.service', 'angular2/common', '../shared/control-message.component', '../shared/result-message.component', '../service/app.interface'], function(exports_1, context_1) {
+System.register(['angular2/core', '../service/app.service', 'angular2/common', '../shared/control-message.component', '../shared/result-message.component', '../service/app.interface', '../datepicker/datepicker'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', '../service/app.service', 'angular2/common', '
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, app_service_1, common_1, control_message_component_1, result_message_component_1, app_interface_1;
+    var core_1, app_service_1, common_1, control_message_component_1, result_message_component_1, app_interface_1, datepicker_1;
     var CreateConferenceComponent;
     return {
         setters:[
@@ -31,6 +31,9 @@ System.register(['angular2/core', '../service/app.service', 'angular2/common', '
             },
             function (app_interface_1_1) {
                 app_interface_1 = app_interface_1_1;
+            },
+            function (datepicker_1_1) {
+                datepicker_1 = datepicker_1_1;
             }],
         execute: function() {
             CreateConferenceComponent = (function () {
@@ -47,6 +50,7 @@ System.register(['angular2/core', '../service/app.service', 'angular2/common', '
                     });
                 }
                 CreateConferenceComponent.prototype.ngOnInit = function () {
+                    this.minDate = new Date();
                     this._conference.enddate = new Date();
                 };
                 CreateConferenceComponent.prototype.checkConferenceDate = function (startdate, enddate) {
@@ -72,7 +76,7 @@ System.register(['angular2/core', '../service/app.service', 'angular2/common', '
                     if (this.checkConferenceDate(value.startdate, value.enddate)) {
                         this._service.createConference(this._conference).subscribe(function (response) {
                             console.log(response);
-                            _this.resultMessage = "New conference has been created you can invite autho from ";
+                            _this.resultMessage = "New conference has been created you can invite autho ";
                             _this.messageType = "success";
                         }, function (error) {
                             _this.resultMessage = "Error , please try again later";
@@ -87,7 +91,7 @@ System.register(['angular2/core', '../service/app.service', 'angular2/common', '
                 CreateConferenceComponent = __decorate([
                     core_1.Component({
                         templateUrl: 'app/conference/create-conference.component.html',
-                        directives: [control_message_component_1.ControlMessagesComponent, result_message_component_1.ResultMessagesComponent],
+                        directives: [control_message_component_1.ControlMessagesComponent, result_message_component_1.ResultMessagesComponent, datepicker_1.DatePicker],
                     }), 
                     __metadata('design:paramtypes', [common_1.FormBuilder, app_service_1.AppService])
                 ], CreateConferenceComponent);
