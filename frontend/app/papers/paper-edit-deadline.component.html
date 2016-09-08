@@ -9,7 +9,8 @@
 
                 <div class="form-group">
                     <label for="deadline">deadline</label>
-                    <input type="date" class="form-control" id="deadline" placeholder="deadline" [(ngModel)]="deadline" ngControl="deadline" required>
+                    <datepicker [(ngModel)]="deadline" [minDate]="minDate" [showWeeks]="false"></datepicker>
+                     <input type="hidden" [(ngModel)]="deadline" class="form-control" id="deadline" placeholder="deadline" ngControl="deadline">
                     <control-messages [control]="form.controls.deadline"></control-messages>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block" [disabled]="!form.valid" (click)="submit($event,form.value)">Update </button>
