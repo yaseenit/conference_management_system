@@ -19,25 +19,32 @@
                     <tr>
                         <th>Title</th>
                         <th>Status</th>
-                        <th>Submission Date </th>
-                        <th> Attached File </th>
+                         <th>Submission Date </th>
+                        <th>DeadLine</th>
+                        <th>File</th>
+                   
                         <th>Reviewers</th>
+                       <th> action </th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor='#paper of papers'>
-                        <td><a [routerLink]="['PaperDetail',{id:paper._id}]">{{paper.title}}</a></td>
+                        <td>{{paper.title}}</td>
                         <td>{{paper.status | lowercase}}</td>
-                        <td>{{paper.createdOn}}</td>
-                        <td>
+                        <td> {{ stringAsDate(paper.createdOn) | date}}</td>
+                     <td> {{ stringAsDate(paper.deadline) | date}}</td>            
+                     <td>
                             <a href="#" (click)='getFile($event,paper.generatedFileName,paper.fileName)' target="_blank"><img src='./app/assets/images/pdf-icon.png' [style.width.px]='imageWidth' [style.height.px]='imageHeight'></a>
                         </td>
-
                         <td>
-                            <a [routerLink]="['AssigReview',{id:paper._id}]" style='width:80px'>
-Reviewers        </a>
+                            <a [routerLink]="['AssigReview',{id:paper._id}]" style='width:80px' *ngIf="getSubmissionIncompletedStatus(paper.status)">Invite/Show Reviewers</a>
                         </td>
-
+                         <td><a href="#" (click)="updateStatus($event,'accepted',paper._id)" *ngIf="getSubmissionStatus(paper.status)"> Accept</a>
+                         <a href="#" (click)="updateStatus($event,'rejected',paper._id)" *ngIf="getSubmissionStatus(paper.status)"> Reject</a>
+                    <a href="#" [routerLink]="['PaperDetail',{id:paper._id}]">Details</a>  
+                    
+                    <a href="#" [routerLink]="['EditDeadline',{id:paper._id,conferenceId:paper.conferenceId}]"  *ngIf="getSubmissionStatus(paper.status)"> Change DeadLine</a>
+                       </td>
                     </tr>
                 </tbody>
             </table>

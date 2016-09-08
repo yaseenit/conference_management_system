@@ -20,7 +20,7 @@ ngOnChanges():void{
 }
 onClick()
 {
-    this.ratingClicked.emit(' the rating $(this.rating) clicked !');
+    this.ratingClicked.emit(this.rating.toString());
 }
 
 }

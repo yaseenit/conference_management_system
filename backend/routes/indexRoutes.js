@@ -89,6 +89,10 @@ var job = new CronJob('00 30 01 * * 1-5', function() {
     app.get('/api/v1/profile/', userRoutes.getProfile);// contains all user conferences
     app.post('/api/v1/profile/', userRoutes.editProfile);
 	app.post('/api/v1/profile/changePassword', userRoutes.changeProfilePassword);
+
+
+
+	
 	app.delete('/api/v1/profile/', userRoutes.deleteProfile);
 
 
@@ -108,8 +112,15 @@ var job = new CronJob('00 30 01 * * 1-5', function() {
 
 
 
-	app.post('/api/v1/review/', reviewRoutes.create);
-    app.get('/api/v1/review/', reviewRoutes.getAll);
+	app.post('/api/v1/:conferenceId/review/create', reviewRoutes.create);
+	app.post('/api/v1/:conferenceId/review/edit', reviewRoutes.edit);
+
+	app.get('/api/v1/:conferenceId/review/:submissionId', reviewRoutes.getReiewBySubmissionId); // as a reviewer
+
+	app.get('/api/v1/:conferenceId/chair/review/:submissionId', reviewRoutes.getRviewsBySubmissionId); // as a chair
+
+
+    app.get('/api/v1/review/', reviewRoutes.getAll); // as an author
 	app.delete('/api/v1/review/:reviewId', reviewRoutes.remove);
 	app.get('/api/v1/review/:reviewId', reviewRoutes.getOne);
 
@@ -127,7 +138,7 @@ var job = new CronJob('00 30 01 * * 1-5', function() {
 
 	app.get('/api/v1/submissions/:submissionId', submissionRoutes.getOne);
 	// app.put('/api/v1/submissions/:submissionId',submissionRoutes.update);
-    app.delete('/api/v1/submissions/:submissionId', submissionRoutes.remove);
+    app.delete('/api/v1/:conferenceId/submissions/:submissionId', submissionRoutes.remove);
 	// app.patch('/api/v1/submissions/:submissionId',submissionRoutes.patch);
 	// app.get('/api/v1/submission/:id', products.getOne);
 	// app.post('/api/v1/submission/', products.create);

@@ -1,6 +1,6 @@
 export interface IPaper{
     title:string;
-    id:number;
+    id:string;
     status:string;
     fileId:string;
     authorList:PaperAuthor[];
@@ -8,7 +8,7 @@ export interface IPaper{
     submissionDate:Date;
     userId:string;
     abstract:string;
-    deadline:string;
+    deadline:Date;
     createdOn:string;
     generatedFileName:string;
     conferenceId:string;
@@ -23,6 +23,7 @@ export class ConferenceModel {
     status: boolean=true;
     authors: any[]=[];
     tasks:any[]=[];
+    _id:string;
     constructor()
     {
         
@@ -55,7 +56,7 @@ export class Chair{
 export class Paper implements IPaper
 {
     title:string="";
-    id:number=0;
+    id:string="";
     status:string="";
     author:string="";
     fileId:string="";
@@ -64,13 +65,11 @@ export class Paper implements IPaper
     submissionDate:Date=new Date();
     userId:string="";
     abstract:string="";
-    deadline:string="";
+    deadline:Date=new Date();
     createdOn:string="";
     generatedFileName:string="";
     conferenceId:string="";
      reviewers:string[]=[];
-
-
     //for review
     review:Review[]=[];
     //
@@ -102,33 +101,35 @@ export class PaperAuthor implements IPaperAuthor
 //for review
 export interface IReview
 {
-    
-    expertise:string;
-    evaluation:string;
+    _id:string;
+    expertise:number;
+    overallEvaluation:number;
     summary:string;
     strongPoints:string;
     weakPoints:string;
-    comments:string;
+    detailedComments:string;
+    createdBy:string;
+    conferenceId:string;
+    submissionId:string;
 
 }
 
 export class Review implements IReview
-{
-    
-    expertise:string="";
-    evaluation:string="";
+{  
+    _id:string="";
+    expertise:number=0;
+    overallEvaluation:number=0;
     summary:string="";
     strongPoints:string="";
     weakPoints:string="";
-    comments:string="";
-    constructor(_expertise:string,_evaluation:string,_summary:string,_strongPoints:string,_weakPoints:string,_comments:string)
+    detailedComments:string="";
+    createdBy:string="";
+    conferenceId:string="";
+    submissionId:string="";
+    constructor()
     {
         
-        this.expertise=_expertise;
-        this.evaluation=_evaluation;
-        this.strongPoints=_strongPoints;
-        this.weakPoints=_weakPoints;
-        this.comments=_comments;
+  
     }
 }
 //

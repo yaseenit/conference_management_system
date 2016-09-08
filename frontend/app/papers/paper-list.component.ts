@@ -56,6 +56,9 @@ export class PaperListComponent implements OnInit
      
 
     }
+       stringAsDate(dateStr) {
+        return new Date(dateStr);
+    }
  getFile(event,generatedFileName,fileName)
  {
          event.preventDefault();

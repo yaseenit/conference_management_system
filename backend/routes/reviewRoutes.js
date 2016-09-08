@@ -10,6 +10,9 @@ var reviewRoutes = function (app) {
     var update = reviewController.put;
     var remove = reviewController.remove;
     var patch = reviewController.patch;
+    var getReiewBySubmissionId = reviewController.getReiewBySubmissionId;
+    var getRviewsBySubmissionId = reviewController.getRviewsBySubmissionId;
+    var edit = reviewController.edit;
 
     return {
         getOne: getOne,
@@ -17,7 +20,10 @@ var reviewRoutes = function (app) {
         create: create,
         update: update,
         remove: remove,
-        patch: patch
+        patch: patch,
+        getReiewBySubmissionId:getReiewBySubmissionId,
+        getRviewsBySubmissionId:getRviewsBySubmissionId,
+        edit:edit
 
     }
 }

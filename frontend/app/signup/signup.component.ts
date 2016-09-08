@@ -48,21 +48,13 @@ export class SignUpComponent {
                 {
               this._signupService.signup(this._user).subscribe(
                 response => {
-                 console.log(response);
-                // this.signupResult=response;
-
                 this.resultMessage = "Thanks for registration please check your email for activation";
                 this.messageType = "success";
-
-
-
             },
             error => {
                 
                     this.resultMessage = "Error , please try again later";
-                    this.messageType = "error";
-
-               
+                    this.messageType = "error";           
                 error => this.signupError = <any>error
 
             }
@@ -103,6 +95,8 @@ export class SignUpComponent {
 
     public address: Object;
     getAddress(place: Object) {
+        if(this.address)
+        {
         this.address = place['formatted_address'];
         var location = place['geometry']['location'];
         var lat = location.lat();
@@ -124,6 +118,7 @@ export class SignUpComponent {
             if (addressType == "locality") {
                 (<Control>this.form.controls["city"]).updateValue(place['address_components'][i].long_name);
             }
+        }
         }
 
     }

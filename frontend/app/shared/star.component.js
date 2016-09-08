@@ -26,7 +26,7 @@ System.register(['angular2/core'], function(exports_1, context_1) {
                     this.starWidth = this.rating * 86 / 5;
                 };
                 StarComponent.prototype.onClick = function () {
-                    this.ratingClicked.emit(' the rating $(this.rating) clicked !');
+                    this.ratingClicked.emit(this.rating.toString());
                 };
                 __decorate([
                     core_1.Input(), 

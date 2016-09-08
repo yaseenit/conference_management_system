@@ -3,7 +3,6 @@ import {ConferenceModel} from '../service/app.interface';
 import {AppService} from '../service/app.service'
 import { ROUTER_DIRECTIVES } from  'angular2/router';
 import { ResultMessagesComponent } from '../shared/result-message.component';
-
 @Component(
     {
         templateUrl: 'app/conference/conference.component.html',
@@ -19,7 +18,7 @@ export class ConferenceComponent implements OnInit {
     messageType: string = "";
     ngOnInit(): void {
         console.log("dddd");
-        this.pageTitle = "My conference";
+        this.pageTitle = "My conferences";
         this._service.getUserConference().subscribe(
             response => {
                 this.conferences = <ConferenceModel[]>response["conferences"];
@@ -36,6 +35,9 @@ export class ConferenceComponent implements OnInit {
                 this.resultMessage = error["message"];
             }
         );
+    }
+    stringAsDate(dateStr) {
+        return new Date(dateStr);
     }
     constructor(private _service: AppService) {
 
