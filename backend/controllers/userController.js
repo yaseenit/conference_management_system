@@ -263,6 +263,21 @@ var userController = function (User) {
         });
     }
 }
+
+var getPublicProfileByEmail = function (req ,  res){
+    username = req.body.username || '' ;
+    if(username){
+         User.findOne({username:username},function(err,profile){
+            if(err)
+               res.status(500).send(err);
+            else{
+                res.json(profile);
+            }
+         });
+    } else {
+        res.status(403).json({message:"not found",code:403})
+    }
+}
 return {
     post: post,
     getAllAuthors: getAllAuthors,
@@ -277,7 +292,8 @@ return {
     getProfile: getProfile,
     editProfile: editProfile,
     deleteProfile: deleteProfile,
-        changeProfilePassword : changeProfilePassword
+        changeProfilePassword : changeProfilePassword,
+        getPublicProfileByEmail:getPublicProfileByEmail
 }
 }
 
