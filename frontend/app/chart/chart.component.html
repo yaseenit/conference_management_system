@@ -1,0 +1,19 @@
+<div class='panel panel-primary'>
+    <div class='panel-heading'>
+        {{pageTitle}}
+    </div>
+    <div class='panel-body'>
+    <h2>Conference Timeline:</h2>
+    <div *ngIf='conferences && conferences.length' id="timeline_chart" [chartData]="setTimelineChart(conferences)" [chartOptions]= "timeline_ChartOptions" chartType="Timeline" GoogleChart></div>
+    
+    <h2>Submissions Status Pie Chart:</h2>
+    <div *ngIf='statusChartData && statusChartData.length' id="pie_chart" [chartData]="setStatusChart(statusChartData)" [chartOptions] = "pie_ChartOptions" chartType="PieChart" GoogleChart></div>   
+    
+    <h2>Submissions Topic Bar Chart:</h2>
+    <div *ngIf='topicChartData && topicChartData.length' id="bar_chart" [chartData]="setTopicChart(topicChartData)" [chartOptions] = "bar_ChartOptions" chartType="BarChart" GoogleChart></div>
+	
+	<h2>Users Country Column Chart:</h2>
+    <div *ngIf='userChartData && userChartData.length' id="column_chart" [chartData]="setCountryChart(userChartData)" [chartOptions] = "column_ChartOptions" chartType="ColumnChart" GoogleChart></div>
+
+    </div>
+</div>

@@ -20,6 +20,7 @@
                         <th>End Date </th>
                         <th>Author</th>
                         <th>submissions</th>
+                        <th> Report </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -30,7 +31,8 @@
   <td>{{ stringAsDate(con.enddate) | date}}</td>
    <td> <a [routerLink]="['ConferencePapers',{id:con._id,title:con.title}]" >Submissions</a></td>
 
-<td> <a [routerLink]="['InviteAuthor',{id:con._id}]" >Author</a></td>
+<td> <a href="#"  [routerLink]="['InviteAuthor',{id:con._id}]" >Author</a></td>
+<td> <a href="#" >Report</a></td>
 
                       </tr>
                 </tbody>

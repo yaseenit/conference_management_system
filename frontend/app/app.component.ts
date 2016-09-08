@@ -50,6 +50,8 @@ import {ReviewDetailComponent} from './review/review-detail.component';
 
 import {EditDeadLineComponent} from './papers/paper-edit-deadline.component';
 
+import {ChartComponent} from './chart/chart.component'
+
 
 @Component({
   selector: 'pm-app',
@@ -85,7 +87,10 @@ import {EditDeadLineComponent} from './papers/paper-edit-deadline.component';
     { path: '/paperEdit/:id', name: 'PaperEdit', component: PaperEditComponent },
     { path: '/reviewCreate/:id', name: 'ReviewCreate', component: ReviewCreateComponent },
     { path: '/reviewDetail/:id', name: 'ReviewDetail', component: ReviewDetailComponent },
-     { path: '/editDeadline/:id/:conferenceId', name: 'EditDeadline', component: EditDeadLineComponent }
+     { path: '/editDeadline/:id/:conferenceId', name: 'EditDeadline', component: EditDeadLineComponent },
+     { path: '/chart', name: 'Chart', component: ChartComponent }
+
+    
 
 
 
@@ -127,14 +132,19 @@ export class AppComponent implements OnInit {
 
   }
   removeProfile(event) {
-    event.preventDefault();
-    this._confirmService.activate("Are you sure to remove your Profile?")
-      .then(res => {
-        if (res)
-          console.log(`Confirmed: ${res}`);
-        else
-          console.log("NO")
-      });
+    event.preventDefault(); 
+     this._logInService.removeProfile().subscribe(
+    response => {
+       this._logInService.logout();
+        window.location.reload();
+
+      }, error => {
+        this.resultMessage = error["message"];
+        this.messageType = "error";});
+
+        
+     
+      
   }
   logOut() {
     this._logInService.logout();

@@ -52,6 +52,7 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                     this.resultMessage = "";
                     this.messageType = "";
                     this.allowReview = false;
+                    this.flag = 0;
                     this.reviewForm = _fb.group({
                         summary: ['', common_1.Validators.required],
                         strongPoints: ['', common_1.Validators.required],
@@ -100,11 +101,12 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                         _this.paper = paper;
                         _this.review.submissionId = id;
                         _this.review.conferenceId = paper.conferenceId;
-                        _this.review.conferenceId = paper.conferenceId;
                         _this.checkPaperStatus(paper.deadline);
                         _this._paperService.getReview(paper.conferenceId, id).subscribe(function (rs) {
-                            if (rs._id != null)
+                            if (rs != null) {
                                 _this.review = rs;
+                                _this.flag = 1;
+                            }
                         });
                     }, function (error) { return _this.errorMessage = error; });
                 };
@@ -126,10 +128,7 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                 ReviewCreateComponent.prototype.submitReview = function (event, value) {
                     var _this = this;
                     event.preventDefault();
-                    var flag = 0;
-                    if (this.review._id != null)
-                        flag = 1;
-                    this._paperService.submitReview(this.review, flag).subscribe(function (response) {
+                    this._paperService.submitReview(this.review, this.flag).subscribe(function (response) {
                         _this.resultMessage = "Review submitted successfully";
                         _this.messageType = "success";
                     }, function (error) {

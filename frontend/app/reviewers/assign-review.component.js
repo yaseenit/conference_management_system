@@ -64,6 +64,7 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                     var _this = this;
                     this._reviewerService.getPaper(id).subscribe(function (respone) {
                         _this.PaperReviewers = respone.reviewers;
+                        _this.authorUserName = respone.createdBy;
                         _this.conferenceId = respone.conferenceId;
                         _this.checkSubmissionStatus(respone.status, respone.deadline);
                     }, function (error) {
@@ -91,28 +92,34 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                 };
                 AssigReviewComponent.prototype.assign = function (event, value) {
                     var _this = this;
-                    this.messageType = "";
-                    this.resultMessage = "";
                     event.preventDefault();
-                    if (this.checkReviewer(value.userName)) {
-                        this._reviewerService.assignReviewers(value.userName, this.submissionId, this.conferenceId).subscribe(function (response) {
-                            _this.PaperReviewers = response.reviewers;
-                            _this.resultMessage = "Reviewer Has been assigned";
-                            _this.messageType = "success";
-                            _this.clearForm();
-                        }, function (error) {
-                            if (error["message"] == null) {
-                                _this.resultMessage = " please try again later";
-                                _this.messageType = "error";
-                            }
-                            else {
-                                _this.resultMessage = error["message"];
-                                _this.messageType = "error";
-                            }
-                        });
+                    if (this.authorUserName != value.userName) {
+                        this.messageType = "";
+                        this.resultMessage = "";
+                        if (this.checkReviewer(value.userName)) {
+                            this._reviewerService.assignReviewers(value.userName, this.submissionId, this.conferenceId).subscribe(function (response) {
+                                _this.PaperReviewers = response.reviewers;
+                                _this.resultMessage = "Reviewer Has been assigned";
+                                _this.messageType = "success";
+                                _this.clearForm();
+                            }, function (error) {
+                                if (error["message"] == null) {
+                                    _this.resultMessage = " please try again later";
+                                    _this.messageType = "error";
+                                }
+                                else {
+                                    _this.resultMessage = error["message"];
+                                    _this.messageType = "error";
+                                }
+                            });
+                        }
+                        else
+                            this.errorMessage = 'reviewer email already assigned';
                     }
-                    else
-                        this.errorMessage = 'reviewer email already assigned';
+                    else {
+                        this.resultMessage = "The reviewer of submission cann't be the author";
+                        this.messageType = "error";
+                    }
                 };
                 AssigReviewComponent.prototype.clearForm = function () {
                     for (var name in this.form.controls) {
