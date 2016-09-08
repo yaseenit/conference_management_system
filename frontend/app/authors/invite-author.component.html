@@ -1,9 +1,12 @@
+<div class='panel panel-primary'>
+    <div class='panel-heading'>
+       Author(s)
+    </div>
+        <result-messages [(message)]='resultMessage' [(messageType)]='messageType'></result-messages>
+
 <div class="row">
-<div class="col-md-8">
-    <result-messages [(message)]='resultMessage' [(messageType)]='messageType'></result-messages>
-    <div class='has-error' *ngIf='errorMessage'>{{errorMessage}}</div>
-<fieldset>
-    <legend>Author(s)</legend>
+<div class="col-md-6">
+
     <div class='table-responsive'>
             <table class='table' 
             *ngIf='authorList && authorList.length' >
@@ -21,6 +24,9 @@
                 </tbody>
             </table>
         </div>
+        </div>
+        <div class="col-md-6">
+
  <form [ngFormModel]="form" *ngIf='chkDate' >
   
   <div class="form-group">
@@ -31,11 +37,12 @@
    <button type="submit" class="btn btn-primary btn-block" [disabled]="!form.valid" (click)="Invite($event,form.value)">Invite</button>
   </form>
  
-</fieldset>
+        </div>
+ 
 
-   <div class='panel-footer'>
+</div>
+  <div class='panel-footer'>
         <a class='btn btn-default' (click)='onBack()' style='width:80px'>
             <i class='glyphicon glyphicon-chevron-left'></i> Back
         </a>
     </div></div>
-</div>

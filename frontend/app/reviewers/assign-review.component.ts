@@ -168,6 +168,9 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
   }
        );  
     }
+     onBack(): void{
+  window.history.back();
+        }
 
 
     }

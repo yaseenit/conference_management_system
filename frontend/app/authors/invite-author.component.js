@@ -137,6 +137,9 @@ System.register(['angular2/core', 'angular2/router', '../service/app.service', '
                         _this.messageType = "error";
                     });
                 };
+                InviteAuthorComponent.prototype.onBack = function () {
+                    this._router.navigate(['Conference']);
+                };
                 InviteAuthorComponent = __decorate([
                     core_1.Component({
                         templateUrl: 'app/authors/invite-author.component.html',

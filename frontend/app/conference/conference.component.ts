@@ -1,7 +1,7 @@
 import { Component, OnInit } from  'angular2/core';
 import {ConferenceModel} from '../service/app.interface';
 import {AppService} from '../service/app.service'
-import { ROUTER_DIRECTIVES } from  'angular2/router';
+import { ROUTER_DIRECTIVES,Router } from  'angular2/router';
 import { ResultMessagesComponent } from '../shared/result-message.component';
 @Component(
     {
@@ -39,7 +39,10 @@ export class ConferenceComponent implements OnInit {
     stringAsDate(dateStr) {
         return new Date(dateStr);
     }
-    constructor(private _service: AppService) {
+    constructor(private _service: AppService,private _router:Router) {
 
     }
+      onBack(): void{
+            this._router.navigate(['Welcome']);
+        }
 }

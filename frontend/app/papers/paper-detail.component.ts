@@ -3,14 +3,12 @@ import  {AppService} from '../service/app.service';
 
 
 import {Rating} from '../shared/rating.component';
-
-
-import {RouteParams,Router} from 'angular2/router';
+import {RouteParams, Router,ROUTER_DIRECTIVES} from 'angular2/router';
 import {IPaper,Review} from '../service/app.interface';
 
 @Component({
         templateUrl: 'app/papers/paper-detail.component.html',
-                directives: [Rating]
+                directives: [Rating,ROUTER_DIRECTIVES]
 
     })
 
@@ -25,8 +23,7 @@ import {IPaper,Review} from '../service/app.interface';
         constructor(private _paperService: AppService,
             private _routeParams:RouteParams ,private _router :Router)
         {
-          //  let id=+this._routeParams.get('id');
-          //  this.pageTitle += `: ${id}`;
+        
         }
          ngOnInit() {
         if (!this.paper) {
@@ -59,6 +56,6 @@ getFile(event,generatedFileName,fileName)
                   
     }
         onBack(): void{
-            this._router.navigate(['Papers']);
+  window.history.back();
         }
     }

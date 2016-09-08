@@ -12,8 +12,6 @@ export class AppService {
   private _rootUrl = "http://myremoteserverwg117.ddns.net:3000/";
   private _apiUrl = this._rootUrl + "api/v1/";
   private _taskUrl = this._apiUrl + "chair/tasks/";
-  // private _inviteUrl = this._apiUrl + "/addAuthor/";
-  //private _paperUrl=this._apiUrl+'submissions/';
 
   private _paperUrl = this._apiUrl + 'submissions/';
   
@@ -28,6 +26,7 @@ export class AppService {
   private _responseCode: any;
   private static _base64_data: string = "";
   private _reportUrl = this._apiUrl + 'report/';
+  private _publicProfileUrl=this._apiUrl+"profile/public";
   constructor(private _http: Http, private _router: Router, private jsonp: Jsonp) {
 
   }
@@ -277,6 +276,12 @@ export class AppService {
     let _token = this.getToken();
     let token = JSON.stringify({ _token });
     return this._http.get(this._profileUrl, { headers: ContentHeaders })
+      .map((response: Response) => <IUser>response.json())
+      .catch(this.handleError).do(data => console.log("All:" + JSON.stringify(data)));
+  }
+  getPublicProfile(username): Observable<IUser> {
+    let body = JSON.stringify({ username });
+    return this._http.post(this._publicProfileUrl,body, { headers: ContentHeaders })
       .map((response: Response) => <IUser>response.json())
       .catch(this.handleError).do(data => console.log("All:" + JSON.stringify(data)));
   }

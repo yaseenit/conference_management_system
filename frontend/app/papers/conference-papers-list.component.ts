@@ -100,4 +100,8 @@ export class ConferencePaperComponent implements OnInit
     constructor(private _paperService :AppService,private _router :Router,private _routeParams:RouteParams)
     {
     }
+
+     onBack(): void{
+            this._router.navigate(['Conference']);
+        }
 }

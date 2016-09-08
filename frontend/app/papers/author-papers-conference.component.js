@@ -36,8 +36,8 @@ System.register(['angular2/core', './paper-filter.pipe', '../service/app.service
                     this._paperService = _paperService;
                     this._router = _router;
                     this._routeParams = _routeParams;
-                    this.imageWidth = 50;
-                    this.imageHeight = 40;
+                    this.imageWidth = 30;
+                    this.imageHeight = 20;
                     this.showFile = false;
                     this.listFilter = '';
                     this.resultMessage = "";
@@ -122,6 +122,9 @@ System.register(['angular2/core', './paper-filter.pipe', '../service/app.service
                 AuthorPapersConferenceComponent.prototype.getFile = function (event, generatedFileName, fileName) {
                     event.preventDefault();
                     this._paperService.getFiles(generatedFileName, fileName);
+                };
+                AuthorPapersConferenceComponent.prototype.onBack = function () {
+                    this._router.navigate(['ConferenceSubmission']);
                 };
                 AuthorPapersConferenceComponent = __decorate([
                     core_1.Component({

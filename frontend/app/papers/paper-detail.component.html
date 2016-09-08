@@ -15,9 +15,10 @@
                         </div>
                     </div>
                     <div class="row">
-                        <label class="col-md-3" style="text-align:left">created By:</label>
+                        <label class="col-md-3" style="text-align:left">created By: </label>
                         <div class="col-md-9">
-                            <p>{{paper.createdBy}}</p>
+<a href="#" [routerLink]="['PublicProfile',{username:paper.createdBy}]" >                        {{paper.createdBy}} 
+</a>
                         </div>
                     </div>
                     <div class="row">
@@ -91,8 +92,8 @@
                 <hr>
                  <div class="row" *ngIf="reviews && reviews.length">
                      <div class="col-md-12">
-      Reviews
-    </div></div>
+                       Reviews
+                 </div></div>
                     <hr>
 
                         <div class="row" *ngFor="#review of reviews">
@@ -100,7 +101,9 @@
                 <div class="row">
                     <label class="col-md-3" style="text-align:left;">Reviewer:</label>
                     <div class="col-md-9" style="text-align:left">
-                        <p>{{review.createdBy}}</p>
+                        <a href="#" [routerLink]="['PublicProfile',{username:review.createdBy}]" >                        {{review.createdBy}} 
+</a>
+                     
                     </div>
                 </div>
             <div class="col-md-12">
@@ -160,8 +163,13 @@
         </div>
             </div>
         </div>
+          </div>
+      <div class='panel-footer'>
 
-    <div class='panel-footer'>
-    
+        <a class='btn btn-default' (click)='onBack()' style='width:80px'>
+            <i class='glyphicon glyphicon-chevron-left'></i> Back
+        </a>       
+
     </div>
+          </div>
 </div>

@@ -34,8 +34,9 @@ System.register(['angular2/core', './paper-filter.pipe', '../shared/star.compone
             }],
         execute: function() {
             PaperListComponent = (function () {
-                function PaperListComponent(_paperService) {
+                function PaperListComponent(_paperService, _router) {
                     this._paperService = _paperService;
+                    this._router = _router;
                     this.pageTitle = 'Paper List';
                     this.imageWidth = 50;
                     this.imageHeight = 40;
@@ -73,6 +74,9 @@ System.register(['angular2/core', './paper-filter.pipe', '../shared/star.compone
                     event.preventDefault();
                     this._paperService.getFiles(generatedFileName, fileName);
                 };
+                PaperListComponent.prototype.onBack = function () {
+                    this._router.navigate(['Welcome']);
+                };
                 PaperListComponent = __decorate([
                     core_1.Component({
                         selector: 'pm-papers',
@@ -81,7 +85,7 @@ System.register(['angular2/core', './paper-filter.pipe', '../shared/star.compone
                         pipes: [paper_filter_pipe_1.PaperFilterPipe],
                         directives: [star_component_1.StarComponent, router_1.ROUTER_DIRECTIVES, result_message_component_1.ResultMessagesComponent]
                     }), 
-                    __metadata('design:paramtypes', [app_service_1.AppService])
+                    __metadata('design:paramtypes', [app_service_1.AppService, router_1.Router])
                 ], PaperListComponent);
                 return PaperListComponent;
             }());
