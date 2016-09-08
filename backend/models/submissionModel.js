@@ -2,6 +2,7 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var taskSchema = require('../models/taskModel');
+var uploadedFilesPath = require('../config/configurations').uploadedFilesPath;
 
   
 
@@ -46,6 +47,7 @@ submissionSchema.pre('remove', function(next) {
     // to be notified of the calls' result.
     taskSchema.remove({submissionId: this._id}).exec();
     //Submission.remove({client_id: this._id}).exec();
+    fs.unlink(uploadedFilesPath + this.generatedFileName);
     next();
 });
 

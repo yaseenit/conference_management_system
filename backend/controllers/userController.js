@@ -222,10 +222,6 @@ var userController = function (User) {
     var deleteProfile = function (req, res) {
 
         var username = req.user.username;
-        if (req.user.role.toLowerCase().localeCompare("chair") == 0) {
-            res.status(403).json({ message: "Chair user can not be removed! please refere to the adminstrator.", code: 403 });
-        }
-        else {
             req.user.remove(function (err) {
                 if (err)
                     res.status(500).send(err);
@@ -233,7 +229,7 @@ var userController = function (User) {
                     res.status(204).json({ message: username + " has been removed successfully.", code: 204 });
                 }
             });
-        }
+        
     }
 
     var changeProfilePassword = function (req, res) {
