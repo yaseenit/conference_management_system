@@ -13,6 +13,8 @@ export interface IPaper{
     generatedFileName:string;
     conferenceId:string;
     reviewers:string[];
+     createdBy:string;
+
 }
 export class ConferenceModel {
     title: string="";
@@ -70,6 +72,8 @@ export class Paper implements IPaper
     generatedFileName:string="";
     conferenceId:string="";
      reviewers:string[]=[];
+     createdBy:string="";
+
     //for review
     review:Review[]=[];
     //
@@ -147,6 +151,20 @@ export interface IUser
     country:string;
    institute:string; 
    tasks:Task[];
+}
+
+export interface IChartCountry{
+    
+    country:string;
+}
+
+export interface IChart{
+    
+    status:string;
+    keywords:string;
+    _id: IChartCountry;
+    count:number;
+    counter:number;
 }
 export class User implements IUser
 { 

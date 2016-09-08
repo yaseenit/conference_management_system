@@ -56,6 +56,7 @@ System.register([], function(exports_1, context_1) {
                     this.generatedFileName = "";
                     this.conferenceId = "";
                     this.reviewers = [];
+                    this.createdBy = "";
                     //for review
                     this.review = [];
                 }

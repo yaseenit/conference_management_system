@@ -28,7 +28,7 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
         messageType:string="";
         conferenceId:string="";
         chkSubmissionStatus:boolean=false;
-
+        authorUserName:string;
         constructor(_fb: FormBuilder, private _reviewerService: AppService,  private _routeParams:RouteParams ) {
         this.form = _fb.group({
             userName: ['', Validators.compose([ValidationService.emailValidator,Validators.required])]
@@ -45,6 +45,7 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
         this._reviewerService.getPaper(id).subscribe(
             respone => {
                 this.PaperReviewers=respone.reviewers;
+                this.authorUserName=respone.createdBy;
                 this.conferenceId=respone.conferenceId;
   this.checkSubmissionStatus(respone.status,respone.deadline);
 
@@ -82,9 +83,11 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
       }
     }
     assign(event,value: any ) {
+        event.preventDefault();
+        if(this.authorUserName!=value.userName)
+        {
         this.messageType="";
         this.resultMessage="";
-        event.preventDefault();
         if(this.checkReviewer(value.userName))
         {
         this._reviewerService.assignReviewers(value.userName,this.submissionId,this.conferenceId).subscribe(
@@ -111,6 +114,12 @@ import { ResultMessagesComponent } from '../shared/result-message.component';
         }
         else
          this.errorMessage='reviewer email already assigned';
+        }
+        else
+        {
+         this.resultMessage="The reviewer of submission cann't be the author";
+         this.messageType="error";
+        }
       }
       clearForm():void
       {
