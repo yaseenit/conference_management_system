@@ -89,6 +89,10 @@ var job = new CronJob('00 30 01 * * 1-5', function() {
     app.get('/api/v1/profile/', userRoutes.getProfile);// contains all user conferences
     app.post('/api/v1/profile/', userRoutes.editProfile);
 	app.post('/api/v1/profile/changePassword', userRoutes.changeProfilePassword);
+
+
+
+	
 	app.delete('/api/v1/profile/', userRoutes.deleteProfile);
 
 
